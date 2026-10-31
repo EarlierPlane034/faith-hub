@@ -20,7 +20,7 @@ self.addEventListener("notificationclick", e => {
   }));
 });
 
-const CACHE = "faith-hub-v3-1";
+const CACHE = "faith-hub-v3-2";
 const CORE = ["./", "index.html", "today.html", "manifest.json", "manifest-today.json", "icon-192.png", "icon-512.png"];
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(CORE)).then(() => self.skipWaiting()));
@@ -32,7 +32,7 @@ self.addEventListener("fetch", e => {
   const req = e.request;
   if (req.method !== "GET") return;
   const u = new URL(req.url);
-  if (u.hostname.includes("firestore") || u.hostname.endsWith("googleapis.com") || u.hostname.includes("bible-api") || u.hostname.includes("gstatic")) return;
+  if (u.hostname.includes("firestore") || u.hostname.endsWith("googleapis.com") || u.hostname.includes("bible-api") || u.hostname.includes("gstatic") || u.hostname.includes("esv.org")) return;
   e.respondWith(caches.match(req).then(hit => {
     const net = fetch(req).then(res => {
       if (res && res.ok) { const copy = res.clone(); caches.open(CACHE).then(c => c.put(req, copy)); }

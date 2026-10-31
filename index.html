@@ -92,7 +92,7 @@ details.card summary{font-weight:600;cursor:pointer}
 
 <script>
 /* ============ SETUP (Jayden only) ============ */
-const APP_VER="3.1";
+const APP_VER="3.2";
 const FIREBASE_CONFIG = {
   apiKey:"AIzaSyDhwY77B-wZL7f4077kEC_tn0K2AgJ6bIs",
   authDomain:"faith-hub-71ae2.firebaseapp.com",
@@ -102,6 +102,7 @@ const FIREBASE_CONFIG = {
   appId:"1:560019176489:web:8b6f70aa76bcdac3f53038"
 };
 const VAPID_KEY="BJy21T8ExVsoNw8mLdLqR6QcYP1TAlVNXRxDiaBl13LNtlweGUxE2lisx62iyG5qEpOmKx1_c8_XqjxFJR78c4s";
+const ESV_KEY = "b486a747a3c0582c4dd43d1b72194ed0a7f47d4c";
 const PASSCODE = "";
 const PEOPLE = ["Jayden","Summer"];
 const SITE="https://earlierplane034.github.io/faith-hub/";
@@ -226,7 +227,8 @@ const fmt=t=>new Date(t).toLocaleDateString(undefined,{month:"short",day:"numeri
 const ymd=d=>d.toLocaleDateString("en-CA");
 const fmtDay=s=>{try{return new Date(s+"T00:00:00").toLocaleDateString(undefined,{weekday:"short",month:"short",day:"numeric",year:"numeric"})}catch(e){return s}};
 const dayNum=()=>Math.floor(Date.now()/864e5);
-const bg=r=>"https://www.biblegateway.com/passage/?search="+encodeURIComponent(r)+"&version=NIV";
+const LINKVERS=["NIV","ESV","NLT","CSB","NKJV","KJV"];
+const bg=r=>"https://www.biblegateway.com/passage/?search="+encodeURIComponent(r.replace(/ \(ESV\)$/,""))+"&version="+(localStorage.getItem("fh_linkver")||"NIV");
 const who=n=>((metas.avatars||{})[n]||"")+" "+n;
 const subsFor=g=>simple&&SIMPLE_SUBS[g]?SIMPLE_SUBS[g]:GROUPS[g].subs;
 const curSub=()=>grp in subSel?subSel[grp]:null;
@@ -252,7 +254,18 @@ function notify(title,body){
 async function bibleFetch(ref){
   const k="fh_b_"+ver+"_"+ref;
   try{const c=localStorage.getItem(k);if(c)return JSON.parse(c);}catch(e){}
-  const r=await fetch("https://bible-api.com/"+encodeURIComponent(ref)+"?translation="+ver);
+  if(ver==="esv"&&ESV_KEY){
+    const er=await fetch("https://api.esv.org/v3/passage/text/?q="+encodeURIComponent(ref)+"&include-headings=false&include-footnotes=false&include-short-copyright=false&include-passage-references=false&include-verse-numbers=true",{headers:{Authorization:"Token "+ESV_KEY}});
+    const ej=await er.json();
+    if(ej&&ej.passages&&ej.passages[0]){
+      const raw=ej.passages[0],nums=[];raw.replace(/\[(\d+)\]/g,(m,n)=>{nums.push(Number(n));return m;});
+      const o={ref:(ej.canonical||ref)+" (ESV)",text:raw.replace(/\[\d+\]/g," ").replace(/\s+/g," ").trim(),verses:nums};
+      try{localStorage.setItem(k,JSON.stringify(o));}catch(e){}
+      return o;
+    }
+    throw new Error("not found");
+  }
+  const r=await fetch("https://bible-api.com/"+encodeURIComponent(ref)+"?translation="+(ver==="esv"?"web":ver));
   const j=await r.json();
   if(j&&j.text){
     const o={ref:j.reference||ref,text:j.text.trim().replace(/\s*\n\s*/g," "),verses:(j.verses||[]).map(v=>v.verse)};
@@ -811,7 +824,8 @@ function moreView(){
   <div class="card"><h3>Look and feel</h3><div class="row">${["auto","light","dark"].map(t=>`<button class="chip ${th===t?"on":""}" data-act="theme" data-t="${t}">${t==="auto"?"Auto":t[0].toUpperCase()+t.slice(1)}</button>`).join("")}</div>
     <div class="row">${ACC.map(c=>`<button class="react" style="background:${c};width:34px;height:34px;border-radius:50%" data-act="accent" data-c="${c}" aria-label="color"></button>`).join("")}</div>
     <div class="row"><button class="btn small ghost" data-act="fs" data-d="-1">A−</button><button class="btn small ghost" data-act="fs" data-d="1">A+</button><span class="meta">Text size</span></div>
-    <label>Bible version for lookups</label><select data-act="verpick"><option value="web" ${ver==="web"?"selected":""}>WEB (modern English)</option><option value="kjv" ${ver==="kjv"?"selected":""}>KJV (classic)</option><option value="bbe" ${ver==="bbe"?"selected":""}>BBE (Basic English, easy words)</option></select></div>
+    <label>Bible version for lookups</label><select data-act="verpick"><option value="web" ${ver==="web"?"selected":""}>WEB (modern English)</option><option value="kjv" ${ver==="kjv"?"selected":""}>KJV (classic)</option><option value="bbe" ${ver==="bbe"?"selected":""}>BBE (Basic English, easy words)</option>${ESV_KEY?`<option value="esv" ${ver==="esv"?"selected":""}>ESV (English Standard Version)</option>`:""}</select>
+    <label>Open in my Bible uses</label><select data-act="linkpick">${LINKVERS.map(v=>`<option ${(localStorage.getItem("fh_linkver")||"NIV")===v?"selected":""}>${v}</option>`).join("")}</select>${ver==="esv"?`<div class="meta" style="margin-top:8px">Scripture quotations are from the ESV® Bible (The Holy Bible, English Standard Version®), © 2001 by Crossway, a publishing ministry of Good News Publishers. Used by permission. All rights reserved.</div>`:""}</div>
   <div class="card"><h3>This week</h3>${weekSummary()}</div>
   <div class="card"><h3>Badges</h3>${badges().map(([i,t,o])=>`<div style="opacity:${o?1:.35}">${i} ${esc(t)}${o?" ✅":""}</div>`).join("")}</div>
   <div class="card"><h3>Keepsakes</h3><div class="row"><button class="btn small ghost" data-act="review">🎉 Year in review</button><button class="btn small ghost" data-act="journal">📄 Download journal</button><button class="btn small ghost" data-act="backup">💾 Backup file</button></div></div>
@@ -923,6 +937,7 @@ document.addEventListener("change",e=>{
   const a=e.target.dataset&&e.target.dataset.act;
   if(a==="planpick")setMeta("settings",{plan:e.target.value});
   if(a==="ntime"&&e.target.value&&me)setMeta("notif",{[me]:{[e.target.dataset.k+"T"]:e.target.value}});
+  if(a==="linkpick"){localStorage.setItem("fh_linkver",e.target.value);}
   if(a==="ntz"&&me)setMeta("notif",{[me]:{tz:e.target.value}});
   if(a==="verpick"){ver=e.target.value;localStorage.setItem("fh_ver",ver);daily=null;loadDaily();}
 });
