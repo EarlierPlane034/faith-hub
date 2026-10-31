@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Faith Hub</title>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<style>
+:root{--bg:#faf6ef;--card:#fff;--ink:#2b2a33;--mute:#76717f;--acc:#b5722f;--acc2:#e9d3b4;--line:#eadfce}
+@media(prefers-color-scheme:dark){:root{--bg:#1c1a1f;--card:#27242c;--ink:#f1ece4;--mute:#a49ead;--acc:#e0a062;--acc2:#3a3126;--line:#3a3540}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.5 Georgia,serif;padding-bottom:84px}
+header{padding:20px 16px 8px;max-width:720px;margin:auto}
+h1{margin:0;font-size:26px}
+.sub{color:var(--mute);font-size:14px;font-family:system-ui,sans-serif}
+main{max-width:720px;margin:auto;padding:8px 16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:12px 0}
+.card h3{margin:0 0 4px;font-size:18px}
+.meta{font:13px system-ui,sans-serif;color:var(--mute)}
+.who{display:inline-block;padding:1px 9px;border-radius:99px;background:var(--acc2);color:var(--ink);font:12px system-ui,sans-serif;margin-right:6px}
+.verse{font-size:21px;font-style:italic;line-height:1.45}
+nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--line);display:flex;overflow-x:auto;padding:6px 4px;gap:2px}
+nav button{flex:1 0 74px;background:none;border:0;color:var(--mute);font:12px system-ui,sans-serif;padding:6px 2px;border-radius:10px;cursor:pointer}
+nav button span{display:block;font-size:22px}
+nav button.on{color:var(--acc);background:var(--acc2)}
+.btn{background:var(--acc);color:#fff;border:0;border-radius:12px;padding:12px 18px;font:600 16px system-ui,sans-serif;cursor:pointer}
+.btn.ghost{background:none;color:var(--acc);border:1px solid var(--acc)}
+.btn.small{padding:6px 12px;font-size:14px}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.add{width:100%;margin:8px 0}
+label{display:block;font:600 14px system-ui,sans-serif;margin:12px 0 4px}
+input,textarea,select{width:100%;font:16px system-ui,sans-serif;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+textarea{min-height:100px}
+dialog{border:0;border-radius:16px;padding:18px;width:min(92vw,480px);background:var(--card);color:var(--ink)}
+dialog::backdrop{background:#0008}
+.banner{background:var(--acc2);border-radius:10px;padding:8px 12px;font:13px system-ui,sans-serif;margin:8px 0}
+.done{opacity:.6}
+.empty{color:var(--mute);text-align:center;padding:30px 10px;font-family:system-ui,sans-serif}
+input.search{margin:6px 0}
+</style>
+</head>
+<body>
+<header>
+  <h1>✝️ Faith Hub</h1>
+  <div class="sub" id="hello"></div>
+</header>
+<main id="main"></main>
+<nav id="nav"></nav>
+<dialog id="dlg"></dialog>
+
+<script>
+/* ============ SETUP (Jayden only) ============
+ 1. Paste your Firebase web config below so everything is shared live.
+ 2. Optional: set a PASSCODE so only you two can open the site.
+ Until FIREBASE_CONFIG is filled in, data saves only on that one device. */
+const FIREBASE_CONFIG = {
+  apiKey:"AIzaSyDhwY77B-wZL7f4077kEC_tn0K2AgJ6bIs",
+  authDomain:"faith-hub-71ae2.firebaseapp.com",
+  projectId:"faith-hub-71ae2",
+  storageBucket:"faith-hub-71ae2.firebasestorage.app",
+  messagingSenderId:"560019176489",
+  appId:"1:560019176489:web:8b6f70aa76bcdac3f53038"
+};
+/* example:
+const FIREBASE_CONFIG = {apiKey:"...",authDomain:"...",projectId:"...",appId:"..."}; */
+const PASSCODE = "";
+const PEOPLE = ["Jayden","Summer"];
+
+const SECTIONS = {
+  reading:{label:"Reading",icon:"📖",title:"Monthly Bible chapter",fields:[
+    {k:"ref",l:"Chapter (example: John 3)"},{k:"month",l:"Month",type:"month"},
+    {k:"note",l:"Thoughts or questions",type:"area"}]},
+  verse:{label:"Verses",icon:"🕊️",title:"Verse bank",fields:[
+    {k:"ref",l:"Reference (example: Psalm 46:10)"},{k:"text",l:"Verse text",type:"area"},
+    {k:"tag",l:"Theme",type:"select",opts:["Encouragement","Peace","Trust","Strength","Hard days","Gratitude","Other"]}]},
+  prayer:{label:"Prayer",icon:"🙏",title:"Prayer journal",fields:[
+    {k:"text",l:"Prayer request",type:"area"},{k:"for",l:"Who or what is it for?"}]},
+  sermon:{label:"Sermons",icon:"⛪",title:"Sermon notes",fields:[
+    {k:"church",l:"Church"},{k:"date",l:"Date",type:"date"},{k:"ref",l:"Scripture"},
+    {k:"text",l:"Takeaways",type:"area"}]},
+  thanks:{label:"Gratitude",icon:"🌻",title:"Gratitude wall",fields:[
+    {k:"text",l:"I am thankful for...",type:"area"}]},
+  outdoor:{label:"Outdoors",icon:"🌲",title:"Outdoor devotionals",fields:[
+    {k:"place",l:"Place (example: Enchanted Rock)"},{k:"ref",l:"Verse"},
+    {k:"text",l:"Reflection",type:"area"}]},
+};
+const ORDER=["home",...Object.keys(SECTIONS)];
+
+let items=[], tab="home", me=localStorage.getItem("fh_me"), q="";
+let db=null;
+if(FIREBASE_CONFIG && window.firebase){firebase.initializeApp(FIREBASE_CONFIG);db=firebase.firestore();}
+
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const $=id=>document.getElementById(id);
+const fmt=t=>new Date(t).toLocaleDateString(undefined,{month:"short",day:"numeric"});
+
+function start(){
+  if(PASSCODE && localStorage.getItem("fh_pass")!==PASSCODE){
+    const p=prompt("Enter the passcode");
+    if(p!==PASSCODE){document.body.innerHTML="<p class='empty'>Wrong passcode. Refresh to try again.</p>";return;}
+    localStorage.setItem("fh_pass",PASSCODE);
+  }
+  if(db){db.collection("items").orderBy("created","desc").onSnapshot(s=>{items=s.docs.map(d=>({id:d.id,...d.data()}));render();});}
+  else{items=JSON.parse(localStorage.getItem("fh_items")||"[]");}
+  if(!me){askWho();}
+  render();
+}
+function askWho(){
+  const d=$("dlg");
+  d.innerHTML=`<h3>Who is here?</h3><div class="row">${PEOPLE.map(p=>`<button class="btn" data-p="${p}">${p}</button>`).join("")}</div>`;
+  d.querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>{me=b.dataset.p;localStorage.setItem("fh_me",me);d.close();render();});
+  d.addEventListener("cancel",e=>e.preventDefault(),{once:true});
+  d.showModal();
+}
+function persist(){if(!db)localStorage.setItem("fh_items",JSON.stringify(items));}
+async function save(it){
+  if(db){const {id,...rest}=it;if(id)await db.collection("items").doc(id).set(rest,{merge:true});else await db.collection("items").add(rest);}
+  else{if(it.id){items=items.map(x=>x.id===it.id?it:x);}else{it.id=String(Date.now());items.unshift(it);}persist();render();}
+}
+async function remove(id){
+  if(!confirm("Delete this?"))return;
+  if(db)await db.collection("items").doc(id).delete();else{items=items.filter(x=>x.id!==id);persist();render();}
+}
+
+function form(type,it){
+  const S=SECTIONS[type],d=$("dlg"),v=it||{};
+  d.innerHTML=`<h3>${it?"Edit":"Add"}: ${esc(S.title)}</h3><form method="dialog" id="f">
+  ${S.fields.map(f=>{
+    const val=esc(v[f.k]||"");
+    let inp;
+    if(f.type==="area")inp=`<textarea name="${f.k}">${val}</textarea>`;
+    else if(f.type==="select")inp=`<select name="${f.k}">${f.opts.map(o=>`<option ${v[f.k]===o?"selected":""}>${o}</option>`).join("")}</select>`;
+    else inp=`<input name="${f.k}" type="${f.type||"text"}" value="${val}">`;
+    return `<label>${esc(f.l)}</label>${inp}`;}).join("")}
+  <div class="row"><button class="btn" value="ok">Save</button><button class="btn ghost" type="button" id="x">Cancel</button></div></form>`;
+  $("x").onclick=()=>d.close();
+  $("f").onsubmit=async e=>{
+    const o=Object.fromEntries(new FormData(e.target));
+    const rec={...v,...o,type,author:v.author||me||"Someone",created:v.created||Date.now()};
+    await save(rec);
+  };
+  d.showModal();
+}
+
+function card(it){
+  const S=SECTIONS[it.type];
+  const body=[it.ref&&`<div class="meta">${esc(it.ref)}</div>`,it.text&&`<div>${esc(it.text).replace(/\n/g,"<br>")}</div>`,
+    it.note&&`<div>${esc(it.note).replace(/\n/g,"<br>")}</div>`].filter(Boolean).join("");
+  const title=it.place||it.church||it.for||it.tag||(it.month?`Chapter for ${it.month}`:"");
+  const tail=it.type==="prayer"?`<button class="btn small ghost" data-a="${it.id}">${it.answered?"Mark unanswered":"Mark answered ✅"}</button>`:"";
+  return `<div class="card ${it.answered?"done":""}">
+    ${title?`<h3>${esc(title)}${it.answered?" ✅":""}</h3>`:""}
+    <div class="meta"><span class="who">${esc(it.author)}</span>${fmt(it.created)}${it.date?" · "+esc(it.date):""}</div>
+    ${body}
+    <div class="row">${tail}<button class="btn small ghost" data-e="${it.id}">Edit</button><button class="btn small ghost" data-d="${it.id}">Delete</button></div></div>`;
+}
+
+function render(){
+  $("hello").textContent=me?`Hi ${me}. This is your shared space.`:"";
+  $("nav").innerHTML=ORDER.map(t=>{const S=SECTIONS[t];return `<button class="${t===tab?"on":""}" data-t="${t}"><span>${S?S.icon:"🏠"}</span>${S?S.label:"Home"}</button>`}).join("");
+  const m=$("main");
+  const banner=db?"":`<div class="banner">Not shared yet: entries only save on this device until setup is finished.</div>`;
+  if(tab==="home"){
+    const verses=items.filter(i=>i.type==="verse"&&i.text);
+    const day=Math.floor(Date.now()/864e5);
+    const v=verses.length?verses[day%verses.length]:null;
+    const recent=items.slice(0,5);
+    m.innerHTML=banner+`<div class="card"><div class="meta">Verse of the day</div>${v?`<p class="verse">"${esc(v.text)}"</p><div class="meta">${esc(v.ref||"")} added by ${esc(v.author)}</div>`:`<p class="empty">Add a verse in the Verses tab and it shows up here.</p>`}</div>
+    <div class="row">${Object.entries(SECTIONS).map(([k,S])=>`<button class="btn ghost" data-t="${k}">${S.icon} ${S.label} (${items.filter(i=>i.type===k).length})</button>`).join("")}</div>
+    <h3>Recent</h3>${recent.length?recent.map(card).join(""):`<p class="empty">Nothing yet. Pick a tab below and add the first one.</p>`}`;
+  } else {
+    const S=SECTIONS[tab];
+    let list=items.filter(i=>i.type===tab);
+    if(q)list=list.filter(i=>JSON.stringify(i).toLowerCase().includes(q.toLowerCase()));
+    m.innerHTML=banner+`<h2>${S.icon} ${esc(S.title)}</h2><button class="btn add" data-add="1">+ Add</button>
+    <input class="search" placeholder="Search" value="${esc(q)}" id="q">
+    ${list.length?list.map(card).join(""):`<p class="empty">Nothing here yet. Tap Add to start.</p>`}`;
+    const qi=$("q");qi.oninput=()=>{q=qi.value;const p=qi.selectionStart;render();const n=$("q");n.focus();n.setSelectionRange(p,p);};
+    m.querySelector("[data-add]").onclick=()=>form(tab);
+  }
+  document.querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>{tab=b.dataset.t;q="";render();scrollTo(0,0);});
+  document.querySelectorAll("[data-e]").forEach(b=>b.onclick=()=>{const it=items.find(x=>x.id===b.dataset.e);form(it.type,it);});
+  document.querySelectorAll("[data-d]").forEach(b=>b.onclick=()=>remove(b.dataset.d));
+  document.querySelectorAll("[data-a]").forEach(b=>b.onclick=()=>{const it=items.find(x=>x.id===b.dataset.a);save({...it,answered:!it.answered});});
+}
+start();
+</script>
+</body>
+</html>
