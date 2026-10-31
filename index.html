@@ -2,42 +2,63 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Faith Hub</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1c1a1f">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Faith Hub">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon-192.png">
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <style>
-:root{--bg:#faf6ef;--card:#fff;--ink:#2b2a33;--mute:#76717f;--acc:#b5722f;--acc2:#e9d3b4;--line:#eadfce}
-@media(prefers-color-scheme:dark){:root{--bg:#1c1a1f;--card:#27242c;--ink:#f1ece4;--mute:#a49ead;--acc:#e0a062;--acc2:#3a3126;--line:#3a3540}}
+:root{--bg:#faf6ef;--card:#fff;--ink:#2b2a33;--mute:#76717f;--acc:#b5722f;--acc2:#e9d3b4;--line:#eadfce;--ok:#2f8f5b}
+:root[data-theme=dark]{--bg:#1c1a1f;--card:#27242c;--ink:#f1ece4;--mute:#a49ead;--acc:#e0a062;--acc2:#3a3126;--line:#3a3540}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#1c1a1f;--card:#27242c;--ink:#f1ece4;--mute:#a49ead;--acc:#e0a062;--acc2:#3a3126;--line:#3a3540}}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.5 Georgia,serif;padding-bottom:84px}
-header{padding:20px 16px 8px;max-width:720px;margin:auto}
-h1{margin:0;font-size:26px}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.5 Georgia,serif;padding-bottom:96px}
+header{padding:18px 16px 4px;max-width:720px;margin:auto}
+h1{margin:0;font-size:26px}h2{margin:12px 0 4px;font-size:21px}h3{margin:0 0 4px;font-size:18px}
 .sub{color:var(--mute);font-size:14px;font-family:system-ui,sans-serif}
-main{max-width:720px;margin:auto;padding:8px 16px}
+main{max-width:720px;margin:auto;padding:4px 16px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:12px 0}
-.card h3{margin:0 0 4px;font-size:18px}
 .meta{font:13px system-ui,sans-serif;color:var(--mute)}
 .who{display:inline-block;padding:1px 9px;border-radius:99px;background:var(--acc2);color:var(--ink);font:12px system-ui,sans-serif;margin-right:6px}
-.verse{font-size:21px;font-style:italic;line-height:1.45}
-nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--line);display:flex;overflow-x:auto;padding:6px 4px;gap:2px}
-nav button{flex:1 0 74px;background:none;border:0;color:var(--mute);font:12px system-ui,sans-serif;padding:6px 2px;border-radius:10px;cursor:pointer}
+.verse{font-size:21px;font-style:italic;line-height:1.45;margin:6px 0}
+nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);padding:6px 4px calc(6px + env(safe-area-inset-bottom));z-index:5}
+nav button{background:none;border:0;color:var(--mute);font:12px system-ui,sans-serif;padding:6px 2px;border-radius:10px;cursor:pointer}
 nav button span{display:block;font-size:22px}
 nav button.on{color:var(--acc);background:var(--acc2)}
 .btn{background:var(--acc);color:#fff;border:0;border-radius:12px;padding:12px 18px;font:600 16px system-ui,sans-serif;cursor:pointer}
 .btn.ghost{background:none;color:var(--acc);border:1px solid var(--acc)}
 .btn.small{padding:6px 12px;font-size:14px}
-.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.btn[disabled]{opacity:.6}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;align-items:center}
 .add{width:100%;margin:8px 0}
+.chips{display:flex;gap:6px;overflow-x:auto;padding:6px 0}
+.chip{flex:0 0 auto;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:8px 14px;border-radius:99px;font:14px system-ui,sans-serif;cursor:pointer}
+.chip.on{background:var(--acc);color:#fff;border-color:var(--acc)}
 label{display:block;font:600 14px system-ui,sans-serif;margin:12px 0 4px}
 input,textarea,select{width:100%;font:16px system-ui,sans-serif;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
 textarea{min-height:100px}
-dialog{border:0;border-radius:16px;padding:18px;width:min(92vw,480px);background:var(--card);color:var(--ink)}
+dialog{border:0;border-radius:16px;padding:18px;width:min(92vw,480px);max-height:88vh;overflow:auto;background:var(--card);color:var(--ink)}
 dialog::backdrop{background:#0008}
 .banner{background:var(--acc2);border-radius:10px;padding:8px 12px;font:13px system-ui,sans-serif;margin:8px 0}
-.done{opacity:.6}
-.empty{color:var(--mute);text-align:center;padding:30px 10px;font-family:system-ui,sans-serif}
-input.search{margin:6px 0}
+.done{opacity:.65}
+.empty{color:var(--mute);text-align:center;padding:26px 10px;font-family:system-ui,sans-serif}
+.ph{width:100%;border-radius:10px;margin-top:8px;display:block}
+.react{background:none;border:1px solid var(--line);border-radius:99px;padding:4px 10px;font:14px system-ui,sans-serif;color:var(--ink);cursor:pointer}
+.react.on{background:var(--acc2);border-color:var(--acc)}
+.cm{font:14px system-ui,sans-serif;margin-top:8px;padding-top:6px;border-top:1px dashed var(--line)}
+.bar{height:10px;background:var(--line);border-radius:99px;overflow:hidden;margin:8px 0}
+.bar i{display:block;height:100%;background:var(--ok)}
+.toast{position:fixed;left:12px;right:12px;bottom:92px;max-width:480px;margin:auto;background:#222;color:#fff;border-radius:12px;padding:12px 16px;font:15px system-ui,sans-serif;z-index:20;display:flex;gap:12px;justify-content:space-between;align-items:center}
+.toast button{background:none;border:0;color:#ffd08a;font:600 15px system-ui,sans-serif;cursor:pointer}
+.big{font-size:42px;text-align:center;margin:6px 0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pdone{font:15px system-ui,sans-serif}
 </style>
 </head>
 <body>
@@ -48,12 +69,10 @@ input.search{margin:6px 0}
 <main id="main"></main>
 <nav id="nav"></nav>
 <dialog id="dlg"></dialog>
+<div id="toastbox"></div>
 
 <script>
-/* ============ SETUP (Jayden only) ============
- 1. Paste your Firebase web config below so everything is shared live.
- 2. Optional: set a PASSCODE so only you two can open the site.
- Until FIREBASE_CONFIG is filled in, data saves only on that one device. */
+/* ============ SETUP (Jayden only) ============ */
 const FIREBASE_CONFIG = {
   apiKey:"AIzaSyDhwY77B-wZL7f4077kEC_tn0K2AgJ6bIs",
   authDomain:"faith-hub-71ae2.firebaseapp.com",
@@ -62,128 +81,436 @@ const FIREBASE_CONFIG = {
   messagingSenderId:"560019176489",
   appId:"1:560019176489:web:8b6f70aa76bcdac3f53038"
 };
-/* example:
-const FIREBASE_CONFIG = {apiKey:"...",authDomain:"...",projectId:"...",appId:"..."}; */
 const PASSCODE = "";
 const PEOPLE = ["Jayden","Summer"];
 
-const SECTIONS = {
-  reading:{label:"Reading",icon:"📖",title:"Monthly Bible chapter",fields:[
-    {k:"ref",l:"Chapter (example: John 3)"},{k:"month",l:"Month",type:"month"},
-    {k:"note",l:"Thoughts or questions",type:"area"}]},
-  verse:{label:"Verses",icon:"🕊️",title:"Verse bank",fields:[
-    {k:"ref",l:"Reference (example: Psalm 46:10)"},{k:"text",l:"Verse text",type:"area"},
-    {k:"tag",l:"Theme",type:"select",opts:["Encouragement","Peace","Trust","Strength","Hard days","Gratitude","Other"]}]},
-  prayer:{label:"Prayer",icon:"🙏",title:"Prayer journal",fields:[
-    {k:"text",l:"Prayer request",type:"area"},{k:"for",l:"Who or what is it for?"}]},
-  sermon:{label:"Sermons",icon:"⛪",title:"Sermon notes",fields:[
-    {k:"church",l:"Church"},{k:"date",l:"Date",type:"date"},{k:"ref",l:"Scripture"},
-    {k:"text",l:"Takeaways",type:"area"}]},
-  thanks:{label:"Gratitude",icon:"🌻",title:"Gratitude wall",fields:[
-    {k:"text",l:"I am thankful for...",type:"area"}]},
-  outdoor:{label:"Outdoors",icon:"🌲",title:"Outdoor devotionals",fields:[
-    {k:"place",l:"Place (example: Enchanted Rock)"},{k:"ref",l:"Verse"},
-    {k:"text",l:"Reflection",type:"area"}]},
+const FV = window.firebase ? firebase.firestore.FieldValue : null;
+const REACTS=[["heart","❤️"],["amen","🙏"],["joy","😊"],["star","⭐"]];
+const MOODS=["😞","😕","😐","🙂","😄"];
+/* field = [key, label, type, options] */
+const SECTIONS={
+ reading:{label:"Reading",icon:"📖",title:"Monthly Bible chapter",f:[["ref","Chapter (example: John 3)"],["month","Month","month"],["note","Thoughts or questions","area"]]},
+ verse:{label:"Verses",icon:"🕊️",title:"Verse bank",f:[["ref","Reference (example: Psalm 46:10)"],["text","Verse text","area"],["tag","Theme","select",["Encouragement","Peace","Trust","Strength","Hard days","Gratitude","Other"]]]},
+ prayer:{label:"Prayer",icon:"🙏",title:"Prayer journal",f:[["text","Prayer request","area"],["for","Who or what is it for?"],["update","Update (optional)","area"]]},
+ sermon:{label:"Sermons",icon:"⛪",title:"Sermon notes",f:[["church","Church"],["date","Date","date"],["ref","Scripture"],["text","Takeaways","area"],["apply","How I will apply it","area"]]},
+ thanks:{label:"Gratitude",icon:"🌻",title:"Gratitude wall",f:[["text","I am thankful for...","area"]]},
+ checkin:{label:"Check in",icon:"💛",title:"Weekly check in",f:[["mood","How is your heart this week?","mood"],["day","Kind of week","select",["Good week","Mixed week","Hard week"]],["text","Anything you want to share","area"]]},
+ goal:{label:"Goals",icon:"🎯",title:"Shared goal",f:[["title","Goal"],["progress","Progress (percent)","select",["0","25","50","75","100"]],["text","Notes","area"]]},
+ event:{label:"Events",icon:"📅",title:"Event",f:[["title","What is it?"],["date","Date","date"],["time","Time","time"],["text","Notes","area"]]},
+ outdoor:{label:"Outdoors",icon:"🌲",title:"Outdoor devotional",f:[["place","Place (example: Enchanted Rock)"],["ref","Verse"],["text","Reflection","area"]]}
 };
-const ORDER=["home",...Object.keys(SECTIONS)];
+const GROUPS={
+ home:{label:"Home",icon:"🏠"},
+ faith:{label:"Faith",icon:"📖",subs:["reading","verse","prayer","sermon","thanks","plan","memo"]},
+ together:{label:"Together",icon:"💬",subs:["checkin","goal","event"]},
+ outdoor:{label:"Outdoors",icon:"🌲",subs:["outdoor"]},
+ more:{label:"More",icon:"⚙️"}
+};
+const SUBLABEL={plan:"📆 Plan",memo:"🧠 Memorize"};
+const PLANS={john:{n:"Gospel of John (21 days)",book:"John",days:21},proverbs:{n:"Proverbs in a month (31 days)",book:"Proverbs",days:31},mark:{n:"Gospel of Mark (16 days)",book:"Mark",days:16}};
+const DEFAULTS=[
+ {ref:"Psalm 46:10",text:"Be still, and know that I am God."},
+ {ref:"Joshua 1:9",text:"Have not I commanded thee? Be strong and of a good courage; be not afraid, neither be thou dismayed: for the LORD thy God is with thee whithersoever thou goest."},
+ {ref:"Philippians 4:13",text:"I can do all things through Christ which strengtheneth me."},
+ {ref:"Isaiah 41:10",text:"Fear thou not; for I am with thee: be not dismayed; for I am thy God: I will strengthen thee; yea, I will help thee."},
+ {ref:"Proverbs 3:5-6",text:"Trust in the LORD with all thine heart; and lean not unto thine own understanding. In all thy ways acknowledge him, and he shall direct thy paths."},
+ {ref:"Matthew 11:28",text:"Come unto me, all ye that labour and are heavy laden, and I will give you rest."},
+ {ref:"1 Peter 5:7",text:"Casting all your care upon him; for he careth for you."},
+ {ref:"Psalm 23:1",text:"The LORD is my shepherd; I shall not want."},
+ {ref:"Romans 8:28",text:"And we know that all things work together for good to them that love God, to them who are the called according to his purpose."},
+ {ref:"Jeremiah 29:11",text:"For I know the thoughts that I think toward you, saith the LORD, thoughts of peace, and not of evil, to give you an expected end."}
+];
+const DAILY_REFS=["Psalm 46:10","Joshua 1:9","Philippians 4:13","Isaiah 41:10","Proverbs 3:5-6","Matthew 11:28","1 Peter 5:7","Psalm 23:1","Romans 8:28","Jeremiah 29:11","Psalm 121:1-2","Isaiah 40:31","Philippians 4:6-7","Romans 12:12","Psalm 34:8","John 3:16","John 14:27","2 Corinthians 12:9","Psalm 27:1","Lamentations 3:22-23","Matthew 6:33","Psalm 119:105","Galatians 5:22-23","Hebrews 11:1","Colossians 3:23","Psalm 37:4","Micah 6:8","Ephesians 2:8-9","1 Corinthians 13:4-5","Psalm 91:1-2","Deuteronomy 31:6","Romans 15:13","Psalm 139:14","James 1:2-3","Proverbs 16:3","Psalm 56:3","Isaiah 26:3","Zephaniah 3:17","Psalm 30:5","1 John 4:19"];
+let daily=null;
+async function loadDaily(){
+  const day=Math.floor(Date.now()/864e5),ref=DAILY_REFS[day%DAILY_REFS.length],key="fh_daily_"+ymd(new Date());
+  try{const c=JSON.parse(localStorage.getItem(key)||"null");if(c&&c.text){daily=c;return;}}catch(e){}
+  try{
+    const r=await fetch("https://bible-api.com/"+encodeURIComponent(ref));const j=await r.json();
+    if(j&&j.text){daily={ref:j.reference||ref,text:j.text.trim().replace(/\s*\n\s*/g," ")};localStorage.setItem(key,JSON.stringify(daily));render();return;}
+  }catch(e){}
+  daily=DEFAULTS[day%DEFAULTS.length];render();
+}
+const QUESTIONS=["What is one thing God showed you this week?","Who can you encourage today?","What are you holding on to that you can give to God?","What made you smile or feel peace today?","What is one prayer you want to see answered?","Where did you see God in the outdoors lately?","What is one thing you are learning about trust?","What does today's verse mean for a hard day?","What is a small act of kindness you can do?","What are you most thankful for right now?","What is something you need strength for?","How can we pray for each other this week?","What is a verse you want to remember?","What is one way you grew this month?"];
 
-let items=[], tab="home", me=localStorage.getItem("fh_me"), q="";
-let db=null;
-if(FIREBASE_CONFIG && window.firebase){firebase.initializeApp(FIREBASE_CONFIG);db=firebase.firestore();}
+let items=[], metas={}, grp="home", subSel={faith:"reading",together:"checkin",outdoor:"outdoor"}, filt="all", q="";
+let me=localStorage.getItem("fh_me"), memoI=0, memoShow=false, db=null, firstItems=true, startTime=Date.now();
+
+if(FIREBASE_CONFIG && window.firebase){
+  firebase.initializeApp(FIREBASE_CONFIG);
+  db=firebase.firestore();
+  try{db.enablePersistence({synchronizeTabs:true}).catch(()=>{});}catch(e){}
+}
 
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const nl=s=>esc(s).replace(/\n/g,"<br>");
 const $=id=>document.getElementById(id);
 const fmt=t=>new Date(t).toLocaleDateString(undefined,{month:"short",day:"numeric"});
+const ymd=d=>d.toLocaleDateString("en-CA");
+const fmtDay=s=>{try{return new Date(s+"T00:00:00").toLocaleDateString(undefined,{weekday:"short",month:"short",day:"numeric",year:"numeric"})}catch(e){return s}};
+const curType=()=>grp in subSel?subSel[grp]:null;
 
+/* ---------- toast + notify ---------- */
+function toast(msg,undoLabel,undoFn){
+  const box=$("toastbox");
+  box.innerHTML=`<div class="toast"><span>${esc(msg)}</span>${undoLabel?`<button id="tundo">${esc(undoLabel)}</button>`:""}</div>`;
+  if(undoLabel){$("tundo").onclick=()=>{box.innerHTML="";undoFn&&undoFn();};}
+  clearTimeout(toast.t);toast.t=setTimeout(()=>{box.innerHTML=""},undoLabel?7000:3500);
+}
+function notify(title,body){
+  toast(body);
+  try{
+    if("Notification" in window && Notification.permission==="granted" && navigator.serviceWorker){
+      navigator.serviceWorker.ready.then(r=>r.showNotification(title,{body,icon:"icon-192.png"})).catch(()=>{});
+    }
+  }catch(e){}
+}
+
+/* ---------- data ---------- */
 function start(){
   if(PASSCODE && localStorage.getItem("fh_pass")!==PASSCODE){
     const p=prompt("Enter the passcode");
     if(p!==PASSCODE){document.body.innerHTML="<p class='empty'>Wrong passcode. Refresh to try again.</p>";return;}
     localStorage.setItem("fh_pass",PASSCODE);
   }
-  if(db){db.collection("items").orderBy("created","desc").onSnapshot(s=>{items=s.docs.map(d=>({id:d.id,...d.data()}));render();});}
-  else{items=JSON.parse(localStorage.getItem("fh_items")||"[]");}
-  if(!me){askWho();}
+  const th=localStorage.getItem("fh_theme");if(th&&th!=="auto")document.documentElement.dataset.theme=th;
+  const fs=localStorage.getItem("fh_fs");if(fs)document.body.style.fontSize=fs+"px";
+  if(new Date().getMonth()===11)document.documentElement.style.setProperty("--acc","#b3392f");
+  if(db){
+    db.collection("items").orderBy("created","desc").onSnapshot(s=>{
+      if(!firstItems){
+        s.docChanges().forEach(c=>{
+          if(c.type==="added"&&!c.doc.metadata.hasPendingWrites){
+            const d=c.doc.data();
+            if(d.author&&d.author!==me){const S=SECTIONS[d.type];notify("Faith Hub",`${d.author} added to ${S?S.label:"the hub"}`);}
+          }
+        });
+      }
+      firstItems=false;
+      items=s.docs.map(d=>({id:d.id,...d.data()}));
+      render();
+    });
+    db.collection("meta").onSnapshot(s=>{metas={};s.docs.forEach(d=>metas[d.id]=d.data());render();});
+    db.collection("pings").orderBy("ts","desc").limit(1).onSnapshot(s=>{
+      s.docChanges().forEach(c=>{
+        if(c.type==="added"){const d=c.doc.data();if(d.from&&d.from!==me&&d.ts>startTime)notify("Faith Hub",`💛 ${d.from} is thinking of you`);}
+      });
+    });
+  } else {
+    items=JSON.parse(localStorage.getItem("fh_items")||"[]");
+  }
+  if(!me)askWho();
   render();
-}
-function askWho(){
-  const d=$("dlg");
-  d.innerHTML=`<h3>Who is here?</h3><div class="row">${PEOPLE.map(p=>`<button class="btn" data-p="${p}">${p}</button>`).join("")}</div>`;
-  d.querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>{me=b.dataset.p;localStorage.setItem("fh_me",me);d.close();render();});
-  d.addEventListener("cancel",e=>e.preventDefault(),{once:true});
-  d.showModal();
+  loadDaily();
 }
 function persist(){if(!db)localStorage.setItem("fh_items",JSON.stringify(items));}
-async function save(it){
-  if(db){const {id,...rest}=it;if(id)await db.collection("items").doc(id).set(rest,{merge:true});else await db.collection("items").add(rest);}
-  else{if(it.id){items=items.map(x=>x.id===it.id?it:x);}else{it.id=String(Date.now());items.unshift(it);}persist();render();}
+function save(it){
+  if(db){
+    const {id,...rest}=it;
+    const p=id?db.collection("items").doc(id).set(rest,{merge:true}):db.collection("items").add(rest);
+    p.catch(()=>toast("Could not save. Check your connection."));
+  } else {
+    if(it.id){items=items.map(x=>x.id===it.id?it:x);}else{it.id=String(Date.now());items.unshift(it);}
+    persist();render();
+  }
 }
-async function remove(id){
-  if(!confirm("Delete this?"))return;
-  if(db)await db.collection("items").doc(id).delete();else{items=items.filter(x=>x.id!==id);persist();render();}
+function setMeta(id,data){
+  if(!db){toast("Sharing is not set up yet");return;}
+  db.collection("meta").doc(id).set(data,{merge:true}).catch(()=>toast("Could not save. Check your connection."));
+}
+function patch(id,data){
+  if(!db){toast("Sharing is not set up yet");return;}
+  db.collection("items").doc(id).update(data).catch(()=>toast("Could not save. Check your connection."));
+}
+function del(id){
+  const it=items.find(x=>x.id===id);if(!it)return;
+  const {id:_,...rest}=it;
+  if(db)db.collection("items").doc(id).delete().catch(()=>{});
+  else{items=items.filter(x=>x.id!==id);persist();render();}
+  toast("Deleted","Undo",()=>{
+    if(db)db.collection("items").doc(id).set(rest).catch(()=>{});
+    else{items.unshift(it);persist();render();}
+  });
 }
 
-function form(type,it){
-  const S=SECTIONS[type],d=$("dlg"),v=it||{};
-  d.innerHTML=`<h3>${it?"Edit":"Add"}: ${esc(S.title)}</h3><form method="dialog" id="f">
-  ${S.fields.map(f=>{
-    const val=esc(v[f.k]||"");
-    let inp;
-    if(f.type==="area")inp=`<textarea name="${f.k}">${val}</textarea>`;
-    else if(f.type==="select")inp=`<select name="${f.k}">${f.opts.map(o=>`<option ${v[f.k]===o?"selected":""}>${o}</option>`).join("")}</select>`;
-    else inp=`<input name="${f.k}" type="${f.type||"text"}" value="${val}">`;
-    return `<label>${esc(f.l)}</label>${inp}`;}).join("")}
-  <div class="row"><button class="btn" value="ok">Save</button><button class="btn ghost" type="button" id="x">Cancel</button></div></form>`;
-  $("x").onclick=()=>d.close();
-  $("f").onsubmit=async e=>{
-    const o=Object.fromEntries(new FormData(e.target));
+/* ---------- helpers ---------- */
+function streak(name){
+  const set=new Set(((metas.reads||{})[name])||[]);
+  let d=new Date();if(!set.has(ymd(d)))d.setDate(d.getDate()-1);
+  let n=0;while(set.has(ymd(d))){n++;d.setDate(d.getDate()-1);}
+  return n;
+}
+function versePool(){const b=items.filter(i=>i.type==="verse"&&i.text);return b.length?b:DEFAULTS;}
+function upcoming(){
+  const t=ymd(new Date());
+  return items.filter(i=>i.type==="event"&&i.date&&i.date>=t).sort((a,b)=>a.date.localeCompare(b.date))[0];
+}
+function daysUntil(s){const a=new Date(ymd(new Date())+"T00:00:00"),b=new Date(s+"T00:00:00");return Math.round((b-a)/864e5);}
+function readPhoto(file){
+  return new Promise(res=>{
+    const r=new FileReader();
+    r.onload=()=>{const im=new Image();
+      im.onload=()=>{const m=900,s=Math.min(1,m/Math.max(im.width,im.height));const c=document.createElement("canvas");c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);c.getContext("2d").drawImage(im,0,0,c.width,c.height);res(c.toDataURL("image/jpeg",.7));};
+      im.onerror=()=>res(null);im.src=r.result;};
+    r.onerror=()=>res(null);r.readAsDataURL(file);
+  });
+}
+function openDlg(html){const d=$("dlg");if(d.open)d.close();d.innerHTML=html;d.showModal();return d;}
+function closeDlg(){const d=$("dlg");if(d.open)d.close();}
+
+function askWho(){
+  const d=openDlg(`<h3>Who is here?</h3><div class="row">${PEOPLE.map(p=>`<button class="btn" data-act="who" data-p="${p}">${p}</button>`).join("")}</div>`);
+  d.addEventListener("cancel",e=>e.preventDefault(),{once:true});
+}
+
+/* ---------- forms ---------- */
+function openForm(type,it){
+  const S=SECTIONS[type],v=it||{};
+  const inputs=S.f.map(([k,l,t,o])=>{
+    const val=esc(v[k]||"");let inp;
+    if(t==="area")inp=`<textarea name="${k}">${val}</textarea>`;
+    else if(t==="select")inp=`<select name="${k}">${o.map(x=>`<option ${String(v[k])===x?"selected":""}>${x}</option>`).join("")}</select>`;
+    else if(t==="mood")inp=`<select name="${k}">${MOODS.map((m,i)=>`<option value="${i+1}" ${String(v[k]||3)===String(i+1)?"selected":""}>${m} ${i+1} of 5</option>`).join("")}</select>`;
+    else inp=`<input name="${k}" type="${t||"text"}" value="${val}">`;
+    return `<label>${esc(l)}</label>${inp}`;
+  }).join("");
+  const lookup=type==="verse"?`<div class="row"><button type="button" class="btn small ghost" data-act="lookup">🔎 Look up verse text</button></div>`:"";
+  const d=openDlg(`<h3>${it?"Edit":"Add"}: ${esc(S.title)}</h3><form id="f">${inputs}${lookup}
+    <label>Photo (optional)</label><input type="file" name="photo" accept="image/*">
+    <div class="row"><button class="btn" type="submit">Save</button><button class="btn ghost" type="button" data-act="close">Cancel</button></div></form>`);
+  const f=$("f");
+  f.onsubmit=async e=>{
+    e.preventDefault();
+    const b=f.querySelector("[type=submit]");b.disabled=true;b.textContent="Saving...";
+    const o=Object.fromEntries(new FormData(f));delete o.photo;
+    const file=f.elements.photo.files[0];let photo=v.photo||null;
+    if(file){const p=await readPhoto(file);if(p)photo=p;}
     const rec={...v,...o,type,author:v.author||me||"Someone",created:v.created||Date.now()};
-    await save(rec);
+    if(photo)rec.photo=photo;
+    save(rec);closeDlg();
   };
-  d.showModal();
+}
+async function lookup(){
+  const d=$("dlg"),r=d.querySelector("[name=ref]").value.trim();
+  if(!r){toast("Type a reference first, like John 3:16");return;}
+  try{
+    const res=await fetch("https://bible-api.com/"+encodeURIComponent(r));
+    const j=await res.json();
+    if(j&&j.text){d.querySelector("[name=text]").value=j.text.trim().replace(/\s*\n\s*/g," ");if(j.reference)d.querySelector("[name=ref]").value=j.reference;}
+    else toast("Could not find that verse");
+  }catch(e){toast("Lookup needs internet");}
+}
+function openComment(id){
+  openDlg(`<h3>Add a comment</h3><form id="cf"><textarea name="t" required></textarea><div class="row"><button class="btn" type="submit">Post</button><button class="btn ghost" type="button" data-act="close">Cancel</button></div></form>`);
+  $("cf").onsubmit=e=>{
+    e.preventDefault();const t=e.target.t.value.trim();if(!t)return;
+    if(!db){toast("Sharing is not set up yet");return;}
+    patch(id,{comments:FV.arrayUnion({a:me||"Someone",t,ts:Date.now()})});closeDlg();
+  };
 }
 
+/* ---------- views ---------- */
 function card(it){
-  const S=SECTIONS[it.type];
-  const body=[it.ref&&`<div class="meta">${esc(it.ref)}</div>`,it.text&&`<div>${esc(it.text).replace(/\n/g,"<br>")}</div>`,
-    it.note&&`<div>${esc(it.note).replace(/\n/g,"<br>")}</div>`].filter(Boolean).join("");
-  const title=it.place||it.church||it.for||it.tag||(it.month?`Chapter for ${it.month}`:"");
-  const tail=it.type==="prayer"?`<button class="btn small ghost" data-a="${it.id}">${it.answered?"Mark unanswered":"Mark answered ✅"}</button>`:"";
+  const S=SECTIONS[it.type]||{icon:"",label:""};
+  let title=it.title||it.place||it.church||it.for||(it.type==="checkin"&&it.mood?`${MOODS[it.mood-1]||""} ${it.day||""}`:"")||it.tag||(it.month?"Chapter for "+it.month:"");
+  const body=[
+    it.ref&&`<div class="meta">${esc(it.ref)}</div>`,
+    it.type==="event"&&it.date&&`<div class="meta">${esc(fmtDay(it.date))}${it.time?" at "+esc(it.time):""}${daysUntil(it.date)>=0?` · in ${daysUntil(it.date)} days`:""}</div>`,
+    it.text&&`<div>${nl(it.text)}</div>`,
+    it.note&&`<div>${nl(it.note)}</div>`,
+    it.update&&`<div><b>Update:</b> ${nl(it.update)}</div>`,
+    it.apply&&`<div><b>Apply:</b> ${nl(it.apply)}</div>`
+  ].filter(Boolean).join("");
+  const prog=it.type==="goal"?`<div class="bar"><i style="width:${Number(it.progress)||0}%"></i></div><div class="meta">${Number(it.progress)||0}% done</div>`:"";
+  const photo=it.photo&&String(it.photo).startsWith("data:image/")?`<img class="ph" src="${it.photo}" alt="photo">`:"";
+  const rx=it.reactions||{};
+  const reacts=REACTS.map(([k,e])=>{const a=rx[k]||[];return `<button class="react ${a.includes(me)?"on":""}" data-act="react" data-id="${it.id}" data-k="${k}">${e}${a.length?" "+a.length:""}</button>`;}).join("");
+  const cms=(it.comments||[]).map(c=>`<div class="cm"><span class="who">${esc(c.a)}</span>${nl(c.t)}</div>`).join("");
+  const extra=it.type==="prayer"?`<button class="btn small ghost" data-act="answered" data-id="${it.id}">${it.answered?"Mark unanswered":"Mark answered ✅"}</button>`:
+    it.type==="goal"?`<button class="btn small ghost" data-act="goal" data-id="${it.id}" data-v="${Math.min(100,(Number(it.progress)||0)+25)}">+25%</button>`:"";
   return `<div class="card ${it.answered?"done":""}">
     ${title?`<h3>${esc(title)}${it.answered?" ✅":""}</h3>`:""}
-    <div class="meta"><span class="who">${esc(it.author)}</span>${fmt(it.created)}${it.date?" · "+esc(it.date):""}</div>
-    ${body}
-    <div class="row">${tail}<button class="btn small ghost" data-e="${it.id}">Edit</button><button class="btn small ghost" data-d="${it.id}">Delete</button></div></div>`;
+    <div class="meta"><span class="who">${esc(it.author)}</span>${it.created?fmt(it.created):""}${it.type==="sermon"&&it.date?" · "+esc(it.date):""}</div>
+    ${body}${prog}${photo}
+    <div class="row">${reacts}</div>${cms}
+    <div class="row">${extra}<button class="btn small ghost" data-act="comment" data-id="${it.id}">💬 Comment</button><button class="btn small ghost" data-act="edit" data-id="${it.id}">Edit</button><button class="btn small ghost" data-act="del" data-id="${it.id}">Delete</button></div></div>`;
+}
+function listItems(type){
+  let l=items.filter(i=>i.type===type);
+  if(filt!=="all")l=l.filter(i=>i.author===filt);
+  if(q)l=l.filter(i=>JSON.stringify({...i,photo:""}).toLowerCase().includes(q.toLowerCase()));
+  if(type==="event")l.sort((a,b)=>(a.date||"").localeCompare(b.date||""));
+  else l.sort((a,b)=>(b.created||0)-(a.created||0));
+  return l.length?l.map(card).join(""):`<p class="empty">Nothing here yet. Tap Add to start.</p>`;
+}
+function listView(type){
+  const S=SECTIONS[type];
+  return `<h2>${S.icon} ${esc(S.title)}</h2><button class="btn add" data-act="add" data-t="${type}">+ Add</button>
+  <div class="chips">${["all",...PEOPLE].map(p=>`<button class="chip ${filt===p?"on":""}" data-act="filt" data-p="${p}">${p==="all"?"Everyone":p}</button>`).join("")}</div>
+  <input id="q" class="search" placeholder="Search" value="${esc(q)}">
+  <div id="lst">${listItems(type)}</div>`;
+}
+function homeView(){
+  const day=Math.floor(Date.now()/864e5);
+  const v=daily||DEFAULTS[day%DEFAULTS.length],Q=QUESTIONS[day%QUESTIONS.length];
+  const bank=items.filter(i=>i.type==="verse"&&i.text),bv=bank.length?bank[day%bank.length]:null;
+  const nx=upcoming();
+  const today=ymd(new Date());
+  const readToday=((metas.reads||{})[me]||[]).includes(today);
+  const recent=items.slice(0,4);
+  return `
+  <div class="card"><div class="meta">Verse of the day</div>
+    <p class="verse">"${esc(v.text)}"</p><div class="meta">${esc(v.ref||"")}</div>
+    <p style="margin:10px 0 0"><b>Reflect:</b> ${esc(Q)}</p></div>
+  ${bv?`<div class="card"><div class="meta">From our verse bank</div><p class="verse" style="font-size:18px">"${esc(bv.text)}"</p><div class="meta">${esc(bv.ref||"")} · added by ${esc(bv.author||"")}</div></div>`:""}
+  <div class="grid2">
+    <button class="btn" data-act="read" ${readToday?"disabled":""}>${readToday?"✅ Read today":"📖 I read today"}</button>
+    <button class="btn ghost" data-act="ping">💛 Thinking of you</button>
+  </div>
+  <div class="card"><div class="meta">Reading streaks</div>
+    <div class="row">${PEOPLE.map(p=>`<span class="who">${esc(p)}: ${streak(p)} day${streak(p)===1?"":"s"} 🔥</span>`).join("")}</div></div>
+  ${nx?`<div class="card"><div class="meta">Next event</div><h3>${esc(nx.title||"Event")}</h3><div class="big">${daysUntil(nx.date)===0?"Today!":daysUntil(nx.date)+" days"}</div><div class="meta" style="text-align:center">${esc(fmtDay(nx.date))}</div></div>`:
+  `<div class="card"><div class="meta">Next event</div><p class="empty" style="padding:8px">Add a visit or church date in Together, Events and it shows a countdown here.</p></div>`}
+  <div class="row"><button class="btn ghost" data-act="hard">🌧️ Hard day? Give me a verse</button></div>
+  <h3 style="margin-top:18px">Recent</h3>${recent.length?recent.map(card).join(""):`<p class="empty">Nothing yet. Pick a tab below and add the first one.</p>`}`;
+}
+function planView(){
+  const key=(metas.settings||{}).plan||"john",P=PLANS[key]||PLANS.john;
+  const done=(metas["plan_"+key]||{}).done||{};
+  let total=0,rows="";
+  for(let d=1;d<=P.days;d++){
+    const w=done[d]||[];total+=w.length;
+    const link=`https://www.biblegateway.com/passage/?search=${encodeURIComponent(P.book+" "+d)}&version=NIV`;
+    rows+=`<div class="card" style="padding:10px 14px"><div class="row" style="margin:0;justify-content:space-between">
+      <div><b>Day ${d}</b> · <a href="${link}" target="_blank" rel="noopener">${esc(P.book)} ${d}</a></div>
+      <div class="row" style="margin:0">${PEOPLE.map(p=>p===me?`<button class="react ${w.includes(p)?"on":""}" data-act="plan" data-d="${d}">${w.includes(p)?"✅":"⭕"} ${esc(p)}</button>`:`<span class="pdone">${w.includes(p)?"✅":"⭕"} ${esc(p)}</span>`).join("")}</div></div></div>`;
+  }
+  const pct=Math.round(total/(P.days*2)*100);
+  return `<h2>📆 Reading plan</h2>
+  <label>Plan</label><select data-act="planpick">${Object.entries(PLANS).map(([k,p])=>`<option value="${k}" ${k===key?"selected":""}>${esc(p.n)}</option>`).join("")}</select>
+  <div class="bar"><i style="width:${pct}%"></i></div><div class="meta">${pct}% done together. Tap your own circle when you finish a day.</div>${rows}`;
+}
+function memoView(){
+  const pool=versePool(),v=pool[memoI%pool.length];
+  return `<h2>🧠 Memorize</h2><div class="card" style="text-align:center">
+    <div class="meta">Card ${(memoI%pool.length)+1} of ${pool.length}</div>
+    <h3 style="font-size:24px;margin:14px 0">${esc(v.ref)}</h3>
+    ${memoShow?`<p class="verse">"${esc(v.text)}"</p>`:`<p class="empty">Say the verse out loud, then tap Show.</p>`}
+    <div class="row" style="justify-content:center"><button class="btn" data-act="memoflip">${memoShow?"Hide":"Show verse"}</button><button class="btn ghost" data-act="memonext">Next</button><button class="btn ghost" data-act="memoshuf">Shuffle</button></div></div>
+    <p class="meta">This uses the verses in your Verse bank.</p>`;
+}
+function badges(){
+  const mx=Math.max(...PEOPLE.map(streak),0),own=t=>items.filter(i=>i.type===t).length;
+  const places=new Set(items.filter(i=>i.type==="outdoor"&&i.place).map(i=>i.place.trim().toLowerCase())).size;
+  return [["🔥","7 day reading streak",mx>=7],["🌟","30 day reading streak",mx>=30],["📝","10 entries added",items.length>=10],["🙏","5 prayers written",own("prayer")>=5],["✅","First answered prayer",items.some(i=>i.answered)],["🌲","3 places visited",places>=3],["🕊️","10 verses saved",own("verse")>=10],["📸","First photo shared",items.some(i=>i.photo)]];
+}
+function moreView(){
+  const th=localStorage.getItem("fh_theme")||"auto";
+  return `<h2>⚙️ More</h2>
+  <div class="card"><h3>You</h3><div class="meta">Signed in as ${esc(me||"nobody")}</div><div class="row"><button class="btn small ghost" data-act="askwho">Switch person</button></div></div>
+  <div class="card"><h3>Look and feel</h3><div class="row">${["auto","light","dark"].map(t=>`<button class="chip ${th===t?"on":""}" data-act="theme" data-t="${t}">${t==="auto"?"Auto":t[0].toUpperCase()+t.slice(1)}</button>`).join("")}</div>
+    <div class="row"><button class="btn small ghost" data-act="fs" data-d="-1">A−</button><button class="btn small ghost" data-act="fs" data-d="1">A+</button><span class="meta">Text size</span></div></div>
+  <div class="card"><h3>Alerts</h3><div class="meta">Get a pop up when the other person adds something or sends a 💛 while the app is open.</div><div class="row"><button class="btn small" data-act="notif">Turn on alerts</button></div></div>
+  <div class="card"><h3>Badges</h3>${badges().map(([i,t,o])=>`<div style="opacity:${o?1:.35}">${i} ${esc(t)}${o?" ✅":""}</div>`).join("")}</div>
+  <div class="card"><h3>Keepsakes</h3><div class="row"><button class="btn small ghost" data-act="review">🎉 Year in review</button><button class="btn small ghost" data-act="journal">📄 Download journal</button><button class="btn small ghost" data-act="backup">💾 Backup file</button></div></div>
+  <div class="card"><h3>Make it an app</h3><div class="meta">Android: Chrome menu (three dots), then Add to Home screen. iPhone: Share button, then Add to Home Screen.</div></div>
+  <div class="card"><h3>Verse of the day icon</h3><div class="meta">A tiny page that shows only today's verse. Add it to your home screen as its own icon.</div><div class="row"><a class="btn small" href="today.html">Open verse page</a></div></div>`;
+}
+function reviewDialog(){
+  const c=t=>items.filter(i=>i.type===t).length;
+  const places=new Set(items.filter(i=>i.type==="outdoor"&&i.place).map(i=>i.place.trim())).size;
+  const moods=items.filter(i=>i.type==="checkin"&&i.mood).map(i=>Number(i.mood));
+  const avg=moods.length?(moods.reduce((a,b)=>a+b,0)/moods.length).toFixed(1):"n/a";
+  const tags={};items.filter(i=>i.type==="verse"&&i.tag).forEach(i=>tags[i.tag]=(tags[i.tag]||0)+1);
+  const top=Object.entries(tags).sort((a,b)=>b[1]-a[1])[0];
+  const reads=PEOPLE.map(p=>`${p}: ${(((metas.reads||{})[p])||[]).length} days`).join(", ");
+  openDlg(`<h3>🎉 Year in review</h3>
+   <p>📖 Verses saved: <b>${c("verse")}</b></p><p>🙏 Prayers: <b>${c("prayer")}</b> (answered: <b>${items.filter(i=>i.answered).length}</b>)</p>
+   <p>⛪ Sermons: <b>${c("sermon")}</b></p><p>🌻 Thankful: <b>${c("thanks")}</b></p><p>🌲 Places: <b>${places}</b></p>
+   <p>💛 Average check in mood: <b>${avg}</b> of 5</p><p>🕊️ Favorite verse theme: <b>${top?esc(top[0]):"n/a"}</b></p>
+   <p>📖 Reading days: ${esc(reads)}</p><div class="row"><button class="btn" data-act="close">Close</button></div>`);
+}
+function hardDay(){
+  const good=items.filter(i=>i.type==="verse"&&i.text&&["Hard days","Peace","Strength","Encouragement","Trust"].includes(i.tag));
+  const pool=good.length?good:DEFAULTS,v=pool[Math.floor(Math.random()*pool.length)];
+  openDlg(`<h3>🌧️ For a hard day</h3><p class="verse">"${esc(v.text)}"</p><div class="meta">${esc(v.ref||"")}</div>
+   <p>You are not alone. Take a slow breath and read it once more.</p>
+   <div class="row"><button class="btn" data-act="hard">Another</button><button class="btn ghost" data-act="close">Close</button></div>`);
+}
+function download(name,txt,type){const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([txt],{type}));a.download=name;document.body.appendChild(a);a.click();a.remove();}
+function journalHtml(){
+  const parts=Object.entries(SECTIONS).map(([k,S])=>{
+    const l=items.filter(i=>i.type===k).sort((a,b)=>(a.created||0)-(b.created||0));
+    if(!l.length)return"";
+    return `<h2>${S.icon} ${esc(S.title)}</h2>`+l.map(i=>`<div style="margin:10px 0;padding:8px;border-bottom:1px solid #ddd"><b>${esc(i.title||i.place||i.church||i.for||i.tag||i.ref||"")}</b> <small>${esc(i.author)} ${i.created?fmt(i.created):""}</small><br>${[i.ref,i.text,i.note,i.update,i.apply].filter(Boolean).map(nl).join("<br>")}</div>`).join("");
+  }).join("");
+  return `<!doctype html><meta charset="utf-8"><title>Faith Hub Journal</title><body style="font-family:Georgia,serif;max-width:720px;margin:auto;padding:20px"><h1>Faith Hub Journal</h1>${parts}</body>`;
 }
 
+/* ---------- render ---------- */
 function render(){
+  if(document.activeElement&&document.activeElement.id==="q"&&$("lst")){$("lst").innerHTML=listItems(curType());return;}
   $("hello").textContent=me?`Hi ${me}. This is your shared space.`:"";
-  $("nav").innerHTML=ORDER.map(t=>{const S=SECTIONS[t];return `<button class="${t===tab?"on":""}" data-t="${t}"><span>${S?S.icon:"🏠"}</span>${S?S.label:"Home"}</button>`}).join("");
+  $("nav").innerHTML=Object.entries(GROUPS).map(([k,g])=>`<button class="${k===grp?"on":""}" data-act="nav" data-g="${k}"><span>${g.icon}</span>${g.label}</button>`).join("");
   const m=$("main");
-  const banner=db?"":`<div class="banner">Not shared yet: entries only save on this device until setup is finished.</div>`;
-  if(tab==="home"){
-    const verses=items.filter(i=>i.type==="verse"&&i.text);
-    const day=Math.floor(Date.now()/864e5);
-    const v=verses.length?verses[day%verses.length]:null;
-    const recent=items.slice(0,5);
-    m.innerHTML=banner+`<div class="card"><div class="meta">Verse of the day</div>${v?`<p class="verse">"${esc(v.text)}"</p><div class="meta">${esc(v.ref||"")} added by ${esc(v.author)}</div>`:`<p class="empty">Add a verse in the Verses tab and it shows up here.</p>`}</div>
-    <div class="row">${Object.entries(SECTIONS).map(([k,S])=>`<button class="btn ghost" data-t="${k}">${S.icon} ${S.label} (${items.filter(i=>i.type===k).length})</button>`).join("")}</div>
-    <h3>Recent</h3>${recent.length?recent.map(card).join(""):`<p class="empty">Nothing yet. Pick a tab below and add the first one.</p>`}`;
-  } else {
-    const S=SECTIONS[tab];
-    let list=items.filter(i=>i.type===tab);
-    if(q)list=list.filter(i=>JSON.stringify(i).toLowerCase().includes(q.toLowerCase()));
-    m.innerHTML=banner+`<h2>${S.icon} ${esc(S.title)}</h2><button class="btn add" data-add="1">+ Add</button>
-    <input class="search" placeholder="Search" value="${esc(q)}" id="q">
-    ${list.length?list.map(card).join(""):`<p class="empty">Nothing here yet. Tap Add to start.</p>`}`;
-    const qi=$("q");qi.oninput=()=>{q=qi.value;const p=qi.selectionStart;render();const n=$("q");n.focus();n.setSelectionRange(p,p);};
-    m.querySelector("[data-add]").onclick=()=>form(tab);
+  const banner=db?"":`<div class="banner">Not shared yet: entries only save on this device.</div>`;
+  let html=banner;
+  if(grp==="home")html+=homeView();
+  else if(grp==="more")html+=moreView();
+  else{
+    const g=GROUPS[grp],cur=subSel[grp];
+    if(g.subs.length>1)html+=`<div class="chips">${g.subs.map(s=>`<button class="chip ${s===cur?"on":""}" data-act="sub" data-s="${s}">${SUBLABEL[s]||(SECTIONS[s].icon+" "+SECTIONS[s].label)}</button>`).join("")}</div>`;
+    html+=cur==="plan"?planView():cur==="memo"?memoView():listView(cur);
   }
-  document.querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>{tab=b.dataset.t;q="";render();scrollTo(0,0);});
-  document.querySelectorAll("[data-e]").forEach(b=>b.onclick=()=>{const it=items.find(x=>x.id===b.dataset.e);form(it.type,it);});
-  document.querySelectorAll("[data-d]").forEach(b=>b.onclick=()=>remove(b.dataset.d));
-  document.querySelectorAll("[data-a]").forEach(b=>b.onclick=()=>{const it=items.find(x=>x.id===b.dataset.a);save({...it,answered:!it.answered});});
+  m.innerHTML=html;
 }
+
+/* ---------- actions ---------- */
+document.addEventListener("input",e=>{if(e.target.id==="q"){q=e.target.value;if($("lst"))$("lst").innerHTML=listItems(curType());}});
+document.addEventListener("change",e=>{const a=e.target.dataset&&e.target.dataset.act;if(a==="planpick")setMeta("settings",{plan:e.target.value});});
+document.addEventListener("click",e=>{
+  const b=e.target.closest("[data-act]");if(!b||b.tagName==="SELECT")return;
+  const a=b.dataset.act,d=b.dataset;
+  const it=d.id?items.find(x=>x.id===d.id):null;
+  if(a==="nav"){grp=d.g;filt="all";q="";render();scrollTo(0,0);}
+  else if(a==="sub"){subSel[grp]=d.s;filt="all";q="";render();}
+  else if(a==="filt"){filt=d.p;render();}
+  else if(a==="add")openForm(d.t);
+  else if(a==="edit"&&it)openForm(it.type,it);
+  else if(a==="del")del(d.id);
+  else if(a==="comment")openComment(d.id);
+  else if(a==="react"&&it){
+    if(!db){toast("Sharing is not set up yet");return;}
+    const has=((it.reactions||{})[d.k]||[]).includes(me);
+    patch(d.id,{["reactions."+d.k]:has?FV.arrayRemove(me):FV.arrayUnion(me)});
+  }
+  else if(a==="answered"&&it)save({...it,answered:!it.answered});
+  else if(a==="goal"&&it)save({...it,progress:d.v});
+  else if(a==="read")setMeta("reads",{[me||"Someone"]:FV?FV.arrayUnion(ymd(new Date())):[]});
+  else if(a==="ping"){if(!db){toast("Sharing is not set up yet");return;}db.collection("pings").add({from:me||"Someone",ts:Date.now()}).then(()=>toast("Sent 💛")).catch(()=>toast("Could not send"));}
+  else if(a==="hard")hardDay();
+  else if(a==="plan"){
+    const key=(metas.settings||{}).plan||"john",w=(((metas["plan_"+key]||{}).done||{})[d.d])||[];
+    setMeta("plan_"+key,{done:{[d.d]:w.includes(me)?FV.arrayRemove(me):FV.arrayUnion(me)}});
+  }
+  else if(a==="memoflip"){memoShow=!memoShow;render();}
+  else if(a==="memonext"){memoI++;memoShow=false;render();}
+  else if(a==="memoshuf"){memoI=Math.floor(Math.random()*versePool().length);memoShow=false;render();}
+  else if(a==="who"){me=d.p;localStorage.setItem("fh_me",me);closeDlg();render();}
+  else if(a==="askwho")askWho();
+  else if(a==="theme"){localStorage.setItem("fh_theme",d.t);if(d.t==="auto")delete document.documentElement.dataset.theme;else document.documentElement.dataset.theme=d.t;render();}
+  else if(a==="fs"){const cur=parseInt(getComputedStyle(document.body).fontSize)||17;const n=Math.max(14,Math.min(24,cur+Number(d.d)*2));document.body.style.fontSize=n+"px";localStorage.setItem("fh_fs",n);}
+  else if(a==="notif"){
+    if(!("Notification" in window)){toast("Alerts are not supported on this browser");return;}
+    Notification.requestPermission().then(p=>toast(p==="granted"?"Alerts are on":"Alerts are off"));
+  }
+  else if(a==="review")reviewDialog();
+  else if(a==="journal")download("faith-hub-journal.html",journalHtml(),"text/html");
+  else if(a==="backup")download("faith-hub-backup.json",JSON.stringify({items,metas},null,1),"application/json");
+  else if(a==="lookup")lookup();
+  else if(a==="close")closeDlg();
+});
+if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
 start();
 </script>
 </body>

@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Daily Verse</title>
+<link rel="manifest" href="manifest-today.json">
+<meta name="theme-color" content="#1c1a1f">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Daily Verse">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon-192.png">
+<style>
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:28px;background:linear-gradient(160deg,#1c1a1f,#3a2d22);color:#f1ece4;font-family:Georgia,serif}
+.k{font:14px system-ui,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#e0a062;margin-bottom:18px}
+.v{font-size:26px;line-height:1.5;font-style:italic;max-width:560px}
+.r{margin-top:18px;font:600 18px system-ui,sans-serif;color:#e0a062}
+.d{margin-top:34px;font:14px system-ui,sans-serif;color:#a49ead}
+a{color:#e0a062;font:600 16px system-ui,sans-serif;margin-top:28px;text-decoration:none;border:1px solid #e0a062;border-radius:99px;padding:10px 20px}
+</style>
+</head>
+<body>
+<div class="k">✝️ Verse of the day</div>
+<div class="v" id="v">Loading...</div>
+<div class="r" id="r"></div>
+<div class="d" id="d"></div>
+<a href="index.html">Open Faith Hub</a>
+<script>
+const REFS=["Psalm 46:10","Joshua 1:9","Philippians 4:13","Isaiah 41:10","Proverbs 3:5-6","Matthew 11:28","1 Peter 5:7","Psalm 23:1","Romans 8:28","Jeremiah 29:11","Psalm 121:1-2","Isaiah 40:31","Philippians 4:6-7","Romans 12:12","Psalm 34:8","John 3:16","John 14:27","2 Corinthians 12:9","Psalm 27:1","Lamentations 3:22-23","Matthew 6:33","Psalm 119:105","Galatians 5:22-23","Hebrews 11:1","Colossians 3:23","Psalm 37:4","Micah 6:8","Ephesians 2:8-9","1 Corinthians 13:4-5","Psalm 91:1-2","Deuteronomy 31:6","Romans 15:13","Psalm 139:14","James 1:2-3","Proverbs 16:3","Psalm 56:3","Isaiah 26:3","Zephaniah 3:17","Psalm 30:5","1 John 4:19"];
+const FALLBACK={ref:"Psalm 46:10",text:"Be still, and know that I am God."};
+const today=new Date(),key="fh_daily_"+today.toLocaleDateString("en-CA");
+document.getElementById("d").textContent=today.toLocaleDateString(undefined,{weekday:"long",month:"long",day:"numeric"});
+function show(x){document.getElementById("v").textContent="“"+x.text+"”";document.getElementById("r").textContent=x.ref;}
+(async()=>{
+  try{const c=JSON.parse(localStorage.getItem(key)||"null");if(c&&c.text){show(c);return;}}catch(e){}
+  const day=Math.floor(Date.now()/864e5),ref=REFS[day%REFS.length];
+  try{
+    const r=await fetch("https://bible-api.com/"+encodeURIComponent(ref));const j=await r.json();
+    if(j&&j.text){const x={ref:j.reference||ref,text:j.text.trim().replace(/\s*\n\s*/g," ")};localStorage.setItem(key,JSON.stringify(x));show(x);return;}
+  }catch(e){}
+  show(FALLBACK);
+})();
+if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
+</script>
+</body>
+</html>
