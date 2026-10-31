@@ -92,7 +92,7 @@ details.card summary{font-weight:600;cursor:pointer}
 
 <script>
 /* ============ SETUP (Jayden only) ============ */
-const APP_VER="3.0";
+const APP_VER="3.1";
 const FIREBASE_CONFIG = {
   apiKey:"AIzaSyDhwY77B-wZL7f4077kEC_tn0K2AgJ6bIs",
   authDomain:"faith-hub-71ae2.firebaseapp.com",
@@ -205,7 +205,7 @@ const HELP=[
  ["Something is not working","Close the app and open it again. Then tap More and Send feedback so Jayden can fix it."]
 ];
 const TOUR=[["Welcome 💛","This is a private space for the two of you to share faith, prayers and adventures."],["Add something","Tap a tab at the bottom, then the big Add button. We ask one question at a time."],["Stay close","Tap 💛 Thinking of you, send a message, or react to anything with ❤️ or 🙏."],["Daily verse","Turn on notifications in More to get a verse every day at noon. Tap the ? button any time for help."]];
-const NEWS=["Daily verse notifications at noon (turn on in More)","Simple mode, a welcome tour and a Help button","One chapter a month, split into small parts","Chat, letters, voice notes, photo album and more","Verse share cards, topics, Psalm of the day, plans and challenges"];
+const NEWS=["Choose your own notifications: evening prayer, reading reminder, weekly recap, countdowns and more (More, Notifications)","Daily verse notifications at noon (turn on in More)","Simple mode, a welcome tour and a Help button","One chapter a month, split into small parts","Chat, letters, voice notes, photo album and more","Verse share cards, topics, Psalm of the day, plans and challenges"];
 
 let items=[], metas={}, grp="home", subSel={faith:"chapter",together:"chat",outdoor:"outdoor"}, filt="all", q="", catFilt="all";
 let me=localStorage.getItem("fh_me"), memoI=0, memoShow=false, db=null, firstItems=true, startTime=Date.now(), offline=!navigator.onLine;
@@ -807,7 +807,7 @@ function moreView(){
     <div class="meta" style="margin-top:10px">Pick your picture</div><div class="row">${AV.map(a=>`<button class="react" style="font-size:22px" data-act="avatar" data-a="${a}">${a}</button>`).join("")}</div></div>
   <div class="card"><h3>Make it easier</h3><div class="row"><button class="chip ${simple?"on":""}" data-act="simple">${simple?"✅ Simple mode is on":"Turn on Simple mode"}</button><button class="chip ${localStorage.getItem("fh_calm")==="1"?"on":""}" data-act="calm">Calm mode</button></div>
     <div class="meta">Simple mode shows big buttons and fewer tabs. Calm mode softens colors and stops animations.</div></div>
-  <div class="card"><h3>🔔 Notifications</h3><div class="meta">${pushOn?"Daily verse notifications are on for this phone.":"Get the daily verse at noon and a nudge to check the app."}</div><div class="row"><button class="btn small" data-act="notif">${pushOn?"Refresh notifications":"Turn on daily notifications"}</button></div></div>
+  ${notifCard(pushOn)}
   <div class="card"><h3>Look and feel</h3><div class="row">${["auto","light","dark"].map(t=>`<button class="chip ${th===t?"on":""}" data-act="theme" data-t="${t}">${t==="auto"?"Auto":t[0].toUpperCase()+t.slice(1)}</button>`).join("")}</div>
     <div class="row">${ACC.map(c=>`<button class="react" style="background:${c};width:34px;height:34px;border-radius:50%" data-act="accent" data-c="${c}" aria-label="color"></button>`).join("")}</div>
     <div class="row"><button class="btn small ghost" data-act="fs" data-d="-1">A−</button><button class="btn small ghost" data-act="fs" data-d="1">A+</button><span class="meta">Text size</span></div>
@@ -820,6 +820,15 @@ function moreView(){
   <div class="card"><h3>Help and updates</h3><div class="row"><button class="btn small ghost" data-act="help">❓ Help</button><button class="btn small ghost" data-act="feedback">✉️ Send feedback</button><button class="btn small ghost" data-act="news">✨ What's new</button><button class="btn small ghost" data-act="tourreplay">Replay tour</button></div>
     <div class="meta" style="margin-top:8px">Version ${APP_VER}. Android: Chrome menu, then Add to Home screen. iPhone: Share, then Add to Home Screen.</div>
     <div class="row"><a class="btn small" href="today.html">Open verse of the day page</a></div></div>`;
+}
+const NOTIF_DEFS={morning:["🕊️ Daily verse","12:00"],evening:["🙏 Evening prayer","20:00"],reading:["📖 Reading reminder (only if you have not read)","19:00"],recap:["📊 Sunday weekly recap","09:00"],countdown:["📅 Event countdowns","09:00"],followup:["🌿 Prayer follow ups","10:00"],monthly:["📆 Monthly chapter reminders","09:00"],seasonal:["🎄 Holidays","09:00"]};
+function notifCfg(){const o=((metas.notif||{})[me])||{};const c={tz:o.tz||"America/Denver"};Object.keys(NOTIF_DEFS).forEach(k=>{c[k]=o[k]!==false;c[k+"T"]=o[k+"T"]||NOTIF_DEFS[k][1];});return c;}
+function notifCard(pushOn){
+  const c=notifCfg();
+  const rows=Object.entries(NOTIF_DEFS).map(([k,[l]])=>`<div class="row" style="justify-content:space-between;margin:8px 0"><button class="chip ${c[k]?"on":""}" data-act="ntog" data-k="${k}">${c[k]?"✅":"⭕"} ${esc(l)}</button><input type="time" style="width:auto" value="${esc(c[k+"T"])}" data-act="ntime" data-k="${k}"></div>`).join("");
+  return `<div class="card"><h3>🔔 Notifications</h3><div class="meta">${pushOn?"Notifications are on for this phone.":"Turn them on so they reach this phone."}</div><div class="row"><button class="btn small" data-act="notif">${pushOn?"Refresh notifications":"Turn on notifications"}</button></div>
+  <div class="meta" style="margin-top:12px">Pick what you want and when. Times use your time zone below.</div>${rows}
+  <label>Your time zone</label><select data-act="ntz">${[["America/Denver","Mountain"],["America/Chicago","Central"],["America/New_York","Eastern"],["America/Los_Angeles","Pacific"]].map(([v,n])=>`<option value="${v}" ${c.tz===v?"selected":""}>${n}</option>`).join("")}</select></div>`;
 }
 function reviewDialog(){
   const c=t=>items.filter(i=>i.type===t).length;
@@ -913,6 +922,8 @@ document.addEventListener("input",e=>{if(e.target.id==="q"){q=e.target.value;if(
 document.addEventListener("change",e=>{
   const a=e.target.dataset&&e.target.dataset.act;
   if(a==="planpick")setMeta("settings",{plan:e.target.value});
+  if(a==="ntime"&&e.target.value&&me)setMeta("notif",{[me]:{[e.target.dataset.k+"T"]:e.target.value}});
+  if(a==="ntz"&&me)setMeta("notif",{[me]:{tz:e.target.value}});
   if(a==="verpick"){ver=e.target.value;localStorage.setItem("fh_ver",ver);daily=null;loadDaily();}
 });
 document.addEventListener("click",async e=>{
@@ -1012,6 +1023,7 @@ document.addEventListener("click",async e=>{
   else if(a==="accent"){localStorage.setItem("fh_acc",d.c);document.documentElement.style.setProperty("--acc",d.c);}
   else if(a==="fs"){const cur=parseInt(getComputedStyle(document.body).fontSize)||17;const n=Math.max(14,Math.min(26,cur+Number(d.d)*2));document.body.style.fontSize=n+"px";localStorage.setItem("fh_fs",n);}
   else if(a==="notif")enablePush();
+  else if(a==="ntog"&&me){const c=notifCfg();setMeta("notif",{[me]:{[d.k]:!c[d.k]}});}
   else if(a==="setpin"){const p=prompt("Choose a PIN (numbers only)");if(p){localStorage.setItem("fh_pin",await sha(p));toast("PIN saved");render();}}
   else if(a==="clearpin"){localStorage.removeItem("fh_pin");toast("PIN removed");render();}
   else if(a==="review")reviewDialog();
