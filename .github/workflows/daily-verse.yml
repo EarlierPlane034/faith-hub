@@ -1,12 +1,11 @@
 name: Daily verse notification
 on:
   schedule:
-    - cron: "5 18 * * *"
-    - cron: "5 19 * * *"
+    - cron: "7,37 * * * *"
   workflow_dispatch:
     inputs:
       force:
-        description: "Send now (test)"
+        description: "Test: 1 = verse now, or evening, reading, recap, countdown, followup, monthly, seasonal"
         default: "0"
 jobs:
   send:
@@ -20,4 +19,4 @@ jobs:
       - run: node scripts/send-verse.js
         env:
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-          FORCE: ${{ github.event.inputs.force }}
+          FORCE: ${{ github.event.inputs.force == '0' && '' || github.event.inputs.force }}
