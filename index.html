@@ -2,1064 +2,212 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Faith Hub</title>
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#1c1a1f">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Faith Hub">
-<link rel="apple-touch-icon" href="icon-180.png">
-<link rel="icon" href="icon-192.png">
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging-compat.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ibookfun Getaways | Travel planning with Terra</title>
+<meta name="description" content="Independent travel agent Terra plans cruises and getaways for you. Call 817-790-2727 or email terra@ibookfun.com.">
+<meta property="og:title" content="ibookfun Getaways">
+<meta property="og:description" content="Tell me where you want to go. I'll plan the rest.">
+<meta property="og:image" content="logo.png">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Nunito+Sans:ital,wght@0,400;0,700;0,800;1,400&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#faf6ef;--card:#fff;--ink:#2b2a33;--mute:#76717f;--acc:#b5722f;--acc2:#e9d3b4;--line:#eadfce;--ok:#2f8f5b}
-:root[data-theme=dark]{--bg:#1c1a1f;--card:#27242c;--ink:#f1ece4;--mute:#a49ead;--acc:#e0a062;--acc2:#3a3126;--line:#3a3540}
-@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#1c1a1f;--card:#27242c;--ink:#f1ece4;--mute:#a49ead;--acc:#e0a062;--acc2:#3a3126;--line:#3a3540}}
-html[data-calm]{--acc:#5f8a84;--acc2:#dbe8e5}
-html[data-calm] *{animation:none!important;transition:none!important}
+:root{--plum:#470C62;--plum-text:#4F0E66;--coral:#C2463A;--cream:#FFF9F3;--lav:#F6EDF4;--ink:#2A1B35;--muted:#6B5878}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.5 Georgia,serif;padding-bottom:100px}
-header{padding:18px 16px 4px;max-width:720px;margin:auto}
-h1{margin:0;font-size:26px}h2{margin:12px 0 4px;font-size:21px}h3{margin:0 0 4px;font-size:18px}
-.sub{color:var(--mute);font-size:14px;font-family:system-ui,sans-serif}
-main{max-width:720px;margin:auto;padding:4px 16px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:12px 0;animation:fade .25s}
-@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
-.meta{font:13px system-ui,sans-serif;color:var(--mute)}
-.who{display:inline-block;padding:1px 9px;border-radius:99px;background:var(--acc2);color:var(--ink);font:12px system-ui,sans-serif;margin-right:6px}
-.verse{font-size:21px;font-style:italic;line-height:1.45;margin:6px 0}
-nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--line);display:grid;padding:6px 4px calc(6px + env(safe-area-inset-bottom));z-index:5}
-nav button{background:none;border:0;color:var(--mute);font:12px system-ui,sans-serif;padding:6px 2px;border-radius:10px;cursor:pointer}
-nav button span{display:block;font-size:22px}
-nav button.on{color:var(--acc);background:var(--acc2)}
-button:active{transform:scale(.97)}
-.btn{background:var(--acc);color:#fff;border:0;border-radius:12px;padding:12px 18px;font:600 16px system-ui,sans-serif;cursor:pointer;text-decoration:none;display:inline-block}
-.btn.ghost{background:none;color:var(--acc);border:1px solid var(--acc)}
-.btn.small{padding:6px 12px;font-size:14px}
-.btn.giant{display:block;width:100%;padding:22px;font-size:20px;border-radius:18px;margin:10px 0;text-align:center}
-.btn[disabled]{opacity:.6}
-.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;align-items:center}
-.add{width:100%;margin:8px 0}
-.chips{display:flex;gap:6px;overflow-x:auto;padding:6px 0}
-.chip{flex:0 0 auto;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:8px 14px;border-radius:99px;font:14px system-ui,sans-serif;cursor:pointer}
-.chip.on{background:var(--acc);color:#fff;border-color:var(--acc)}
-label{display:block;font:600 14px system-ui,sans-serif;margin:12px 0 4px}
-input,textarea,select{width:100%;font:16px system-ui,sans-serif;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
-input[type=checkbox]{width:auto}
-textarea{min-height:100px}
-dialog{border:0;border-radius:16px;padding:18px;width:min(92vw,480px);max-height:88vh;overflow:auto;background:var(--card);color:var(--ink)}
-dialog::backdrop{background:#0008}
-.banner{background:var(--acc2);border-radius:10px;padding:8px 12px;font:13px system-ui,sans-serif;margin:8px 0}
-.done{opacity:.65}
-.empty{color:var(--mute);text-align:center;padding:26px 10px;font-family:system-ui,sans-serif}
-.ph{width:100%;border-radius:10px;margin-top:8px;display:block}
-.react{background:none;border:1px solid var(--line);border-radius:99px;padding:4px 10px;font:14px system-ui,sans-serif;color:var(--ink);cursor:pointer}
-.react.on{background:var(--acc2);border-color:var(--acc)}
-.cm{font:14px system-ui,sans-serif;margin-top:8px;padding-top:6px;border-top:1px dashed var(--line)}
-.bar{height:10px;background:var(--line);border-radius:99px;overflow:hidden;margin:8px 0}
-.bar i{display:block;height:100%;background:var(--ok)}
-.toast{position:fixed;left:12px;right:12px;bottom:104px;max-width:480px;margin:auto;background:#222;color:#fff;border-radius:12px;padding:12px 16px;font:15px system-ui,sans-serif;z-index:20;display:flex;gap:12px;justify-content:space-between;align-items:center}
-.toast button{background:none;border:0;color:#ffd08a;font:600 15px system-ui,sans-serif;cursor:pointer}
-.big{font-size:42px;text-align:center;margin:6px 0}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.help{position:fixed;right:14px;bottom:calc(86px + env(safe-area-inset-bottom));width:44px;height:44px;border-radius:50%;background:var(--acc);color:#fff;border:0;font:700 20px system-ui,sans-serif;z-index:6;box-shadow:0 2px 8px #0004}
-.chat{display:flex;flex-direction:column;gap:6px;margin:8px 0}
-.bub{max-width:82%;padding:8px 12px;border-radius:16px;background:var(--card);border:1px solid var(--line);font:16px system-ui,sans-serif;align-self:flex-start}
-.bub.me{align-self:flex-end;background:var(--acc2)}
-.bub small{display:block;color:var(--mute);font-size:11px}
-.agrid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px}
-.agrid img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;cursor:pointer}
-.breath{width:150px;height:150px;border-radius:50%;background:var(--acc2);border:3px solid var(--acc);margin:22px auto;display:flex;align-items:center;justify-content:center;font:600 16px system-ui,sans-serif;text-align:center;transition:transform 4s ease-in-out}
-details.card summary{font-weight:600;cursor:pointer}
-.cross{text-decoration:line-through;opacity:.6}
-.locked{text-align:center;opacity:.85}
-.stick{position:sticky;bottom:90px}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:'Nunito Sans',system-ui,sans-serif;font-size:17px;line-height:1.7}
+a{color:var(--plum-text)}a:hover{color:var(--coral)}
+h1,h2{font-family:Fraunces,Georgia,serif;font-weight:700;line-height:1.15;text-wrap:balance;color:var(--plum-text);margin:0}
+h2{font-size:clamp(26px,3vw,34px)}
+p{margin:0}
+img{max-width:100%;height:auto;display:block}
+.wrap{max-width:1040px;margin:0 auto;padding:0 32px}
+.sec{padding:72px 0}
+.lead-gap{margin-bottom:24px}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:64px;row-gap:36px;align-items:start}
+.top{background:var(--plum);color:#fff}
+header .wrap{display:flex;align-items:center;justify-content:space-between;gap:20px;height:68px;border-bottom:1px solid #ffffff1f}
+.brand{font-family:Fraunces,Georgia,serif;font-weight:700;font-size:21px;color:#fff;text-decoration:none}
+.brand span{color:#FF8A7E}.brand em{font-style:normal;font-weight:500;color:#EBDDF5}
+nav{display:flex;gap:28px;align-items:center}
+nav a{color:#EBDDF5;text-decoration:none;font-weight:700;font-size:15px}
+nav a:hover{color:#fff}
+nav .tel{color:#FFD27A;font-weight:800}
+.hero{display:grid;grid-template-columns:1.1fr .9fr;column-gap:48px;align-items:center;padding-top:40px;padding-bottom:64px}
+.kicker{font-weight:700;color:#FFD27A;margin-bottom:12px}
+.hero h1{font-size:clamp(36px,4.6vw,52px);color:#fff;max-width:15ch;margin-bottom:18px}
+.hero .sub{font-size:18px;color:#EBDDF5;max-width:42ch}
+.hero-logo{width:100%;max-width:400px;height:auto;justify-self:end}
+.btns{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+.btn{display:inline-block;font:inherit;font-weight:800;font-size:16px;text-decoration:none;padding:13px 24px;border-radius:6px;border:0;cursor:pointer;background:var(--coral);color:#fff}
+.btn:hover{background:#A93A30;color:#fff}
+.btn.ghost{background:none;border:2px solid #ffffff80;padding:11px 22px}
+.btn.ghost:hover{border-color:#fff}
+.about{display:grid;grid-template-columns:4fr 7fr;column-gap:56px;align-items:start}
+.about p+p{margin-top:14px}
+.portrait{width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:6px}
+blockquote{margin:0;padding-left:20px;border-left:3px solid #F26B5E}
+blockquote p{font-style:italic}
+cite{display:block;font-style:normal;font-weight:800;font-size:15px;color:var(--muted);margin-top:8px}
+.photos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.photos img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:6px}
+.forms{background:var(--lav)}
+.form-list{border-top:1px solid #DCC9DE}
+.form-row{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 0;border-bottom:1px solid #DCC9DE;text-decoration:none;color:var(--plum-text)}
+.form-row strong{display:block;font-size:18px}
+.form-row small{display:block;color:var(--muted);font-size:15px;line-height:1.5}
+.arrow{color:var(--coral);font-size:22px}
+.note{margin-top:16px;font-size:15px;color:var(--muted)}
+.big-tel{margin-top:22px;font-family:Fraunces,Georgia,serif;font-size:34px;line-height:1.2;font-weight:700}
+.big-tel a{color:var(--coral);text-decoration:none}
+form{display:flex;flex-direction:column;gap:16px}
+.row2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+label{display:flex;flex-direction:column;gap:6px;font-weight:700;font-size:15px;color:var(--plum-text)}
+input,textarea{font:inherit;font-size:16px;padding:12px 14px;border:1.5px solid #D9CBE0;border-radius:6px;background:#fff;color:#24132F;width:100%}
+input:focus,textarea:focus{outline:3px solid #17A9B5;outline-offset:1px}
+form .btn{align-self:flex-start}
+footer{background:var(--plum);color:#EBDDF5;padding:40px 0 28px}
+footer .line{display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap}
+footer .name{font-family:Fraunces,Georgia,serif;font-size:19px;color:#fff}
+footer .tag{font-family:'Nunito Sans',sans-serif;font-style:italic;font-size:15px;color:#FFD27A;margin-left:8px}
+footer a{color:#fff;font-weight:700;text-decoration:none}
+footer .copy{margin-top:20px;padding-top:16px;border-top:1px solid #ffffff2a;font-size:14px;color:#CDB8DD}
+@media (max-width:860px){
+.sec{padding:52px 0}
+.wrap{padding:0 20px}
+.hero,.about,.two{grid-template-columns:1fr;row-gap:32px}
+.hero-logo{order:-1;justify-self:center;max-width:240px}
+nav .hide-sm{display:none}
+.row2,.photos{grid-template-columns:1fr}
+.portrait{max-width:320px}
+}
 </style>
 </head>
 <body>
+
+<div class="top">
 <header>
-  <h1>✝️ Faith Hub</h1>
-  <div class="sub" id="hello"></div>
+<div class="wrap">
+<a class="brand" href="#top">ibook<span>fun</span> <em>Getaways</em></a>
+<nav aria-label="Main">
+<a class="hide-sm" href="#about">About</a>
+<a class="hide-sm" href="#reviews">Reviews</a>
+<a class="hide-sm" href="#forms">Forms</a>
+<a class="hide-sm" href="#contact">Contact</a>
+<a class="tel" href="tel:8177902727">817-790-2727</a>
+</nav>
+</div>
 </header>
-<main id="main"></main>
-<button class="help" data-act="help" aria-label="Help">?</button>
-<nav id="nav"></nav>
-<dialog id="dlg"></dialog>
-<div id="toastbox"></div>
 
-<script>
-/* ============ SETUP (Jayden only) ============ */
-const APP_VER="3.2";
-const FIREBASE_CONFIG = {
-  apiKey:"AIzaSyDhwY77B-wZL7f4077kEC_tn0K2AgJ6bIs",
-  authDomain:"faith-hub-71ae2.firebaseapp.com",
-  projectId:"faith-hub-71ae2",
-  storageBucket:"faith-hub-71ae2.firebasestorage.app",
-  messagingSenderId:"560019176489",
-  appId:"1:560019176489:web:8b6f70aa76bcdac3f53038"
-};
-const VAPID_KEY="BJy21T8ExVsoNw8mLdLqR6QcYP1TAlVNXRxDiaBl13LNtlweGUxE2lisx62iyG5qEpOmKx1_c8_XqjxFJR78c4s";
-const ESV_KEY = "b486a747a3c0582c4dd43d1b72194ed0a7f47d4c";
-const PASSCODE = "";
-const PEOPLE = ["Jayden","Summer","Madison"];
-const SITE="https://earlierplane034.github.io/faith-hub/";
+<section id="top">
+<div class="wrap hero">
+<div>
+<p class="kicker">Travel planning with Terra</p>
+<h1>Tell me where you want to go. I'll plan the rest.</h1>
+<p class="sub">I'm an independent travel agent. Most of my clients are friends of friends, and I'd rather talk with you on the phone than send you to a booking site.</p>
+<div class="btns">
+<a class="btn" href="tel:8177902727">Call 817-790-2727</a>
+<a class="btn ghost" href="mailto:terra@ibookfun.com">Email me</a>
+</div>
+</div>
+<img class="hero-logo" src="logo.png" width="600" height="600" alt="ibookfun Getaways logo, a sea turtle swimming under a sunset. Book Joyfully. Escape Beautifully.">
+</div>
+</section>
+</div>
 
-const FV = window.firebase ? firebase.firestore.FieldValue : null;
-const REACTS=[["heart","❤️"],["amen","🙏"],["joy","😊"],["star","⭐"]];
-const MOODS=["😞","😕","😐","🙂","😄"];
-/* field = [key, label, type, options] */
-const SECTIONS={
- reading:{label:"Reading",icon:"📖",title:"Reading thought",f:[["ref","Chapter (example: John 3)"],["month","Month","month"],["note","Thoughts or questions","area"]],p:{ref:"Which chapter did you read?",month:"Which month is this for?",note:"What stood out to you?"}},
- verse:{label:"Verses",icon:"🕊️",title:"Verse bank",f:[["ref","Reference (example: Psalm 46:10)"],["text","Verse text","area"],["tag","Theme","select",["Encouragement","Peace","Trust","Strength","Hard days","Gratitude","Other"]]],p:{ref:"Which verse is it? (like John 3:16)",text:"What does it say?",tag:"What is it about?"}},
- prayer:{label:"Prayer",icon:"🙏",title:"Prayer",f:[["text","Prayer request","area"],["for","Who or what is it for?"],["cat","Group","select",["Myself","Us","Family","Friends","World"]],["update","Update (optional)","area"]],p:{text:"What would you like to pray about?",for:"Who is it for?",cat:"Which group is it for?",update:"Any update?"}},
- sermon:{label:"Sermons",icon:"⛪",title:"Sermon notes",f:[["church","Church"],["date","Date","date"],["ref","Scripture"],["text","Takeaways","area"],["apply","How I will apply it","area"]],p:{church:"Which church?",date:"What day was it?",ref:"What scripture was used?",text:"What did you take away?",apply:"How will you use it this week?"}},
- thanks:{label:"Gratitude",icon:"🌻",title:"Gratitude",f:[["text","I am thankful for...","area"]],p:{text:"What are you thankful for today?"}},
- checkin:{label:"Check in",icon:"💛",title:"Check in",f:[["mood","How is your heart?","mood"],["day","Kind of week","select",["Good week","Mixed week","Hard week"]],["text","Anything you want to share","area"]],p:{mood:"How is your heart today?",day:"What kind of week has it been?",text:"Anything you want to share?"}},
- goal:{label:"Goals",icon:"🎯",title:"Shared goal",f:[["title","Goal"],["progress","Progress (percent)","select",["0","25","50","75","100"]],["text","Notes","area"]]},
- event:{label:"Events",icon:"📅",title:"Event",f:[["title","What is it?"],["date","Date","date"],["time","Time","time"],["repeat","Repeats","select",["Once","Every year"]],["text","Notes","area"]]},
- outdoor:{label:"Outdoors",icon:"🌲",title:"Outdoor devotional",f:[["place","Place (example: Enchanted Rock)"],["ref","Verse"],["text","Reflection","area"]],p:{place:"Where were you?",ref:"Which verse fits this place?",text:"What did you feel or learn?"}},
- hike:{label:"Hikes",icon:"🥾",title:"Hike log",f:[["place","Trail or place"],["miles","Miles","number"],["difficulty","Difficulty","select",["Easy","Moderate","Hard"]],["text","Notes","area"]]},
- stars:{label:"Stars",icon:"🔭",title:"Stargazing log",f:[["place","Where?"],["date","Date","date"],["text","What did you see?","area"]]},
- todo:{label:"To do",icon:"✅",title:"Checklist item",f:[["text","What is it?"],["list","List","select",["To do","Gear"]]]},
- vote:{label:"Next trip",icon:"🗳️",title:"Vote",f:[["title","What are we deciding?"],["a","Option A"],["b","Option B"]]},
- letter:{label:"Letters",icon:"💌",title:"Letter or time capsule",f:[["kind","Kind","select",["Letter","Time capsule"]],["open","Opens on","date"],["text","Write it here","area"]],p:{kind:"Is this a letter or a time capsule?",open:"When should it open?",text:"What do you want to say?"}},
- jar:{label:"Jar",icon:"🫙",title:"Encouragement jar",f:[["text","Write something encouraging","area"]],p:{text:"What encouraging thing do you want to save?"}},
- memory:{label:"Memories",icon:"🎞️",title:"Memory",f:[["title","Title"],["text","The story","area"]]},
- dream:{label:"Dreams",icon:"✨",title:"Dream or goal",f:[["title","Dream"],["text","Why it matters","area"]]},
- milestone:{label:"Timeline",icon:"🌱",title:"Faith milestone",f:[["title","What happened?"],["date","Date","date"],["kind","Type","select",["Faith moment","Baptism","First church","Answered prayer","Other"]],["text","Details","area"]]},
- idea:{label:"Ideas",icon:"💡",title:"Content idea",f:[["title","Idea"],["text","Details","area"]]},
- win:{label:"Wins",icon:"🏆",title:"Advocacy win",f:[["title","What happened?"],["date","Date","date"],["text","Details","area"]]},
- question:{label:"Questions",icon:"❓",title:"Question I am wrestling with",f:[["text","What are you wondering about?","area"]],p:{text:"What are you wondering about?"}},
- photo:{label:"Photo",icon:"📸",title:"Photo",f:[["text","Caption"]]},
- msg:{label:"Chat",icon:"💬",title:"Message",f:[["text","Message"]]},
- voice:{label:"Voice",icon:"🎙️",title:"Voice note",f:[["title","Title"]]}
-};
-const SIMPLE_WIZ=["verse","prayer","thanks","checkin","outdoor","reading","question","jar","sermon"];
-const GROUPS={
- home:{label:"Home",icon:"🏠"},
- faith:{label:"Faith",icon:"📖",subs:["chapter","psalm","verse","prayer","sermon","thanks","plan","memo","topics","learn","question","calm"]},
- together:{label:"Together",icon:"💬",subs:["chat","checkin","goal","event","letter","jar","memory","dream","album","voice","timeline","prayfor","fun","ideas","wins","todo"]},
- outdoor:{label:"Outdoors",icon:"🌲",subs:["outdoor","hike","stars","gear","vote"]},
- more:{label:"More",icon:"⚙️"}
-};
-const SIMPLE_SUBS={faith:["chapter","verse","prayer","thanks"],together:["chat","checkin","album"],outdoor:["outdoor"]};
-const LBL={chapter:"📖 Reading",psalm:"🎶 Psalm",verse:"🕊️ Verses",prayer:"🙏 Prayer",sermon:"⛪ Sermons",thanks:"🌻 Thanks",plan:"📆 Plans",memo:"🧠 Memorize",topics:"🔎 Topics",learn:"📚 Learn",question:"❓ Questions",calm:"🌿 Calm",chat:"💬 Chat",checkin:"💛 Check in",goal:"🎯 Goals",event:"📅 Events",letter:"💌 Letters",jar:"🫙 Jar",memory:"🎞️ Memories",dream:"✨ Dreams",album:"📸 Album",voice:"🎙️ Voice",timeline:"🌱 Timeline",prayfor:"🤝 Pray together",fun:"🎲 Fun",ideas:"💡 Ideas",wins:"🏆 Wins",todo:"✅ To do",outdoor:"🌲 Devotionals",hike:"🥾 Hikes",stars:"🔭 Stars",gear:"🎒 Gear",vote:"🗳️ Next trip"};
-const SUBDEFS={
- gear:{type:"todo",where:i=>i.list==="Gear",preset:{list:"Gear"},title:"Gear and packing"},
- todo:{type:"todo",where:i=>i.list!=="Gear",preset:{list:"To do"},title:"Shared to do list"},
- ideas:{type:"idea",title:"Content ideas"},wins:{type:"win",title:"Advocacy wins"},timeline:{type:"milestone",title:"Faith timeline"}
-};
-const PLANS={
- john:{n:"Gospel of John (21 days)",book:"John",days:21},
- proverbs:{n:"Proverbs in a month (31 days)",book:"Proverbs",days:31},
- mark:{n:"Gospel of Mark (16 days)",book:"Mark",days:16},
- romans:{n:"Romans (16 days)",book:"Romans",days:16},
- psalms:{n:"Psalms 1 to 30",book:"Psalm",days:30},
- peace:{n:"14 days of peace",refs:["Philippians 4:6-7","John 14:27","Isaiah 26:3","Psalm 4:8","Colossians 3:15","Psalm 29:11","Numbers 6:24-26","2 Thessalonians 3:16","Isaiah 32:17","Romans 5:1","Psalm 85:8","John 16:33","Matthew 11:28-30","Psalm 119:165"]},
- kindness:{n:"7 day kindness challenge",tasks:["Text someone an encouraging message","Pray for a friend by name","Say thank you to someone in person","Do one small chore for someone","Send everyone a verse","Give a sincere compliment","Listen to someone without interrupting"]},
- gratitude:{n:"21 day gratitude challenge",tasks:["A person you are thankful for","Something in nature","A meal you enjoyed","A challenge that taught you something","A song or worship moment","A friend who showed up for you","Something small that made you smile","Your health or body","A place that feels peaceful","A memory you treasure","A prayer God answered","Something you learned this week","A teacher or mentor","A gift or talent you have","A hard thing you made it through","Your home","A Bible verse that helped","A kind word someone said","Something you get to do","A person you will pray for","God's faithfulness to you"]}
-};
-const DEFAULTS=[
- {ref:"Psalm 46:10",text:"Be still, and know that I am God."},
- {ref:"Joshua 1:9",text:"Have not I commanded thee? Be strong and of a good courage; be not afraid, neither be thou dismayed: for the LORD thy God is with thee whithersoever thou goest."},
- {ref:"Philippians 4:13",text:"I can do all things through Christ which strengtheneth me."},
- {ref:"Isaiah 41:10",text:"Fear thou not; for I am with thee: be not dismayed; for I am thy God: I will strengthen thee; yea, I will help thee."},
- {ref:"Proverbs 3:5-6",text:"Trust in the LORD with all thine heart; and lean not unto thine own understanding. In all thy ways acknowledge him, and he shall direct thy paths."},
- {ref:"Matthew 11:28",text:"Come unto me, all ye that labour and are heavy laden, and I will give you rest."},
- {ref:"1 Peter 5:7",text:"Casting all your care upon him; for he careth for you."},
- {ref:"Psalm 23:1",text:"The LORD is my shepherd; I shall not want."},
- {ref:"Romans 8:28",text:"And we know that all things work together for good to them that love God, to them who are the called according to his purpose."},
- {ref:"Jeremiah 29:11",text:"For I know the thoughts that I think toward you, saith the LORD, thoughts of peace, and not of evil, to give you an expected end."}
-];
-const DAILY_REFS=["Psalm 46:10","Joshua 1:9","Philippians 4:13","Isaiah 41:10","Proverbs 3:5-6","Matthew 11:28","1 Peter 5:7","Psalm 23:1","Romans 8:28","Jeremiah 29:11","Psalm 121:1-2","Isaiah 40:31","Philippians 4:6-7","Romans 12:12","Psalm 34:8","John 3:16","John 14:27","2 Corinthians 12:9","Psalm 27:1","Lamentations 3:22-23","Matthew 6:33","Psalm 119:105","Galatians 5:22-23","Hebrews 11:1","Colossians 3:23","Psalm 37:4","Micah 6:8","Ephesians 2:8-9","1 Corinthians 13:4-5","Psalm 91:1-2","Deuteronomy 31:6","Romans 15:13","Psalm 139:14","James 1:2-3","Proverbs 16:3","Psalm 56:3","Isaiah 26:3","Zephaniah 3:17","Psalm 30:5","1 John 4:19"];
-const TOPICS={Anxiety:["Philippians 4:6-7","1 Peter 5:7","Matthew 6:34","Psalm 94:19"],Hope:["Jeremiah 29:11","Romans 15:13","Psalm 42:11","Lamentations 3:22-23"],Strength:["Isaiah 40:31","Philippians 4:13","Psalm 46:1","Joshua 1:9"],Grief:["Psalm 34:18","Matthew 5:4","Revelation 21:4","John 14:27"],Fear:["Isaiah 41:10","Psalm 56:3","Deuteronomy 31:6","2 Timothy 1:7"],Loneliness:["Deuteronomy 31:8","Psalm 139:7-10","Matthew 28:20","Psalm 68:6"],Thankful:["Psalm 107:1","1 Thessalonians 5:18","Colossians 3:15-17","Psalm 100:4"],Peace:["John 14:27","Isaiah 26:3","Colossians 3:15","Psalm 4:8"]};
-const LEARN={
- "Fruit of the Spirit (Galatians 5:22-23)":[["Love","Caring for others with no strings attached."],["Joy","Gladness that does not depend on circumstances."],["Peace","A calm heart even when things are uncertain."],["Patience","Staying gentle when waiting or when others are hard."],["Kindness","Small acts that make someone's day better."],["Goodness","Choosing what is right and helpful."],["Faithfulness","Being someone people can count on."],["Gentleness","Strength that stays soft with people."],["Self-control","Guiding your words and actions with wisdom."]],
- "Armor of God (Ephesians 6:13-17)":[["Belt of truth","Live honestly and stand on what is true."],["Breastplate of righteousness","Guard your heart by doing what is right."],["Shoes of peace","Be ready to share good news calmly."],["Shield of faith","Trust that blocks doubt and fear."],["Helmet of salvation","Protect your mind with hope in Jesus."],["Sword of the Spirit","God's word, used in prayer and truth."]],
- "Names of God":[["Elohim","God the Creator"],["Jehovah Jireh","The Lord who provides"],["Jehovah Rapha","The Lord who heals"],["Jehovah Nissi","The Lord is my banner"],["Jehovah Shalom","The Lord is peace"],["Jehovah Rohi","The Lord is my shepherd"],["El Shaddai","God Almighty"],["Adonai","Lord and Master"]]
-};
-const QUESTIONS=["What is one thing God showed you this week?","Who can you encourage today?","What are you holding on to that you can give to God?","What made you smile or feel peace today?","What is one prayer you want to see answered?","Where did you see God in the outdoors lately?","What is one thing you are learning about trust?","What does today's verse mean for a hard day?","What is a small act of kindness you can do?","What are you most thankful for right now?","What is something you need strength for?","How can we pray for each other this week?","What is a verse you want to remember?","What is one way you grew this month?"];
-const PRAYERS=["Lord, thank You for today. Help me notice Your goodness in small things.","God, give me peace when my thoughts are loud. Remind me You are near.","Father, help me love the people around me well today.","Jesus, I trust You with what I cannot control.","Lord, give me strength for what is hard and joy for what is good.","God, protect my heart and guide my steps today.","Father, thank You for friends who walk with me. Bless them today.","Lord, help me be patient with myself and with others.","God, show me one way to be kind today.","Jesus, quiet my fears and fill me with Your peace.","Lord, teach me to rest in You.","Father, make me brave to do what is right.","God, thank You for being faithful even when I am not.","Lord, help me listen for Your voice today."];
-const PRAYPROMPTS=["Pray for each other's health and rest.","Pray for your families.","Pray for friends who are struggling.","Pray for wisdom in big decisions.","Pray for your church and community.","Pray for the Tourette community and for understanding.","Pray for peace in hard moments.","Pray for your future and plans.","Pray for safety when traveling.","Pray for someone who has hurt you.","Pray with thanks for what God has done.","Pray for the world and those in need."];
-const WYR=[["Watch a sunrise on a mountain","Watch a sunset on a lake"],["Read a chapter together by a campfire","Go on a long hike together"],["Have a quiet cabin weekend","Have a road trip adventure"],["Sing worship in a big crowd","Pray quietly in a small room"],["Camp under the stars","Stay in a cozy lodge"],["Visit a new state","Revisit a favorite place"],["Learn a new instrument","Learn a new language"],["Breakfast outdoors","Dinner by a fire"],["Morning devotion","Evening devotion"],["Write a letter","Record a voice note"],["Go to a waterfall","Go to a canyon"],["Plan every detail","Be spontaneous"],["Spend a day offline","Spend a day volunteering"],["Winter snow trip","Summer lake trip"]];
-const QUIZ=[
- {q:"Who built the ark?",o:["Moses","Noah","Abraham"],a:1},
- {q:"How many books are in the Bible?",o:["39","66","72"],a:1},
- {q:"Who was swallowed by a great fish?",o:["Jonah","Peter","Elijah"],a:0},
- {q:"What did David use to defeat Goliath?",o:["A sword","A spear","A sling and a stone"],a:2},
- {q:"Who denied Jesus three times?",o:["Judas","Peter","Thomas"],a:1},
- {q:"Where was Jesus born?",o:["Nazareth","Jerusalem","Bethlehem"],a:2},
- {q:"Who led the Israelites out of Egypt?",o:["Moses","Joshua","David"],a:0},
- {q:"What is the first book of the Bible?",o:["Exodus","Genesis","Psalms"],a:1},
- {q:"How many disciples did Jesus choose?",o:["7","10","12"],a:2},
- {q:"Which is the shortest verse in the KJV Bible?",o:["Psalm 23:1","John 11:35","Genesis 1:1"],a:1}
-];
-const HELP=[
- ["How do I add something?","Tap a tab at the bottom, then tap the big Add button. Answer the questions and tap Save."],
- ["How do I say hi?","On Home, tap the 💛 Thinking of you button. Everyone else gets a pop up."],
- ["How do I get a daily verse notification?","Tap More, then Turn on daily notifications, and tap Allow. On iPhone, add the app to your Home Screen first."],
- ["I made a mistake","Tap Edit on the card, or Delete and then Undo right away."],
- ["How do I make it simpler?","Tap More and turn on Simple mode. It hides the extra tabs."],
- ["Something is not working","Close the app and open it again. Then tap More and Send feedback so Jayden can fix it."]
-];
-const TOUR=[["Welcome 💛","This is a private space for the three of you to share faith, prayers and adventures."],["Add something","Tap a tab at the bottom, then the big Add button. We ask one question at a time."],["Stay close","Tap 💛 Thinking of you, send a message, or react to anything with ❤️ or 🙏."],["Daily verse","Turn on notifications in More to get a verse every day at noon. Tap the ? button any time for help."]];
-const NEWS=["Choose your own notifications: evening prayer, reading reminder, weekly recap, countdowns and more (More, Notifications)","Daily verse notifications at noon (turn on in More)","Simple mode, a welcome tour and a Help button","One chapter a month, split into small parts","Chat, letters, voice notes, photo album and more","Verse share cards, topics, Psalm of the day, plans and challenges"];
+<main>
+<section id="about" class="sec">
+<div class="wrap about">
+<img class="portrait" src="terra.jpg" width="800" height="1000" alt="Terra, owner of ibookfun Getaways">
+<div>
+<h2 style="margin-bottom:16px">About me</h2>
+<p>Hi, I'm Terra. I used to book trips under a franchise, and now I'm on my own as ibookfun Getaways. Same person, just my own name on the door.</p>
+<p>You can book a cruise online in five minutes. What you get from me is someone who asks the right questions, and keeps track of the details that are easy to miss.</p>
+<p>Call me with a rough idea of where you'd like to go, when, and your budget. I'll come back with a few options and we'll go from there.</p>
+</div>
+</div>
+</section>
 
-let items=[], metas={}, grp="home", subSel={faith:"chapter",together:"chat",outdoor:"outdoor"}, filt="all", q="", catFilt="all";
-let me=localStorage.getItem("fh_me"), memoI=0, memoShow=false, db=null, firstItems=true, startTime=Date.now(), offline=!navigator.onLine;
-let simple=localStorage.getItem("fh_simple")==="1", ver=localStorage.getItem("fh_ver")||"web";
-let topicSel=null, topicRes=[], quizI=0, quizScore=0, quizPick=null, voiceDraft=null, calmTimer=null, errCount=0, W=null;
-let rec=null,chunks=[],recTimer=null;
+<section id="reviews" class="sec" style="padding-top:0">
+<div class="wrap">
+<h2 class="lead-gap">What my clients say</h2>
+<div class="two">
+<blockquote><p>[Client review placeholder]</p><cite>[Client name]</cite></blockquote>
+<blockquote><p>[Client review placeholder]</p><cite>[Client name]</cite></blockquote>
+<blockquote><p>[Client review placeholder]</p><cite>[Client name]</cite></blockquote>
+<blockquote><p>[Client review placeholder]</p><cite>[Client name]</cite></blockquote>
+</div>
+</div>
+</section>
 
-if(FIREBASE_CONFIG && window.firebase){
-  firebase.initializeApp(FIREBASE_CONFIG);
-  db=firebase.firestore();
-  try{db.enablePersistence({synchronizeTabs:true}).catch(()=>{});}catch(e){}
-}
+<section id="trips" class="sec" style="padding-top:0">
+<div class="wrap">
+<div class="lead-gap" style="display:flex;justify-content:space-between;align-items:baseline;gap:20px;flex-wrap:wrap">
+<h2>Trip photos</h2>
+<p>More on <a href="https://www.facebook.com/ibookfun/" target="_blank" rel="noopener" style="font-weight:800">Facebook</a> and <a href="https://www.instagram.com/ibookfun/" target="_blank" rel="noopener" style="font-weight:800">Instagram</a></p>
+</div>
+<div class="photos">
+<img src="trip-cruise.jpg" width="800" height="800" loading="lazy" alt="Sunset over the ocean from a cruise ship rail">
+<img src="trip-alaska.jpg" width="800" height="800" loading="lazy" alt="Overlook above the water in Alaska">
+<img src="trip-cenote.jpg" width="800" height="800" loading="lazy" alt="Turquoise water in a cave pool">
+</div>
+</div>
+</section>
 
-const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const nl=s=>esc(s).replace(/\n/g,"<br>");
-const $=id=>document.getElementById(id);
-const fmt=t=>new Date(t).toLocaleDateString(undefined,{month:"short",day:"numeric"});
-const ymd=d=>d.toLocaleDateString("en-CA");
-const fmtDay=s=>{try{return new Date(s+"T00:00:00").toLocaleDateString(undefined,{weekday:"short",month:"short",day:"numeric",year:"numeric"})}catch(e){return s}};
-const dayNum=()=>Math.floor(Date.now()/864e5);
-const LINKVERS=["NIV","ESV","NLT","CSB","NKJV","KJV"];
-const bg=r=>"https://www.biblegateway.com/passage/?search="+encodeURIComponent(r.replace(/ \(ESV\)$/,""))+"&version="+(localStorage.getItem("fh_linkver")||"NIV");
-const who=n=>((metas.avatars||{})[n]||"")+" "+n;
-const subsFor=g=>simple&&SIMPLE_SUBS[g]?SIMPLE_SUBS[g]:GROUPS[g].subs;
-const curSub=()=>grp in subSel?subSel[grp]:null;
-const defOf=s=>SUBDEFS[s]||{type:s};
+<section id="forms" class="sec forms">
+<div class="wrap two">
+<div>
+<h2 style="margin-bottom:12px">Forms</h2>
+<p>If you're booking with me, you'll need one or both of these. Please don't text or email me your card number. Use the authorization form instead.</p>
+</div>
+<div>
+<div class="form-list">
+<a class="form-row" href="TERN_FORM_LINK_HERE" target="_blank" rel="noopener">
+<span><strong>Credit card authorization</strong><small>Secure form through Tern</small></span>
+<span class="arrow" aria-hidden="true">&#8594;</span>
+</a>
+<a class="form-row" href="insurance-waiver.pdf" target="_blank" rel="noopener">
+<span><strong>Travel insurance waiver</strong><small>Fill it out, save it, and email it to me</small></span>
+<span class="arrow" aria-hidden="true">&#8594;</span>
+</a>
+</div>
+<p class="note">Done with the waiver? Email it to <a href="mailto:terra@ibookfun.com?subject=Travel%20insurance%20waiver" style="font-weight:800">terra@ibookfun.com</a>. If you'd rather use paper, print and sign it, then email or text me a photo.</p>
+</div>
+</div>
+</section>
 
-/* ---------- toast + notify ---------- */
-function toast(msg,undoLabel,undoFn){
-  const box=$("toastbox");
-  box.innerHTML=`<div class="toast"><span>${esc(msg)}</span>${undoLabel?`<button id="tundo">${esc(undoLabel)}</button>`:""}</div>`;
-  if(undoLabel){$("tundo").onclick=()=>{box.innerHTML="";undoFn&&undoFn();};}
-  clearTimeout(toast.t);toast.t=setTimeout(()=>{box.innerHTML=""},undoLabel?7000:3500);
-}
-function notify(title,body){
-  toast(body);
-  try{
-    if("Notification" in window && Notification.permission==="granted" && navigator.serviceWorker){
-      navigator.serviceWorker.ready.then(r=>r.showNotification(title,{body,icon:"icon-192.png"})).catch(()=>{});
-    }
-  }catch(e){}
-}
+<section id="contact" class="sec">
+<div class="wrap two">
+<div>
+<h2 style="margin-bottom:12px">Get in touch</h2>
+<p>Calling is the fastest way to reach me. If I don't pick up, leave a message or fill out the form and I'll get back to you.</p>
+<p class="big-tel"><a href="tel:8177902727">817-790-2727</a></p>
+<p style="margin-top:4px"><a href="mailto:terra@ibookfun.com" style="font-weight:800">terra@ibookfun.com</a></p>
+</div>
+<form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+<div class="row2">
+<label>Name<input name="name" autocomplete="name" required></label>
+<label>Phone<input name="phone" type="tel" autocomplete="tel"></label>
+</div>
+<label>Email<input name="email" type="email" autocomplete="email" required></label>
+<label>Message<textarea name="message" rows="4" placeholder="Where you'd like to go, when, and how many people"></textarea></label>
+<input type="hidden" name="_subject" value="New message from ibookfun.com">
+<button type="submit" class="btn">Send</button>
+</form>
+</div>
+</section>
+</main>
 
-/* ---------- bible text ---------- */
-async function bibleFetch(ref){
-  const k="fh_b_"+ver+"_"+ref;
-  try{const c=localStorage.getItem(k);if(c)return JSON.parse(c);}catch(e){}
-  if(ver==="esv"&&ESV_KEY){
-    const er=await fetch("https://api.esv.org/v3/passage/text/?q="+encodeURIComponent(ref)+"&include-headings=false&include-footnotes=false&include-short-copyright=false&include-passage-references=false&include-verse-numbers=true",{headers:{Authorization:"Token "+ESV_KEY}});
-    const ej=await er.json();
-    if(ej&&ej.passages&&ej.passages[0]){
-      const raw=ej.passages[0],nums=[];raw.replace(/\[(\d+)\]/g,(m,n)=>{nums.push(Number(n));return m;});
-      const o={ref:(ej.canonical||ref)+" (ESV)",text:raw.replace(/\[\d+\]/g," ").replace(/\s+/g," ").trim(),verses:nums};
-      try{localStorage.setItem(k,JSON.stringify(o));}catch(e){}
-      return o;
-    }
-    throw new Error("not found");
-  }
-  const r=await fetch("https://bible-api.com/"+encodeURIComponent(ref)+"?translation="+(ver==="esv"?"web":ver));
-  const j=await r.json();
-  if(j&&j.text){
-    const o={ref:j.reference||ref,text:j.text.trim().replace(/\s*\n\s*/g," "),verses:(j.verses||[]).map(v=>v.verse)};
-    try{localStorage.setItem(k,JSON.stringify(o));}catch(e){}
-    return o;
-  }
-  throw new Error("not found");
-}
-let daily=null;
-async function loadDaily(){
-  const ref=DAILY_REFS[dayNum()%DAILY_REFS.length];
-  try{const r=await bibleFetch(ref);daily={ref:r.ref,text:r.text};}catch(e){daily=DEFAULTS[dayNum()%DEFAULTS.length];}
-  render();
-}
+<footer>
+<div class="wrap">
+<div class="line">
+<p class="name">ibookfun Getaways <span class="tag">Book Joyfully. Escape Beautifully.</span></p>
+<p><a href="tel:8177902727">817-790-2727</a> &#183; <a href="mailto:terra@ibookfun.com">terra@ibookfun.com</a></p>
+</div>
+<p class="copy">&#169; 2026 ibookfun Getaways</p>
+</div>
+</footer>
 
-/* ---------- data ---------- */
-async function sha(s){try{const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(s));return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,"0")).join("");}catch(e){return s;}}
-function lockScreen(done){
-  const d=openDlg(`<h3>🔒 Enter your PIN</h3><input id="pin" type="password" inputmode="numeric" autocomplete="off"><div class="row"><button class="btn" id="pinok">Unlock</button></div>`);
-  d.addEventListener("cancel",e=>e.preventDefault(),{once:true});
-  $("pinok").onclick=async()=>{if(await sha($("pin").value)===localStorage.getItem("fh_pin")){closeDlg();done();}else toast("That PIN is not right");};
-}
-function start(){
-  if(PASSCODE && localStorage.getItem("fh_pass")!==PASSCODE){
-    const p=prompt("Enter the passcode");
-    if(p!==PASSCODE){document.body.innerHTML="<p class='empty'>Wrong passcode. Refresh to try again.</p>";return;}
-    localStorage.setItem("fh_pass",PASSCODE);
-  }
-  const th=localStorage.getItem("fh_theme");if(th&&th!=="auto")document.documentElement.dataset.theme=th;
-  if(localStorage.getItem("fh_calm")==="1")document.documentElement.dataset.calm="1";
-  const fs=localStorage.getItem("fh_fs");if(fs)document.body.style.fontSize=fs+"px";
-  else if(simple)document.body.style.fontSize="19px";
-  const ac=localStorage.getItem("fh_acc");
-  if(ac)document.documentElement.style.setProperty("--acc",ac);
-  else if(new Date().getMonth()===11)document.documentElement.style.setProperty("--acc","#b3392f");
-  window.addEventListener("online",()=>{offline=false;render();});
-  window.addEventListener("offline",()=>{offline=true;render();});
-  document.addEventListener("visibilitychange",()=>{if(!document.hidden)markSeen();});
-  if(db){
-    db.collection("items").orderBy("created","desc").onSnapshot(s=>{
-      if(!firstItems){
-        s.docChanges().forEach(c=>{
-          if(c.type==="added"&&!c.doc.metadata.hasPendingWrites){
-            const d=c.doc.data();
-            if(d.author&&d.author!==me&&!d.priv){const S=SECTIONS[d.type];notify("Faith Hub",d.type==="msg"?`${d.author}: ${String(d.text||"").slice(0,80)}`:`${d.author} added to ${S?S.label:"the hub"}`);}
-          }
-        });
-      }
-      firstItems=false;
-      items=s.docs.map(d=>({id:d.id,...d.data()}));
-      render();
-    });
-    db.collection("meta").onSnapshot(s=>{metas={};s.docs.forEach(d=>metas[d.id]=d.data());render();});
-    db.collection("pings").orderBy("ts","desc").limit(1).onSnapshot(s=>{
-      s.docChanges().forEach(c=>{
-        if(c.type==="added"){const d=c.doc.data();if(d.from&&d.from!==me&&d.ts>startTime)notify("Faith Hub",`💛 ${d.from} is thinking of you`);}
-      });
-    });
-  } else {
-    items=JSON.parse(localStorage.getItem("fh_items")||"[]");
-  }
-  const go=()=>{
-    if(!me){askWho(afterWho);}else afterWho();
-  };
-  if(localStorage.getItem("fh_pin"))lockScreen(go);else go();
-  render();
-  loadDaily();
-}
-function afterWho(){
-  markSeen();
-  if(db&&"Notification" in window&&Notification.permission==="granted")ensureToken(false);
-  if(!localStorage.getItem("fh_tour")){openTour(0);}
-  else if(localStorage.getItem("fh_ver_seen")!==APP_VER){showNews();}
-  render();
-}
-function markSeen(){if(db&&me)db.collection("meta").doc("seen").set({[me]:Date.now()},{merge:true}).catch(()=>{});}
-function persist(){if(!db)localStorage.setItem("fh_items",JSON.stringify(items));}
-function save(it){
-  if(db){
-    const {id,...rest}=it;
-    const p=id?db.collection("items").doc(id).set(rest,{merge:true}):db.collection("items").add(rest);
-    p.catch(()=>toast("Could not save. Check your connection."));
-  } else {
-    if(it.id){items=items.map(x=>x.id===it.id?it:x);}else{it.id=String(Date.now());items.unshift(it);}
-    persist();render();
-  }
-}
-function saveNew(type,fields){save({...fields,type,author:me||"Someone",created:Date.now()});}
-function setMeta(id,data){
-  if(!db){toast("Sharing is not set up yet");return;}
-  db.collection("meta").doc(id).set(data,{merge:true}).catch(()=>toast("Could not save. Check your connection."));
-}
-function patch(id,data){
-  if(!db){toast("Sharing is not set up yet");return;}
-  db.collection("items").doc(id).update(data).catch(()=>toast("Could not save. Check your connection."));
-}
-function del(id){
-  const it=items.find(x=>x.id===id);if(!it)return;
-  const {id:_,...rest}=it;
-  if(db)db.collection("items").doc(id).delete().catch(()=>{});
-  else{items=items.filter(x=>x.id!==id);persist();render();}
-  toast("Deleted","Undo",()=>{
-    if(db)db.collection("items").doc(id).set(rest).catch(()=>{});
-    else{items.unshift(it);persist();render();}
-  });
-}
-
-/* ---------- push notifications ---------- */
-async function ensureToken(show){
-  try{
-    const reg=await navigator.serviceWorker.ready;
-    const m=firebase.messaging();
-    const token=await m.getToken({vapidKey:VAPID_KEY,serviceWorkerRegistration:reg});
-    if(token){
-      await db.collection("tokens").doc(token).set({user:me||"Someone",ts:Date.now(),ua:navigator.userAgent.slice(0,100)},{merge:true});
-      localStorage.setItem("fh_push","1");
-      if(show)toast("Daily notifications are on 🔔");
-      render();
-    }
-    m.onMessage(p=>{const n=p.notification||{};toast((n.title?n.title+": ":"")+(n.body||""));});
-  }catch(e){if(show)toast("Could not turn on notifications on this device");}
-}
-async function enablePush(){
-  if(!("Notification" in window)||!("serviceWorker" in navigator)||!window.firebase||!db){toast("Notifications are not supported here. On iPhone, add the app to your Home Screen first.");return;}
-  const p=await Notification.requestPermission();
-  if(p!=="granted"){toast("Notifications are off. You can change this in your phone settings.");return;}
-  await ensureToken(true);
-}
-
-/* ---------- helpers ---------- */
-function streak(name){
-  const set=new Set(((metas.reads||{})[name])||[]);
-  let d=new Date();if(!set.has(ymd(d)))d.setDate(d.getDate()-1);
-  let n=0;while(set.has(ymd(d))){n++;d.setDate(d.getDate()-1);}
-  return n;
-}
-function evDate(it){
-  if(!it.date)return null;
-  if(it.repeat==="Every year"){
-    const t=new Date(),m=it.date.slice(5);let y=t.getFullYear();
-    let s=`${y}-${m}`;if(s<ymd(t))s=`${y+1}-${m}`;return s;
-  }
-  return it.date;
-}
-function daysUntil(s){const a=new Date(ymd(new Date())+"T00:00:00"),b=new Date(s+"T00:00:00");return Math.round((b-a)/864e5);}
-function upcoming(){
-  const t=ymd(new Date());
-  return items.filter(i=>i.type==="event"&&evDate(i)&&evDate(i)>=t).sort((a,b)=>evDate(a).localeCompare(evDate(b)))[0];
-}
-function versePool(){const b=items.filter(i=>i.type==="verse"&&i.text);return b.length?b:DEFAULTS;}
-function readPhoto(file){
-  return new Promise(res=>{
-    const r=new FileReader();
-    r.onload=()=>{const im=new Image();
-      im.onload=()=>{const m=900,s=Math.min(1,m/Math.max(im.width,im.height));const c=document.createElement("canvas");c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);c.getContext("2d").drawImage(im,0,0,c.width,c.height);res(c.toDataURL("image/jpeg",.7));};
-      im.onerror=()=>res(null);im.src=r.result;};
-    r.onerror=()=>res(null);r.readAsDataURL(file);
-  });
-}
-function openDlg(html){const d=$("dlg");if(d.open)d.close();d.innerHTML=html;d.showModal();return d;}
-function closeDlg(){const d=$("dlg");if(d.open)d.close();}
-function speak(t){try{speechSynthesis.cancel();speechSynthesis.speak(new SpeechSynthesisUtterance(t));}catch(e){toast("Reading aloud is not supported here");}}
-function ago(t){if(!t)return"";const m=Math.round((Date.now()-t)/6e4);if(m<2)return"just now";if(m<60)return m+" minutes ago";const h=Math.round(m/60);if(h<24)return h+" hours ago";return Math.round(h/24)+" days ago";}
-function download(name,txt,type){const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([txt],{type}));a.download=name;document.body.appendChild(a);a.click();a.remove();}
-
-function askWho(cb){
-  const d=openDlg(`<h3>Who is here?</h3><div class="row">${PEOPLE.map(p=>`<button class="btn" data-act="who" data-p="${p}">${p}</button>`).join("")}</div>`);
-  askWho.cb=cb;
-  d.addEventListener("cancel",e=>e.preventDefault(),{once:true});
-}
-function openTour(i){
-  const t=TOUR[i];
-  openDlg(`<div class="big">${i===0?"💛":["","➕","🤝","🔔"][i]}</div><h3 style="text-align:center">${esc(t[0])}</h3><p style="text-align:center">${esc(t[1])}</p>
-  <div class="row" style="justify-content:center">${i>0?`<button class="btn ghost" data-act="tour" data-i="${i-1}">Back</button>`:""}<button class="btn" data-act="tour" data-i="${i+1}">${i===TOUR.length-1?"Let's go":"Next"}</button></div>`);
-}
-function showNews(){
-  openDlg(`<h3>✨ What's new (version ${APP_VER})</h3>${NEWS.map(n=>`<p>• ${esc(n)}</p>`).join("")}<div class="row"><button class="btn" data-act="newsdone">Got it</button></div>`);
-}
-
-/* ---------- forms ---------- */
-function fieldHtml(k,l,t,o,val,S){
-  let inp;
-  const v=esc(val||"");
-  if(t==="area")inp=`<textarea name="${k}">${v}</textarea><div class="row"><button type="button" class="btn small ghost" data-act="dictate" data-n="${k}">🎤 Speak instead</button></div>`;
-  else if(t==="select")inp=`<select name="${k}">${o.map(x=>`<option ${String(val)===x?"selected":""}>${x}</option>`).join("")}</select>`;
-  else if(t==="mood")inp=`<select name="${k}">${MOODS.map((m,i)=>`<option value="${i+1}" ${String(val||3)===String(i+1)?"selected":""}>${m} ${i+1} of 5</option>`).join("")}</select>`;
-  else inp=`<input name="${k}" type="${t||"text"}" value="${v}"${t==="number"?' inputmode="decimal" step="any"':""}>`;
-  return `<label>${esc(l)}</label>${inp}`;
-}
-function openForm(type,it,preset){
-  const S=SECTIONS[type],v=it||preset||{};
-  const inputs=S.f.map(([k,l,t,o])=>fieldHtml(k,l,t,o,v[k],S)).join("");
-  const lookupBtn=type==="verse"?`<div class="row"><button type="button" class="btn small ghost" data-act="lookup">🔎 Look up verse text</button></div>`:"";
-  openDlg(`<h3>${it?"Edit":"Add"}: ${esc(S.title)}</h3><form id="f">${inputs}${lookupBtn}
-    <label>Photo (optional)</label><input type="file" name="photo" accept="image/*">
-    <label><input type="checkbox" name="priv" ${v.priv?"checked":""}> Just for me (hidden from everyone else in the app)</label>
-    <div class="row"><button class="btn" type="submit">Save</button><button class="btn ghost" type="button" data-act="close">Cancel</button></div></form>`);
-  const f=$("f");
-  f.onsubmit=async e=>{
-    e.preventDefault();
-    const b=f.querySelector("[type=submit]");b.disabled=true;b.textContent="Saving...";
-    const o=Object.fromEntries(new FormData(f));delete o.photo;const pv=o.priv;delete o.priv;
-    const file=f.elements.photo.files[0];let photo=v.photo||null;
-    if(file){const p=await readPhoto(file);if(p)photo=p;}
-    const rec2={...(it||preset||{}),...o,type,author:(it&&it.author)||me||"Someone",created:(it&&it.created)||Date.now()};
-    rec2.priv=pv?(me||"Someone"):null;
-    if(photo)rec2.photo=photo;
-    save(rec2);closeDlg();
-  };
-}
-/* one question at a time */
-function openWizard(type,preset){
-  const S=SECTIONS[type];
-  W={type,steps:S.f,i:0,ans:{...(preset||{})}};
-  wizDraw();
-}
-function wizDraw(){
-  const S=SECTIONS[W.type],n=W.steps.length;
-  if(W.i>=n){
-    openDlg(`<h3>Almost done 🎉</h3><label>Add a photo (optional)</label><input type="file" id="wph" accept="image/*">
-      <label><input type="checkbox" id="wpr"> Just for me</label>
-      <div class="row"><button class="btn" data-w="save">Save ✅</button><button class="btn ghost" data-w="back">Back</button><button class="btn ghost" data-act="close">Cancel</button></div>`);
-    return;
-  }
-  const [k,l,t,o]=W.steps[W.i];
-  const prompt=(S.p&&S.p[k])||l;
-  openDlg(`<div class="meta">Question ${W.i+1} of ${n}</div><h3>${esc(prompt)}</h3><form id="wf">${fieldHtml(k,"",t,o,W.ans[k],S).replace('<label></label>',"")}</form>
-    ${W.type==="verse"&&k==="text"?`<div class="row"><button type="button" class="btn small ghost" data-act="lookupw">🔎 Fill it in for me</button></div>`:""}
-    <div class="row">${W.i>0?`<button class="btn ghost" data-w="back">Back</button>`:""}<button class="btn" data-w="next">${W.i===n-1?"Next":"Next"}</button><button class="btn ghost" data-act="close">Cancel</button></div>`);
-}
-function wizCapture(){
-  const f=$("wf");if(!f)return;
-  const el=f.elements[W.steps[W.i][0]];if(el)W.ans[W.steps[W.i][0]]=el.value;
-}
-async function wizSave(){
-  const photoFile=$("wph")&&$("wph").files[0];let photo=null;
-  if(photoFile)photo=await readPhoto(photoFile);
-  const rec2={...W.ans,type:W.type,author:me||"Someone",created:Date.now()};
-  if($("wpr")&&$("wpr").checked)rec2.priv=me||"Someone";
-  if(photo)rec2.photo=photo;
-  save(rec2);closeDlg();toast("Saved ✅");
-}
-function addAction(type,preset){
-  if(simple&&SIMPLE_WIZ.includes(type))openWizard(type,preset);else openForm(type,null,preset);
-}
-async function lookup(fromWizard){
-  const d=$("dlg");
-  const refEl=fromWizard?null:d.querySelector("[name=ref]");
-  const ref=(fromWizard?W.ans.ref:refEl.value||"").trim();
-  if(!ref){toast("Type a reference first, like John 3:16");return;}
-  try{
-    const r=await bibleFetch(ref);
-    if(fromWizard){const ta=d.querySelector("[name=text]");ta.value=r.text;W.ans.ref=r.ref;}
-    else{d.querySelector("[name=text]").value=r.text;refEl.value=r.ref;}
-  }catch(e){toast(navigator.onLine?"Could not find that verse":"Lookup needs internet");}
-}
-function dictate(name){
-  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  if(!SR){toast("Voice typing is not supported here. Try the microphone key on your keyboard.");return;}
-  const el=$("dlg").querySelector(`[name="${name}"]`);if(!el)return;
-  const r=new SR();r.lang="en-US";r.interimResults=false;
-  r.onresult=e=>{const t=e.results[0][0].transcript;el.value=(el.value?el.value+" ":"")+t;};
-  r.onerror=()=>toast("Could not hear you. Try again.");
-  r.start();toast("Listening...");
-}
-function openComment(id){
-  openDlg(`<h3>Add a comment</h3><form id="cf"><textarea name="t" required></textarea><div class="row"><button class="btn" type="submit">Post</button><button class="btn ghost" type="button" data-act="close">Cancel</button></div></form>`);
-  $("cf").onsubmit=e=>{
-    e.preventDefault();const t=e.target.t.value.trim();if(!t)return;
-    if(!db){toast("Sharing is not set up yet");return;}
-    patch(id,{comments:FV.arrayUnion({a:me||"Someone",t,ts:Date.now()})});closeDlg();
-  };
-}
-
-/* ---------- share card ---------- */
-function wrapLines(g,text,maxW){
-  const words=text.split(" "),lines=[];let cur="";
-  for(const w of words){const t=cur?cur+" "+w:w;if(g.measureText(t).width>maxW&&cur){lines.push(cur);cur=w;}else cur=t;}
-  if(cur)lines.push(cur);return lines;
-}
-function shareCard(ref,text){
-  const c=document.createElement("canvas");c.width=1080;c.height=1350;const g=c.getContext("2d");
-  const gr=g.createLinearGradient(0,0,1080,1350);gr.addColorStop(0,"#1c1a1f");gr.addColorStop(1,"#4a3523");g.fillStyle=gr;g.fillRect(0,0,1080,1350);
-  g.textAlign="center";g.fillStyle="#e0a062";g.font="bold 42px sans-serif";g.fillText("VERSE OF THE DAY",540,150);
-  let size=64,lines=[];
-  for(;size>=30;size-=2){g.font=`italic ${size}px Georgia, serif`;lines=wrapLines(g,"“"+text+"”",880);if(lines.length*size*1.4<=800)break;}
-  g.fillStyle="#f1ece4";const top=Math.max(280,675-lines.length*size*0.7);
-  lines.forEach((l,i)=>g.fillText(l,540,top+i*size*1.4));
-  g.fillStyle="#e0a062";g.font="bold 48px sans-serif";g.fillText(ref,540,Math.min(1180,top+lines.length*size*1.4+90));
-  g.fillStyle="#a49ead";g.font="32px sans-serif";g.fillText("Faith Hub",540,1280);
-  c.toBlob(async b=>{
-    const f=new File([b],"verse.png",{type:"image/png"});
-    if(navigator.canShare&&navigator.canShare({files:[f]})){try{await navigator.share({files:[f],text:ref});return;}catch(e){}}
-    const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="verse.png";document.body.appendChild(a);a.click();a.remove();
-    toast("Saved the picture to your downloads");
-  },"image/png");
-}
-
-/* ---------- voice notes ---------- */
-async function toggleRec(){
-  if(rec&&rec.state==="recording"){rec.stop();return;}
-  try{
-    const st=await navigator.mediaDevices.getUserMedia({audio:true});
-    const mime=window.MediaRecorder&&MediaRecorder.isTypeSupported("audio/webm;codecs=opus")?"audio/webm;codecs=opus":(MediaRecorder.isTypeSupported("audio/mp4")?"audio/mp4":"");
-    rec=new MediaRecorder(st,mime?{mimeType:mime,audioBitsPerSecond:24000}:{audioBitsPerSecond:24000});chunks=[];voiceDraft=null;
-    rec.ondataavailable=e=>chunks.push(e.data);
-    rec.onstop=()=>{st.getTracks().forEach(t=>t.stop());clearTimeout(recTimer);const b=new Blob(chunks,{type:rec.mimeType||"audio/webm"});const fr=new FileReader();fr.onload=()=>{voiceDraft=fr.result;render();};fr.readAsDataURL(b);};
-    rec.start();recTimer=setTimeout(()=>{if(rec&&rec.state==="recording")rec.stop();},60000);render();
-  }catch(e){toast("Microphone is not available");}
-}
-
-/* ---------- calm ---------- */
-function stopCalm(){if(calmTimer){clearInterval(calmTimer);calmTimer=null;}}
-function startCalm(mins){
-  stopCalm();
-  const el=$("breath"),phases=[["Breathe in",4,1.3],["Hold",4,1.3],["Breathe out",6,.8]];
-  let end=Date.now()+mins*60000,pi=-1,left=0;
-  const tick=()=>{
-    if(Date.now()>=end){stopCalm();if(el){el.textContent="Well done 💛";el.style.transform="scale(1)";}return;}
-    if(left<=0){pi=(pi+1)%3;left=phases[pi][1];if(el){el.style.transition=`transform ${phases[pi][1]}s ease-in-out`;el.style.transform=`scale(${phases[pi][2]})`;el.textContent=phases[pi][0];}}
-    left--;
-  };
-  tick();calmTimer=setInterval(tick,1000);
-}
-
-/* ---------- views ---------- */
-function card(it){
-  const S=SECTIONS[it.type]||{icon:"",label:""};
-  if(it.type==="letter"&&it.author!==me&&it.open&&it.open>ymd(new Date()))
-    return `<div class="card locked"><div class="big">💌</div><h3>A ${esc((it.kind||"letter").toLowerCase())} from ${esc(it.author)}</h3><div class="meta">Opens on ${esc(fmtDay(it.open))} (${daysUntil(it.open)} days)</div></div>`;
-  if(it.type==="todo")
-    return `<div class="card" style="padding:10px 14px"><div class="row" style="margin:0;justify-content:space-between"><button class="react ${it.done?"on":""}" data-act="todo" data-id="${it.id}">${it.done?"✅":"⭕"}</button><div style="flex:1" class="${it.done?"cross":""}">${esc(it.text)}</div><span class="who">${esc(it.author)}</span><button class="btn small ghost" data-act="del" data-id="${it.id}">✕</button></div></div>`;
-  if(it.type==="vote"){
-    const a=(it.votes||{}).a||[],b=(it.votes||{}).b||[];
-    return `<div class="card"><h3>${esc(it.title)}</h3><div class="meta"><span class="who">${esc(it.author)}</span>${it.created?fmt(it.created):""}</div>
-      <div class="grid2" style="margin-top:8px"><button class="btn ${a.includes(me)?"":"ghost"}" data-act="vote" data-id="${it.id}" data-k="a">${esc(it.a)}<br><small>${a.length} vote${a.length===1?"":"s"}</small></button><button class="btn ${b.includes(me)?"":"ghost"}" data-act="vote" data-id="${it.id}" data-k="b">${esc(it.b)}<br><small>${b.length} vote${b.length===1?"":"s"}</small></button></div>
-      <div class="row"><button class="btn small ghost" data-act="del" data-id="${it.id}">Delete</button></div></div>`;
-  }
-  let title=it.title||it.place||it.church||it.for||(it.type==="checkin"&&it.mood?`${MOODS[it.mood-1]||""} ${it.day||""}`:"")||it.tag||(it.month?"Chapter for "+it.month:"");
-  const ev=it.type==="event"?evDate(it):null;
-  const body=[
-    it.ref&&`<div class="meta">${esc(it.ref)}</div>`,
-    ev&&`<div class="meta">${esc(fmtDay(ev))}${it.time?" at "+esc(it.time):""}${daysUntil(ev)>=0?` · in ${daysUntil(ev)} days`:""}${it.repeat==="Every year"?" · every year":""}</div>`,
-    it.type==="hike"&&`<div class="meta">${it.miles?esc(it.miles)+" miles":""} ${esc(it.difficulty||"")}</div>`,
-    (it.type==="milestone"||it.type==="win"||it.type==="stars")&&it.date&&`<div class="meta">${esc(fmtDay(it.date))}${it.kind?" · "+esc(it.kind):""}</div>`,
-    it.type==="letter"&&it.open&&`<div class="meta">${esc(it.kind||"Letter")} · opens ${esc(fmtDay(it.open))}</div>`,
-    it.text&&`<div>${nl(it.text)}</div>`,
-    it.note&&`<div>${nl(it.note)}</div>`,
-    it.update&&`<div><b>Update:</b> ${nl(it.update)}</div>`,
-    it.apply&&`<div><b>Apply:</b> ${nl(it.apply)}</div>`,
-    it.cat&&it.type==="prayer"&&`<div class="meta">${esc(it.cat)}</div>`
-  ].filter(Boolean).join("");
-  const prog=it.type==="goal"?`<div class="bar"><i style="width:${Number(it.progress)||0}%"></i></div><div class="meta">${Number(it.progress)||0}% done</div>`:"";
-  const photo=it.photo&&String(it.photo).startsWith("data:image/")?`<img class="ph" src="${it.photo}" alt="photo">`:"";
-  const audio=it.audio&&String(it.audio).startsWith("data:audio/")?`<audio controls src="${it.audio}" style="width:100%;margin-top:8px"></audio>`:"";
-  const rx=it.reactions||{};
-  const reacts=REACTS.map(([k,e])=>{const a=rx[k]||[];return `<button class="react ${a.includes(me)?"on":""}" data-act="react" data-id="${it.id}" data-k="${k}">${e}${a.length?" "+a.length:""}</button>`;}).join("");
-  const cms=(it.comments||[]).map(c=>`<div class="cm"><span class="who">${esc(c.a)}</span>${nl(c.t)}</div>`).join("");
-  const extra=[
-    it.type==="prayer"&&`<button class="btn small ghost" data-act="answered" data-id="${it.id}">${it.answered?"Mark unanswered":"Mark answered ✅"}</button>`,
-    it.type==="goal"&&`<button class="btn small ghost" data-act="goal" data-id="${it.id}" data-v="${Math.min(100,(Number(it.progress)||0)+25)}">+25%</button>`,
-    (it.type==="verse"&&it.text)&&`<button class="btn small ghost" data-act="sharecard" data-id="${it.id}">📤 Share</button><button class="btn small ghost" data-act="speak" data-id="${it.id}">🔊</button>`,
-    it.place&&`<a class="btn small ghost" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(it.place)}">📍 Map</a>`
-  ].filter(Boolean).join("");
-  return `<div class="card ${it.answered?"done":""}">
-    ${title?`<h3>${esc(title)}${it.answered?" ✅":""}</h3>`:""}
-    <div class="meta"><span class="who">${esc(who(it.author))}</span>${it.created?fmt(it.created):""}${it.type==="sermon"&&it.date?" · "+esc(it.date):""}${it.priv?" · 🔒 just for you":""}</div>
-    ${body}${prog}${photo}${audio}
-    <div class="row">${reacts}</div>${cms}
-    <div class="row">${extra}<button class="btn small ghost" data-act="comment" data-id="${it.id}">💬 Comment</button><button class="btn small ghost" data-act="edit" data-id="${it.id}">Edit</button><button class="btn small ghost" data-act="del" data-id="${it.id}">Delete</button></div></div>`;
-}
-function visible(i){return !(i.priv&&i.priv!==me);}
-function listItems(sub){
-  const def=defOf(sub);
-  let l=items.filter(i=>i.type===def.type&&visible(i)&&(!def.where||def.where(i)));
-  if(filt!=="all")l=l.filter(i=>i.author===filt);
-  if(sub==="prayer"&&catFilt!=="all")l=l.filter(i=>(i.cat||"Myself")===catFilt);
-  if(q)l=l.filter(i=>JSON.stringify({...i,photo:"",audio:""}).toLowerCase().includes(q.toLowerCase()));
-  if(def.type==="event")l.sort((a,b)=>(evDate(a)||"").localeCompare(evDate(b)||""));
-  else if(def.type==="milestone"||def.type==="win")l.sort((a,b)=>(b.date||"").localeCompare(a.date||""));
-  else l.sort((a,b)=>(b.created||0)-(a.created||0));
-  return l.length?l.map(card).join(""):`<p class="empty">Nothing here yet. Tap Add to start.</p>`;
-}
-function listView(sub,extraTop){
-  const def=defOf(sub),S=SECTIONS[def.type];
-  const cats=sub==="prayer"?`<div class="chips">${["all","Myself","Us","Family","Friends","World"].map(c=>`<button class="chip ${catFilt===c?"on":""}" data-act="cat" data-c="${c}">${c==="all"?"All groups":c}</button>`).join("")}</div>`:"";
-  return `<h2>${S.icon} ${esc(def.title||S.title)}</h2>${extraTop||""}<button class="btn add" data-act="add" data-t="${def.type}" ${def.preset?`data-pre="${esc(JSON.stringify(def.preset))}"`:""}>+ Add</button>
-  <div class="chips">${["all",...PEOPLE].map(p=>`<button class="chip ${filt===p?"on":""}" data-act="filt" data-p="${p}">${p==="all"?"Everyone":p}</button>`).join("")}</div>${cats}
-  <input id="q" class="search" placeholder="Search" value="${esc(q)}">
-  <div id="lst">${listItems(sub)}</div>`;
-}
-function dailyCard(){
-  const v=daily||DEFAULTS[dayNum()%DEFAULTS.length];
-  return `<div class="card"><div class="meta">Verse of the day</div><p class="verse">"${esc(v.text)}"</p><div class="meta">${esc(v.ref||"")}</div>
-   <div class="row"><button class="btn small ghost" data-act="sharedaily">📤 Share picture</button><button class="btn small ghost" data-act="speakdaily">🔊 Read aloud</button></div>
-   <p style="margin:10px 0 0"><b>Reflect:</b> ${esc(QUESTIONS[dayNum()%QUESTIONS.length])}</p>
-   <p style="margin:8px 0 0"><b>Pray:</b> ${esc(PRAYERS[dayNum()%PRAYERS.length])}</p></div>`;
-}
-function homeView(){
-  const pool=items.filter(i=>i.type==="verse"&&i.text&&visible(i)),bv=pool.length?pool[dayNum()%pool.length]:null;
-  const nx=upcoming(),today=ymd(new Date());
-  const reads=(metas.reads||{})[me]||[],readToday=reads.includes(today);
-  const others=PEOPLE.filter(p=>p!==me),other=others.length>1?"everyone":(others[0]||"them"),seenList=others.filter(p=>(metas.seen||{})[p]).map(p=>`${p} was here ${ago((metas.seen||{})[p])}`).join(" · "),seen=seenList;
-  const pushOn="Notification" in window&&Notification.permission==="granted"&&localStorage.getItem("fh_push")==="1";
-  const recent=items.filter(i=>!["msg","todo"].includes(i.type)&&visible(i)).slice(0,4);
-  let h="";
-  if(!pushOn&&db&&"Notification" in window&&Notification.permission!=="denied")h+=`<div class="card"><b>🔔 Get your verse every day at noon</b><div class="meta">Turn on notifications so it arrives on your phone.</div><div class="row"><button class="btn" data-act="notif">Turn on daily notifications</button></div></div>`;
-  if(simple){
-    h+=`<button class="btn giant" data-act="read" ${readToday?"disabled":""}>${readToday?"✅ I read today":"📖 I read today"}</button>
-    <button class="btn giant" data-act="wiz" data-t="prayer">🙏 Write a prayer</button>
-    <button class="btn giant" data-act="wiz" data-t="verse">🕊️ Share a verse</button>
-    <button class="btn giant ghost" data-act="ping">💛 Say hi to ${esc(other)}</button>`+dailyCard();
-    return h+(seen?`<div class="meta">${esc(seenList)}</div>`:"");
-  }
-  h+=dailyCard();
-  if(bv)h+=`<div class="card"><div class="meta">From our verse bank</div><p class="verse" style="font-size:18px">"${esc(bv.text)}"</p><div class="meta">${esc(bv.ref||"")} · added by ${esc(bv.author||"")}</div></div>`;
-  h+=`<div class="grid2"><button class="btn" data-act="read" ${readToday?"disabled":""}>${readToday?"✅ Read today":"📖 I read today"}</button><button class="btn ghost" data-act="ping">💛 Thinking of you</button></div>`;
-  if(seen)h+=`<div class="meta" style="margin:6px 0">${esc(seenList)}</div>`;
-  const ml=metas.moodlog||{},myLog=(ml[me]||[]);
-  const last7=[];for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);const k=ymd(d);const e=[...myLog].reverse().find(x=>x.startsWith(k+":"));last7.push(e?MOODS[Number(e.split(":")[1])-1]:"·");}
-  h+=`<div class="card"><div class="meta">How is your heart today?</div><div class="row">${MOODS.map((m,i)=>`<button class="react" style="font-size:24px" data-act="mood" data-m="${i+1}">${m}</button>`).join("")}</div><div class="meta" style="margin-top:6px">Your week: ${last7.join(" ")}</div></div>`;
-  h+=`<div class="card"><div class="meta">Reading streaks</div><div class="row">${PEOPLE.map(p=>`<span class="who">${esc(p)}: ${streak(p)} day${streak(p)===1?"":"s"} 🔥 · ${(((metas.reads||{})[p])||[]).length} total</span>`).join("")}</div><div class="meta" style="margin-top:6px">Missed a day? No pressure. Just start again today.</div></div>`;
-  h+=nx?`<div class="card"><div class="meta">Next event</div><h3>${esc(nx.title||"Event")}</h3><div class="big">${daysUntil(evDate(nx))===0?"Today!":daysUntil(evDate(nx))+" days"}</div><div class="meta" style="text-align:center">${esc(fmtDay(evDate(nx)))}</div></div>`:
-    `<div class="card"><div class="meta">Next event</div><p class="empty" style="padding:8px">Add a visit or birthday in Together, Events and it shows a countdown here.</p></div>`;
-  if(new Date().getDay()===0)h+=`<div class="card"><b>⛪ Sunday check in</b><div class="meta">Did you go to church today? What stood out?</div><div class="row"><button class="btn small" data-act="add" data-t="sermon">Add sermon notes</button></div></div>`;
-  const lastRead=reads.slice().sort().pop();
-  if(!lastRead||daysUntil(lastRead)<=-3)h+=`<div class="card"><b>🌿 Want a short place to start?</b><div class="meta">Try today's Psalm. It only takes a few minutes.</div><div class="row"><button class="btn small" data-act="goto" data-g="faith" data-s="psalm">Open Psalm of the day</button></div></div>`;
-  const old=items.filter(i=>i.type==="prayer"&&!i.answered&&!i.update&&visible(i)&&Date.now()-(i.created||Date.now())>14*864e5).slice(0,3);
-  if(old.length)h+=`<div class="card"><b>🙏 Check in on these prayers</b>${old.map(i=>`<div class="meta">• ${esc((i.text||"").slice(0,70))}</div>`).join("")}<div class="row"><button class="btn small ghost" data-act="goto" data-g="faith" data-s="prayer">Open prayers</button></div></div>`;
-  const t=new Date(),oty=items.filter(i=>visible(i)&&i.created&&!["msg","todo"].includes(i.type)&&new Date(i.created).getFullYear()<t.getFullYear()&&new Date(i.created).getMonth()===t.getMonth()&&new Date(i.created).getDate()===t.getDate()).slice(0,2);
-  if(oty.length)h+=`<div class="card"><b>📅 On this day</b>${oty.map(i=>`<div class="meta">${esc(i.author)}: ${esc((i.text||i.title||i.ref||"").slice(0,80))}</div>`).join("")}</div>`;
-  h+=`<div class="row"><button class="btn ghost" data-act="hard">🌧️ Hard day? Give me a verse</button><button class="btn ghost" data-act="jarpull">🫙 Open the jar</button></div>`;
-  h+=`<h3 style="margin-top:18px">Recent</h3>${recent.length?recent.map(card).join(""):`<p class="empty">Nothing yet. Pick a tab below and add the first one.</p>`}`;
-  return h;
-}
-function chapterView(){
-  const mk=ymd(new Date()).slice(0,7),c=metas["chap_"+mk];
-  let h=`<h2>📖 This month's chapter</h2>`;
-  if(!c||!c.parts){
-    h+=`<div class="card"><p>Pick one chapter to read together this month. We split it into small parts so it never feels like too much.</p><label>Which chapter? (example: John 3)</label><input id="chapin" placeholder="John 3"><div class="row"><button class="btn" data-act="chapstart">Start this month's chapter</button></div></div>`;
-  } else {
-    const parts=c.parts,done=c.done||{};
-    const mine=parts.findIndex((p,i)=>!(done[i+1]||[]).includes(me));
-    const cnt=n=>parts.filter((p,i)=>(done[i+1]||[]).includes(n)).length;
-    h+=`<div class="card"><h3>${esc(c.ref)}</h3>${PEOPLE.map(n=>`<div class="meta">${esc(n)}: ${cnt(n)} of ${parts.length} parts</div><div class="bar"><i style="width:${cnt(n)/parts.length*100}%"></i></div>`).join("")}</div>`;
-    if(mine>=0){
-      const [s,e]=parts[mine].split("-"),pref=`${c.ref}:${s}${e&&e!==s?"-"+e:""}`;
-      h+=`<div class="card"><div class="meta">Your next part (${mine+1} of ${parts.length})</div><h3>${esc(pref)}</h3><div id="partbox" data-ref="${esc(pref)}">Loading...</div>
-      <div class="row"><a class="btn small ghost" target="_blank" rel="noopener" href="${bg(pref)}">Open in my Bible</a><button class="btn" data-act="partdone" data-i="${mine+1}">✅ I read it</button></div></div>`;
-    } else h+=`<div class="card"><h3>🎉 You finished ${esc(c.ref)}!</h3><p>Write what stood out below.</p></div>`;
-    h+=`<div class="card"><h3>All parts</h3>${parts.map((p,i)=>{const w=done[i+1]||[];return `<div class="${w.length===PEOPLE.length?"cross":""}">Part ${i+1}: ${esc(p)} · ${PEOPLE.map(n=>(w.includes(n)?"✅ ":"⭕ ")+esc(n)).join("  ")}</div>`;}).join("")}</div>
-    <div class="row"><button class="btn small ghost" data-act="chapreset">Pick a different chapter</button></div>`;
-  }
-  h+=`<h3 style="margin-top:16px">Our thoughts</h3><button class="btn add" data-act="add" data-t="reading">+ Add a thought</button><div id="lst">${listItems("reading")}</div>`;
-  return h;
-}
-function psalmView(){
-  const n=(dayNum()%150)+1;
-  return `<h2>🎶 Psalm of the day</h2><div class="card"><h3>Psalm ${n}</h3><div id="psbox" data-ref="Psalm ${n}">Loading...</div>
-  <div class="row"><a class="btn small ghost" target="_blank" rel="noopener" href="${bg("Psalm "+n)}">Open in my Bible</a><button class="btn small" data-act="psalmpray" data-n="${n}">🙏 Pray it back</button></div></div>`;
-}
-function topicsView(){
-  let h=`<h2>🔎 Verses for...</h2><div class="chips">${Object.keys(TOPICS).map(t=>`<button class="chip ${topicSel===t?"on":""}" data-act="topic" data-t="${t}">${t}</button>`).join("")}</div>`;
-  h+=topicSel?`<div id="topicbox" data-topic="${esc(topicSel)}">Loading...</div>`:`<p class="empty">Pick what you are feeling and we will show verses for it.</p>`;
-  return h;
-}
-function learnView(){
-  return `<h2>📚 Learn</h2>`+Object.entries(LEARN).map(([t,l])=>`<details class="card"><summary>${esc(t)}</summary>${l.map(([a,b])=>`<p style="margin:8px 0"><b>${esc(a)}.</b> ${esc(b)}</p>`).join("")}</details>`).join("");
-}
-function calmView(){
-  return `<h2>🌿 Calm</h2><div class="card" style="text-align:center"><p>Slow breathing can settle a busy mind. Breathe with the circle.</p>
-  <div class="breath" id="breath">Ready</div><div class="row" style="justify-content:center">${[1,3,5].map(m=>`<button class="btn small" data-act="calmgo" data-m="${m}">${m} min</button>`).join("")}<button class="btn small ghost" data-act="calmstop">Stop</button></div>
-  <p class="verse" style="font-size:18px;margin-top:16px">"Be still, and know that I am God."</p><div class="meta">Psalm 46:10</div></div>`;
-}
-function planView(){
-  const key=(metas.settings||{}).plan||"john",P=PLANS[key]||PLANS.john;
-  const done=(metas["plan_"+key]||{}).done||{};
-  const days=P.days||(P.refs||P.tasks).length;
-  let total=0,rows="";
-  for(let d=1;d<=days;d++){
-    const w=done[d]||[];total+=w.length;
-    let label;
-    if(P.tasks)label=esc(P.tasks[d-1]);
-    else{const r=P.refs?P.refs[d-1]:P.book+" "+d;label=`<a href="${bg(r)}" target="_blank" rel="noopener">${esc(r)}</a>`;}
-    rows+=`<div class="card" style="padding:10px 14px"><div class="row" style="margin:0;justify-content:space-between"><div><b>Day ${d}</b> · ${label}</div>
-      <div class="row" style="margin:0">${PEOPLE.map(p=>p===me?`<button class="react ${w.includes(p)?"on":""}" data-act="plan" data-d="${d}">${w.includes(p)?"✅":"⭕"} ${esc(p)}</button>`:`<span class="meta">${w.includes(p)?"✅":"⭕"} ${esc(p)}</span>`).join("")}</div></div></div>`;
-  }
-  const pct=Math.round(total/(days*PEOPLE.length)*100);
-  return `<h2>📆 Plans and challenges</h2><label>Choose one</label><select data-act="planpick">${Object.entries(PLANS).map(([k,p])=>`<option value="${k}" ${k===key?"selected":""}>${esc(p.n)}</option>`).join("")}</select>
-  <div class="bar"><i style="width:${pct}%"></i></div><div class="meta">${pct}% done together. Tap your own circle when you finish a day.</div>${rows}`;
-}
-function memoView(){
-  const pool=versePool(),v=pool[memoI%pool.length];
-  return `<h2>🧠 Memorize</h2><div class="card" style="text-align:center"><div class="meta">Card ${(memoI%pool.length)+1} of ${pool.length}</div>
-    <h3 style="font-size:24px;margin:14px 0">${esc(v.ref)}</h3>
-    ${memoShow?`<p class="verse">"${esc(v.text)}"</p>`:`<p class="empty">Say the verse out loud, then tap Show.</p>`}
-    <div class="row" style="justify-content:center"><button class="btn" data-act="memoflip">${memoShow?"Hide":"Show verse"}</button><button class="btn ghost" data-act="memonext">Next</button><button class="btn ghost" data-act="memoshuf">Shuffle</button></div></div>
-    <p class="meta">This uses the verses in your Verse bank.</p>`;
-}
-function chatView(){
-  const l=items.filter(i=>i.type==="msg"&&visible(i)).sort((a,b)=>(a.created||0)-(b.created||0)).slice(-100);
-  return `<h2>💬 Chat</h2><div class="chat" id="chatlist">${chatHtml(l)}</div>
-  <div class="row">${["Good morning ☀️","Goodnight 🌙","Praying for you 🙏","Proud of you 💛"].map(m=>`<button class="chip" data-act="quick" data-m="${esc(m)}">${m}</button>`).join("")}</div>
-  <div class="row stick"><input id="cin" placeholder="Write a message" style="flex:1"><button class="btn" data-act="send">Send</button></div>`;
-}
-function chatHtml(l){return l.length?l.map(m=>`<div class="bub ${m.author===me?"me":""}"><small>${esc(who(m.author))} · ${m.created?fmt(m.created):""}</small>${nl(m.text)}${m.author===me?` <a href="#" data-act="del" data-id="${m.id}" style="font-size:11px;color:var(--mute)">delete</a>`:""}</div>`).join(""):`<p class="empty">Say hello 💛</p>`;}
-function albumView(){
-  const l=items.filter(i=>i.photo&&visible(i)).sort((a,b)=>(b.created||0)-(a.created||0));
-  return `<h2>📸 Photo album</h2><button class="btn add" data-act="add" data-t="photo">+ Add a photo</button>
-  <div class="agrid">${l.map(i=>`<img src="${i.photo}" alt="${esc(i.text||i.title||"photo")}" data-act="bigphoto" data-id="${i.id}">`).join("")}</div>${l.length?"":`<p class="empty">No photos yet.</p>`}`;
-}
-function voiceView(){
-  const recording=rec&&rec.state==="recording";
-  const l=items.filter(i=>i.type==="voice"&&visible(i)).sort((a,b)=>(b.created||0)-(a.created||0));
-  return `<h2>🎙️ Voice notes</h2><div class="card" style="text-align:center"><p class="meta">Record up to one minute. Great for short prayers or messages.</p>
-  <button class="btn giant ${recording?"":"ghost"}" data-act="rec">${recording?"⏹️ Tap to stop":"🎙️ Tap to record"}</button>
-  ${voiceDraft?`<audio controls src="${voiceDraft}" style="width:100%"></audio><input id="vtitle" placeholder="Give it a title" style="margin-top:8px"><div class="row" style="justify-content:center"><button class="btn" data-act="vsave">Save and share</button><button class="btn ghost" data-act="vdiscard">Discard</button></div>`:""}</div>${l.map(card).join("")||`<p class="empty">No voice notes yet.</p>`}`;
-}
-function prayforView(){
-  const wk=Math.floor(dayNum()/7),P=PRAYPROMPTS[wk%PRAYPROMPTS.length],w=(metas.prayed||{})["w"+wk]||[];
-  return `<h2>🤝 Pray together</h2><div class="card"><div class="meta">This week</div><p class="verse" style="font-size:19px">${esc(P)}</p>
-  <div class="row">${PEOPLE.map(p=>p===me?`<button class="btn ${w.includes(p)?"":"ghost"}" data-act="prayed">${w.includes(p)?"✅ I prayed":"🙏 I prayed"}</button>`:`<span class="who">${w.includes(p)?"✅":"⭕"} ${esc(p)}</span>`).join("")}</div></div>`;
-}
-function funView(){
-  const d=dayNum(),Wq=WYR[d%WYR.length],ans=((metas.wyr||{}).a||{})["d"+d]||{};
-  const both=PEOPLE.every(p=>ans[p]);
-  let h=`<h2>🎲 Fun</h2><div class="card"><div class="meta">Would you rather (today)</div><div class="grid2" style="margin-top:8px">${["A","B"].map((k,i)=>`<button class="btn ${ans[me]===k?"":"ghost"}" data-act="wyr" data-k="${k}">${esc(Wq[i])}</button>`).join("")}</div>
-  <div class="meta" style="margin-top:8px">${PEOPLE.map(p=>ans[p]?(both||p===me?`${esc(p)} chose ${ans[p]==="A"?esc(Wq[0]):esc(Wq[1])}`:`${esc(p)} answered`):`${esc(p)} has not answered yet`).join("<br>")}</div></div>`;
-  const Q=QUIZ[quizI];
-  if(quizI>=QUIZ.length)h+=`<div class="card"><h3>🏁 Bible trivia done</h3><p>You got ${quizScore} of ${QUIZ.length}.</p><div class="row"><button class="btn" data-act="quizreset">Play again</button></div></div>`;
-  else h+=`<div class="card"><div class="meta">Bible trivia ${quizI+1} of ${QUIZ.length}</div><h3>${esc(Q.q)}</h3>${Q.o.map((o,i)=>`<button class="btn ${quizPick===null?"ghost":(i===Q.a?"":"ghost")} " style="display:block;width:100%;margin:6px 0;${quizPick!==null&&i===quizPick&&i!==Q.a?"opacity:.5":""}" data-act="quizpick" data-i="${i}">${quizPick!==null&&i===Q.a?"✅ ":""}${esc(o)}</button>`).join("")}${quizPick!==null?`<div class="row"><button class="btn" data-act="quiznext">Next</button></div>`:""}</div>`;
-  return h;
-}
-function jarView(){
-  return listView("jar",`<div class="row" style="margin:0 0 8px"><button class="btn" data-act="jarpull">🫙 Pull one out</button></div>`);
-}
-function badges(){
-  const mx=Math.max(...PEOPLE.map(streak),0),own=t=>items.filter(i=>i.type===t).length;
-  const places=new Set(items.filter(i=>i.type==="outdoor"&&i.place).map(i=>i.place.trim().toLowerCase())).size;
-  return [["🔥","7 day reading streak",mx>=7],["🌟","30 day reading streak",mx>=30],["📝","10 entries added",items.length>=10],["🙏","5 prayers written",own("prayer")>=5],["✅","First answered prayer",items.some(i=>i.answered)],["🌲","3 places visited",places>=3],["🕊️","10 verses saved",own("verse")>=10],["📸","First photo shared",items.some(i=>i.photo)]];
-}
-function weekSummary(){
-  const since=Date.now()-7*864e5,mine=n=>items.filter(i=>i.author===n&&i.created>=since&&i.type!=="msg").length;
-  const rd=n=>(((metas.reads||{})[n])||[]).filter(d=>d>=ymd(new Date(since))).length;
-  return PEOPLE.map(p=>`<div>${esc(p)}: ${mine(p)} entries, ${rd(p)} reading days</div>`).join("");
-}
-function moreView(){
-  const th=localStorage.getItem("fh_theme")||"auto",pushOn="Notification" in window&&Notification.permission==="granted"&&localStorage.getItem("fh_push")==="1";
-  const AV=["😊","🌻","🦋","🌲","⭐","🔥","🕊️","🐻"],ACC=["#b5722f","#2f8f5b","#3d6fb5","#8a4fb5","#b3392f","#5f8a84"];
-  return `<h2>⚙️ More</h2>
-  <div class="card"><h3>You</h3><div class="meta">Signed in as ${esc(me||"nobody")}</div><div class="row"><button class="btn small ghost" data-act="askwho">Switch person</button></div>
-    <div class="meta" style="margin-top:10px">Pick your picture</div><div class="row">${AV.map(a=>`<button class="react" style="font-size:22px" data-act="avatar" data-a="${a}">${a}</button>`).join("")}</div></div>
-  <div class="card"><h3>Make it easier</h3><div class="row"><button class="chip ${simple?"on":""}" data-act="simple">${simple?"✅ Simple mode is on":"Turn on Simple mode"}</button><button class="chip ${localStorage.getItem("fh_calm")==="1"?"on":""}" data-act="calm">Calm mode</button></div>
-    <div class="meta">Simple mode shows big buttons and fewer tabs. Calm mode softens colors and stops animations.</div></div>
-  ${notifCard(pushOn)}
-  <div class="card"><h3>Look and feel</h3><div class="row">${["auto","light","dark"].map(t=>`<button class="chip ${th===t?"on":""}" data-act="theme" data-t="${t}">${t==="auto"?"Auto":t[0].toUpperCase()+t.slice(1)}</button>`).join("")}</div>
-    <div class="row">${ACC.map(c=>`<button class="react" style="background:${c};width:34px;height:34px;border-radius:50%" data-act="accent" data-c="${c}" aria-label="color"></button>`).join("")}</div>
-    <div class="row"><button class="btn small ghost" data-act="fs" data-d="-1">A−</button><button class="btn small ghost" data-act="fs" data-d="1">A+</button><span class="meta">Text size</span></div>
-    <label>Bible version for lookups</label><select data-act="verpick"><option value="web" ${ver==="web"?"selected":""}>WEB (modern English)</option><option value="kjv" ${ver==="kjv"?"selected":""}>KJV (classic)</option><option value="bbe" ${ver==="bbe"?"selected":""}>BBE (Basic English, easy words)</option>${ESV_KEY?`<option value="esv" ${ver==="esv"?"selected":""}>ESV (English Standard Version)</option>`:""}</select>
-    <label>Open in my Bible uses</label><select data-act="linkpick">${LINKVERS.map(v=>`<option ${(localStorage.getItem("fh_linkver")||"NIV")===v?"selected":""}>${v}</option>`).join("")}</select>${ver==="esv"?`<div class="meta" style="margin-top:8px">Scripture quotations are from the ESV® Bible (The Holy Bible, English Standard Version®), © 2001 by Crossway, a publishing ministry of Good News Publishers. Used by permission. All rights reserved.</div>`:""}</div>
-  <div class="card"><h3>This week</h3>${weekSummary()}</div>
-  <div class="card"><h3>Badges</h3>${badges().map(([i,t,o])=>`<div style="opacity:${o?1:.35}">${i} ${esc(t)}${o?" ✅":""}</div>`).join("")}</div>
-  <div class="card"><h3>Keepsakes</h3><div class="row"><button class="btn small ghost" data-act="review">🎉 Year in review</button><button class="btn small ghost" data-act="journal">📄 Download journal</button><button class="btn small ghost" data-act="backup">💾 Backup file</button></div></div>
-  <div class="card"><h3>Privacy</h3><div class="meta">"Just for me" hides an entry from the others inside the app. It is not a strong lock, so keep truly secret things elsewhere.</div><div class="row"><button class="btn small ghost" data-act="setpin">${localStorage.getItem("fh_pin")?"Change PIN":"Set an app PIN"}</button>${localStorage.getItem("fh_pin")?`<button class="btn small ghost" data-act="clearpin">Remove PIN</button>`:""}</div></div>
-  <div class="card"><h3>Resources</h3><div class="meta"><a href="https://tourette.org" target="_blank" rel="noopener">Tourette Association of America</a></div></div>
-  <div class="card"><h3>Help and updates</h3><div class="row"><button class="btn small ghost" data-act="help">❓ Help</button><button class="btn small ghost" data-act="feedback">✉️ Send feedback</button><button class="btn small ghost" data-act="news">✨ What's new</button><button class="btn small ghost" data-act="tourreplay">Replay tour</button></div>
-    <div class="meta" style="margin-top:8px">Version ${APP_VER}. Android: Chrome menu, then Add to Home screen. iPhone: Share, then Add to Home Screen.</div>
-    <div class="row"><a class="btn small" href="today.html">Open verse of the day page</a></div></div>`;
-}
-const NOTIF_DEFS={morning:["🕊️ Daily verse","12:00"],evening:["🙏 Evening prayer","20:00"],reading:["📖 Reading reminder (only if you have not read)","19:00"],recap:["📊 Sunday weekly recap","09:00"],countdown:["📅 Event countdowns","09:00"],followup:["🌿 Prayer follow ups","10:00"],monthly:["📆 Monthly chapter reminders","09:00"],seasonal:["🎄 Holidays","09:00"]};
-function notifCfg(){const o=((metas.notif||{})[me])||{};const c={tz:o.tz||"America/Denver"};Object.keys(NOTIF_DEFS).forEach(k=>{c[k]=o[k]!==false;c[k+"T"]=o[k+"T"]||NOTIF_DEFS[k][1];});return c;}
-function notifCard(pushOn){
-  const c=notifCfg();
-  const rows=Object.entries(NOTIF_DEFS).map(([k,[l]])=>`<div class="row" style="justify-content:space-between;margin:8px 0"><button class="chip ${c[k]?"on":""}" data-act="ntog" data-k="${k}">${c[k]?"✅":"⭕"} ${esc(l)}</button><input type="time" style="width:auto" value="${esc(c[k+"T"])}" data-act="ntime" data-k="${k}"></div>`).join("");
-  return `<div class="card"><h3>🔔 Notifications</h3><div class="meta">${pushOn?"Notifications are on for this phone.":"Turn them on so they reach this phone."}</div><div class="row"><button class="btn small" data-act="notif">${pushOn?"Refresh notifications":"Turn on notifications"}</button></div>
-  <div class="meta" style="margin-top:12px">Pick what you want and when. Times use your time zone below.</div>${rows}
-  <label>Your time zone</label><select data-act="ntz">${[["America/Denver","Mountain"],["America/Chicago","Central"],["America/New_York","Eastern"],["America/Los_Angeles","Pacific"]].map(([v,n])=>`<option value="${v}" ${c.tz===v?"selected":""}>${n}</option>`).join("")}</select></div>`;
-}
-function reviewDialog(){
-  const c=t=>items.filter(i=>i.type===t).length;
-  const places=new Set(items.filter(i=>i.type==="outdoor"&&i.place).map(i=>i.place.trim())).size;
-  const moods=items.filter(i=>i.type==="checkin"&&i.mood).map(i=>Number(i.mood));
-  const avg=moods.length?(moods.reduce((a,b)=>a+b,0)/moods.length).toFixed(1):"n/a";
-  const tags={};items.filter(i=>i.type==="verse"&&i.tag).forEach(i=>tags[i.tag]=(tags[i.tag]||0)+1);
-  const top=Object.entries(tags).sort((a,b)=>b[1]-a[1])[0];
-  const reads=PEOPLE.map(p=>`${p}: ${(((metas.reads||{})[p])||[]).length} days`).join(", ");
-  openDlg(`<h3>🎉 Year in review</h3><p>🕊️ Verses saved: <b>${c("verse")}</b></p><p>🙏 Prayers: <b>${c("prayer")}</b> (answered: <b>${items.filter(i=>i.answered).length}</b>)</p>
-   <p>⛪ Sermons: <b>${c("sermon")}</b></p><p>🌻 Thankful: <b>${c("thanks")}</b></p><p>🌲 Places: <b>${places}</b></p><p>💛 Average check in mood: <b>${avg}</b> of 5</p>
-   <p>🕊️ Favorite verse theme: <b>${top?esc(top[0]):"n/a"}</b></p><p>📖 Reading days: ${esc(reads)}</p><div class="row"><button class="btn" data-act="close">Close</button></div>`);
-}
-function hardDay(){
-  const good=items.filter(i=>i.type==="verse"&&i.text&&visible(i)&&["Hard days","Peace","Strength","Encouragement","Trust"].includes(i.tag));
-  const pool=good.length?good:DEFAULTS,v=pool[Math.floor(Math.random()*pool.length)];
-  openDlg(`<h3>🌧️ For a hard day</h3><p class="verse">"${esc(v.text)}"</p><div class="meta">${esc(v.ref||"")}</div><p>You are not alone. Take a slow breath and read it once more.</p>
-   <div class="row"><button class="btn" data-act="hard">Another</button><button class="btn ghost" data-act="goto" data-g="faith" data-s="calm">🌿 Breathe</button><button class="btn ghost" data-act="close">Close</button></div>`);
-}
-function journalHtml(){
-  const parts=Object.entries(SECTIONS).filter(([k])=>!["msg","todo"].includes(k)).map(([k,S])=>{
-    const l=items.filter(i=>i.type===k&&visible(i)).sort((a,b)=>(a.created||0)-(b.created||0));
-    if(!l.length)return"";
-    return `<h2>${S.icon} ${esc(S.title)}</h2>`+l.map(i=>`<div style="margin:10px 0;padding:8px;border-bottom:1px solid #ddd"><b>${esc(i.title||i.place||i.church||i.for||i.tag||i.ref||"")}</b> <small>${esc(i.author)} ${i.created?fmt(i.created):""}</small><br>${[i.ref,i.text,i.note,i.update,i.apply].filter(Boolean).map(nl).join("<br>")}</div>`).join("");
-  }).join("");
-  return `<!doctype html><meta charset="utf-8"><title>Faith Hub Journal</title><body style="font-family:Georgia,serif;max-width:720px;margin:auto;padding:20px"><h1>Faith Hub Journal</h1>${parts}</body>`;
-}
-function viewFor(sub){
-  switch(sub){
-    case "chapter":return chapterView();
-    case "psalm":return psalmView();
-    case "plan":return planView();
-    case "memo":return memoView();
-    case "topics":return topicsView();
-    case "learn":return learnView();
-    case "calm":return calmView();
-    case "chat":return chatView();
-    case "album":return albumView();
-    case "voice":return voiceView();
-    case "prayfor":return prayforView();
-    case "fun":return funView();
-    case "jar":return jarView();
-    default:return listView(sub);
-  }
-}
-
-/* ---------- render ---------- */
-async function afterRender(){
-  const pb=$("partbox");
-  if(pb){try{const r=await bibleFetch(pb.dataset.ref);if($("partbox"))$("partbox").innerHTML=`<p style="font-size:19px">${esc(r.text)}</p>`;}catch(e){if($("partbox"))$("partbox").textContent="Could not load the text. Use the Open in my Bible button.";}}
-  const ps=$("psbox");
-  if(ps){try{const r=await bibleFetch(ps.dataset.ref);if($("psbox"))$("psbox").innerHTML=`<p style="font-size:18px">${esc(r.text)}</p>`;}catch(e){if($("psbox"))$("psbox").textContent="Could not load the text. Use the Open in my Bible button.";}}
-  const tb=$("topicbox");
-  if(tb){
-    const t=tb.dataset.topic;
-    const rs=await Promise.allSettled(TOPICS[t].map(r=>bibleFetch(r)));
-    topicRes=rs.filter(x=>x.status==="fulfilled").map(x=>x.value);
-    if($("topicbox"))$("topicbox").innerHTML=topicRes.length?topicRes.map((v,i)=>`<div class="card"><p class="verse" style="font-size:18px">"${esc(v.text)}"</p><div class="meta">${esc(v.ref)}</div>
-      <div class="row"><button class="btn small" data-act="savetv" data-i="${i}">Save to our verse bank</button><button class="btn small ghost" data-act="sharetv" data-i="${i}">📤</button><button class="btn small ghost" data-act="speaktv" data-i="${i}">🔊</button></div></div>`).join(""):`<p class="empty">Could not load verses. Check your connection.</p>`;
-  }
-}
-function render(){
-  const ae=document.activeElement;
-  if(ae&&ae.id==="q"&&$("lst")){$("lst").innerHTML=listItems(curSub());return;}
-  if(ae&&ae.id==="cin"&&$("chatlist")){
-    $("chatlist").innerHTML=chatHtml(items.filter(i=>i.type==="msg"&&visible(i)).sort((a,b)=>(a.created||0)-(b.created||0)).slice(-100));return;
-  }
-  if(ae&&["chapin","vtitle"].includes(ae.id))return;
-  if(!(grp==="faith"&&subSel.faith==="calm"))stopCalm();
-  $("hello").textContent=me?`Hi ${me}. This is your shared space.`:"";
-  const gk=Object.keys(GROUPS).filter(k=>!(simple&&k==="outdoor"));
-  $("nav").style.gridTemplateColumns=`repeat(${gk.length},1fr)`;
-  $("nav").innerHTML=gk.map(k=>`<button class="${k===grp?"on":""}" data-act="nav" data-g="${k}"><span>${GROUPS[k].icon}</span>${GROUPS[k].label}</button>`).join("");
-  if(simple&&grp==="outdoor")grp="home";
-  const m=$("main");
-  let html=(db?"":`<div class="banner">Not shared yet: entries only save on this device.</div>`)+(offline?`<div class="banner">You are offline. Changes will save when you are back.</div>`:"");
-  if(grp==="home")html+=homeView();
-  else if(grp==="more")html+=moreView();
-  else{
-    const subs=subsFor(grp);let cur=subSel[grp];if(!subs.includes(cur)){cur=subs[0];subSel[grp]=cur;}
-    if(subs.length>1)html+=`<div class="chips">${subs.map(s=>`<button class="chip ${s===cur?"on":""}" data-act="sub" data-s="${s}">${LBL[s]||s}</button>`).join("")}</div>`;
-    html+=viewFor(cur);
-  }
-  m.innerHTML=html;
-  afterRender();
-  if($("chatlist")){window.scrollTo(0,document.body.scrollHeight);}
-}
-
-/* ---------- actions ---------- */
-document.addEventListener("input",e=>{if(e.target.id==="q"){q=e.target.value;if($("lst"))$("lst").innerHTML=listItems(curSub());}});
-document.addEventListener("change",e=>{
-  const a=e.target.dataset&&e.target.dataset.act;
-  if(a==="planpick")setMeta("settings",{plan:e.target.value});
-  if(a==="ntime"&&e.target.value&&me)setMeta("notif",{[me]:{[e.target.dataset.k+"T"]:e.target.value}});
-  if(a==="linkpick"){localStorage.setItem("fh_linkver",e.target.value);}
-  if(a==="ntz"&&me)setMeta("notif",{[me]:{tz:e.target.value}});
-  if(a==="verpick"){ver=e.target.value;localStorage.setItem("fh_ver",ver);daily=null;loadDaily();}
-});
-document.addEventListener("click",async e=>{
-  const w=e.target.closest("[data-w]");
-  if(w&&W){
-    const a=w.dataset.w;
-    if(a==="next"){wizCapture();W.i++;wizDraw();}
-    else if(a==="back"){wizCapture();W.i=Math.max(0,W.i-1);wizDraw();}
-    else if(a==="save")wizSave();
-    return;
-  }
-  const b=e.target.closest("[data-act]");if(!b||b.tagName==="SELECT")return;
-  const a=b.dataset.act,d=b.dataset;
-  const it=d.id?items.find(x=>x.id===d.id):null;
-  if(a==="nav"){grp=d.g;filt="all";q="";render();scrollTo(0,0);}
-  else if(a==="goto"){closeDlg();grp=d.g;subSel[d.g]=d.s;filt="all";q="";render();scrollTo(0,0);}
-  else if(a==="sub"){subSel[grp]=d.s;filt="all";q="";render();}
-  else if(a==="filt"){filt=d.p;render();}
-  else if(a==="cat"){catFilt=d.c;render();}
-  else if(a==="add"){let pre=null;try{pre=d.pre?JSON.parse(d.pre):null;}catch(x){}addAction(d.t,pre);}
-  else if(a==="wiz")openWizard(d.t);
-  else if(a==="edit"&&it)openForm(it.type,it);
-  else if(a==="del"){e.preventDefault();del(d.id);}
-  else if(a==="comment")openComment(d.id);
-  else if(a==="react"&&it){
-    if(!db){toast("Sharing is not set up yet");return;}
-    const has=((it.reactions||{})[d.k]||[]).includes(me);
-    patch(d.id,{["reactions."+d.k]:has?FV.arrayRemove(me):FV.arrayUnion(me)});
-  }
-  else if(a==="vote"&&it){
-    const o=d.k==="a"?"b":"a";
-    patch(d.id,{["votes."+d.k]:FV.arrayUnion(me),["votes."+o]:FV.arrayRemove(me)});
-  }
-  else if(a==="todo"&&it)save({...it,done:!it.done});
-  else if(a==="answered"&&it)save({...it,answered:!it.answered});
-  else if(a==="goal"&&it)save({...it,progress:d.v});
-  else if(a==="sharecard"&&it)shareCard(it.ref||"",it.text);
-  else if(a==="speak"&&it)speak(it.text);
-  else if(a==="sharedaily"){const v=daily||DEFAULTS[dayNum()%DEFAULTS.length];shareCard(v.ref,v.text);}
-  else if(a==="speakdaily"){const v=daily||DEFAULTS[dayNum()%DEFAULTS.length];speak(v.text+" "+v.ref);}
-  else if(a==="read")setMeta("reads",{[me||"Someone"]:FV?FV.arrayUnion(ymd(new Date())):[]});
-  else if(a==="mood")setMeta("moodlog",{[me||"Someone"]:FV?FV.arrayUnion(ymd(new Date())+":"+d.m):[]});
-  else if(a==="ping"){if(!db){toast("Sharing is not set up yet");return;}db.collection("pings").add({from:me||"Someone",ts:Date.now()}).then(()=>toast("Sent 💛")).catch(()=>toast("Could not send"));}
-  else if(a==="hard")hardDay();
-  else if(a==="jarpull"){
-    const l=items.filter(i=>i.type==="jar"&&i.text&&visible(i));
-    if(!l.length)toast("The jar is empty. Add an encouraging note in Together, Jar.");
-    else{const j=l[Math.floor(Math.random()*l.length)];openDlg(`<h3>🫙 From the jar</h3><p class="verse">${nl(j.text)}</p><div class="meta">from ${esc(j.author)}</div><div class="row"><button class="btn" data-act="jarpull">Another</button><button class="btn ghost" data-act="close">Close</button></div>`);}
-  }
-  else if(a==="plan"){
-    const key=(metas.settings||{}).plan||"john",wl=(((metas["plan_"+key]||{}).done||{})[d.d])||[];
-    setMeta("plan_"+key,{done:{[d.d]:wl.includes(me)?FV.arrayRemove(me):FV.arrayUnion(me)}});
-  }
-  else if(a==="chapstart"){
-    const ref=($("chapin").value||"").trim();if(!ref){toast("Type a chapter first, like John 3");return;}
-    if(!db){toast("Sharing is not set up yet");return;}
-    try{
-      const r=await bibleFetch(ref),vs=r.verses;
-      if(!vs.length)throw new Error("none");
-      const parts=[];for(let i=0;i<vs.length;i+=8)parts.push([vs[i],vs[Math.min(i+7,vs.length-1)]]);
-      if(parts.length>1){const lp=parts[parts.length-1];if(lp[1]-lp[0]<3){const pp=parts[parts.length-2];pp[1]=lp[1];parts.pop();}}
-      const mk=ymd(new Date()).slice(0,7);
-      db.collection("meta").doc("chap_"+mk).set({ref:r.ref,parts:parts.map(p=>p[0]===p[1]?String(p[0]):p[0]+"-"+p[1]),done:{}}).catch(()=>toast("Could not save"));
-    }catch(x){toast(navigator.onLine?"Could not find that chapter. Try a name like John 3":"This needs internet");}
-  }
-  else if(a==="partdone"){const mk=ymd(new Date()).slice(0,7);setMeta("chap_"+mk,{done:{[d.i]:FV.arrayUnion(me)}});setMeta("reads",{[me||"Someone"]:FV.arrayUnion(ymd(new Date()))});toast("Nice work 💛");}
-  else if(a==="chapreset"){if(confirm("Pick a different chapter? Progress for this month will be cleared.")){const mk=ymd(new Date()).slice(0,7);db&&db.collection("meta").doc("chap_"+mk).delete();}}
-  else if(a==="psalmpray"){openForm("prayer",null,{for:"Psalm "+d.n,text:""});}
-  else if(a==="topic"){topicSel=d.t;render();}
-  else if(a==="savetv"){const v=topicRes[d.i];if(v){saveNew("verse",{ref:v.ref,text:v.text,tag:"Encouragement"});toast("Saved to the verse bank ✅");}}
-  else if(a==="sharetv"){const v=topicRes[d.i];if(v)shareCard(v.ref,v.text);}
-  else if(a==="speaktv"){const v=topicRes[d.i];if(v)speak(v.text);}
-  else if(a==="calmgo")startCalm(Number(d.m));
-  else if(a==="calmstop"){stopCalm();const el=$("breath");if(el){el.textContent="Ready";el.style.transform="scale(1)";}}
-  else if(a==="memoflip"){memoShow=!memoShow;render();}
-  else if(a==="memonext"){memoI++;memoShow=false;render();}
-  else if(a==="memoshuf"){memoI=Math.floor(Math.random()*versePool().length);memoShow=false;render();}
-  else if(a==="send"||a==="quick"){
-    const t=a==="quick"?d.m:($("cin").value||"").trim();if(!t)return;
-    saveNew("msg",{text:t});if($("cin"))$("cin").value="";
-  }
-  else if(a==="bigphoto"&&it)openDlg(`<img src="${it.photo}" style="width:100%;border-radius:10px"><p>${esc(it.text||it.title||"")}</p><div class="meta">${esc(it.author||"")}</div><div class="row"><button class="btn" data-act="close">Close</button></div>`);
-  else if(a==="rec")toggleRec();
-  else if(a==="vsave"){if(voiceDraft){if(voiceDraft.length>900000){toast("That recording is too long. Try under a minute.");return;}saveNew("voice",{title:($("vtitle").value||"Voice note"),audio:voiceDraft});voiceDraft=null;render();toast("Saved 🎙️");}}
-  else if(a==="vdiscard"){voiceDraft=null;render();}
-  else if(a==="prayed"){const wk=Math.floor(dayNum()/7);const l=((metas.prayed||{})["w"+wk])||[];setMeta("prayed",{["w"+wk]:l.includes(me)?FV.arrayRemove(me):FV.arrayUnion(me)});}
-  else if(a==="wyr"){setMeta("wyr",{a:{["d"+dayNum()]:{[me]:d.k}}});}
-  else if(a==="quizpick"){if(quizPick===null){quizPick=Number(d.i);if(quizPick===QUIZ[quizI].a)quizScore++;render();}}
-  else if(a==="quiznext"){quizI++;quizPick=null;render();}
-  else if(a==="quizreset"){quizI=0;quizScore=0;quizPick=null;render();}
-  else if(a==="who"){me=d.p;localStorage.setItem("fh_me",me);closeDlg();const cb=askWho.cb;askWho.cb=null;if(cb)cb();else{markSeen();if(db&&"Notification" in window&&Notification.permission==="granted")ensureToken(false);render();}}
-  else if(a==="askwho")askWho(null);
-  else if(a==="avatar"){setMeta("avatars",{[me||"Someone"]:d.a});}
-  else if(a==="simple"){simple=!simple;localStorage.setItem("fh_simple",simple?"1":"0");if(simple&&!localStorage.getItem("fh_fs"))document.body.style.fontSize="19px";else if(!simple&&!localStorage.getItem("fh_fs"))document.body.style.fontSize="";grp="home";render();}
-  else if(a==="calm"){const on=localStorage.getItem("fh_calm")!=="1";localStorage.setItem("fh_calm",on?"1":"0");if(on)document.documentElement.dataset.calm="1";else delete document.documentElement.dataset.calm;render();}
-  else if(a==="theme"){localStorage.setItem("fh_theme",d.t);if(d.t==="auto")delete document.documentElement.dataset.theme;else document.documentElement.dataset.theme=d.t;render();}
-  else if(a==="accent"){localStorage.setItem("fh_acc",d.c);document.documentElement.style.setProperty("--acc",d.c);}
-  else if(a==="fs"){const cur=parseInt(getComputedStyle(document.body).fontSize)||17;const n=Math.max(14,Math.min(26,cur+Number(d.d)*2));document.body.style.fontSize=n+"px";localStorage.setItem("fh_fs",n);}
-  else if(a==="notif")enablePush();
-  else if(a==="ntog"&&me){const c=notifCfg();setMeta("notif",{[me]:{[d.k]:!c[d.k]}});}
-  else if(a==="setpin"){const p=prompt("Choose a PIN (numbers only)");if(p){localStorage.setItem("fh_pin",await sha(p));toast("PIN saved");render();}}
-  else if(a==="clearpin"){localStorage.removeItem("fh_pin");toast("PIN removed");render();}
-  else if(a==="review")reviewDialog();
-  else if(a==="journal")download("faith-hub-journal.html",journalHtml(),"text/html");
-  else if(a==="backup")download("faith-hub-backup.json",JSON.stringify({items,metas},null,1),"application/json");
-  else if(a==="help")openDlg(`<h3>❓ Help</h3>${HELP.map(([q2,a2])=>`<details class="card"><summary>${esc(q2)}</summary><p>${esc(a2)}</p></details>`).join("")}<div class="row"><button class="btn ghost" data-act="feedback">✉️ Send feedback</button><button class="btn" data-act="close">Close</button></div>`);
-  else if(a==="feedback"){openDlg(`<h3>✉️ Send feedback</h3><textarea id="fbt" placeholder="What is confusing or not working?"></textarea><div class="row"><button class="btn" data-act="fbsend">Send</button><button class="btn ghost" data-act="close">Cancel</button></div>`);}
-  else if(a==="fbsend"){const t=($("fbt").value||"").trim();if(t&&db){db.collection("feedback").add({from:me||"Someone",text:t,ts:Date.now(),v:APP_VER}).then(()=>toast("Thank you! Sent.")).catch(()=>toast("Could not send"));}closeDlg();}
-  else if(a==="news")showNews();
-  else if(a==="newsdone"){localStorage.setItem("fh_ver_seen",APP_VER);closeDlg();}
-  else if(a==="tour"){const i=Number(d.i);if(i>=TOUR.length){localStorage.setItem("fh_tour","1");localStorage.setItem("fh_ver_seen",APP_VER);closeDlg();render();}else openTour(i);}
-  else if(a==="tourreplay")openTour(0);
-  else if(a==="lookup")lookup(false);
-  else if(a==="lookupw"){wizCapture();lookup(true);}
-  else if(a==="dictate")dictate(d.n);
-  else if(a==="close")closeDlg();
-});
-window.addEventListener("error",e=>{if(db&&errCount++<5)db.collection("errors").add({msg:String(e.message).slice(0,200),line:e.lineno||0,from:me||"?",ts:Date.now(),v:APP_VER}).catch(()=>{});});
-window.addEventListener("unhandledrejection",e=>{if(db&&errCount++<5)db.collection("errors").add({msg:String(e.reason&&e.reason.message||e.reason).slice(0,200),from:me||"?",ts:Date.now(),v:APP_VER}).catch(()=>{});});
-if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
-start();
-</script>
 </body>
 </html>
