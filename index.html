@@ -104,7 +104,7 @@ const FIREBASE_CONFIG = {
 const VAPID_KEY="BJy21T8ExVsoNw8mLdLqR6QcYP1TAlVNXRxDiaBl13LNtlweGUxE2lisx62iyG5qEpOmKx1_c8_XqjxFJR78c4s";
 const ESV_KEY = "b486a747a3c0582c4dd43d1b72194ed0a7f47d4c";
 const PASSCODE = "";
-const PEOPLE = ["Jayden","Summer"];
+const PEOPLE = ["Jayden","Summer","Madison"];
 const SITE="https://earlierplane034.github.io/faith-hub/";
 
 const FV = window.firebase ? firebase.firestore.FieldValue : null;
@@ -159,7 +159,7 @@ const PLANS={
  romans:{n:"Romans (16 days)",book:"Romans",days:16},
  psalms:{n:"Psalms 1 to 30",book:"Psalm",days:30},
  peace:{n:"14 days of peace",refs:["Philippians 4:6-7","John 14:27","Isaiah 26:3","Psalm 4:8","Colossians 3:15","Psalm 29:11","Numbers 6:24-26","2 Thessalonians 3:16","Isaiah 32:17","Romans 5:1","Psalm 85:8","John 16:33","Matthew 11:28-30","Psalm 119:165"]},
- kindness:{n:"7 day kindness challenge",tasks:["Text someone an encouraging message","Pray for a friend by name","Say thank you to someone in person","Do one small chore for someone","Send each other a verse","Give a sincere compliment","Listen to someone without interrupting"]},
+ kindness:{n:"7 day kindness challenge",tasks:["Text someone an encouraging message","Pray for a friend by name","Say thank you to someone in person","Do one small chore for someone","Send everyone a verse","Give a sincere compliment","Listen to someone without interrupting"]},
  gratitude:{n:"21 day gratitude challenge",tasks:["A person you are thankful for","Something in nature","A meal you enjoyed","A challenge that taught you something","A song or worship moment","A friend who showed up for you","Something small that made you smile","Your health or body","A place that feels peaceful","A memory you treasure","A prayer God answered","Something you learned this week","A teacher or mentor","A gift or talent you have","A hard thing you made it through","Your home","A Bible verse that helped","A kind word someone said","Something you get to do","A person you will pray for","God's faithfulness to you"]}
 };
 const DEFAULTS=[
@@ -199,13 +199,13 @@ const QUIZ=[
 ];
 const HELP=[
  ["How do I add something?","Tap a tab at the bottom, then tap the big Add button. Answer the questions and tap Save."],
- ["How do I say hi?","On Home, tap the 💛 Thinking of you button. The other person gets a pop up."],
+ ["How do I say hi?","On Home, tap the 💛 Thinking of you button. Everyone else gets a pop up."],
  ["How do I get a daily verse notification?","Tap More, then Turn on daily notifications, and tap Allow. On iPhone, add the app to your Home Screen first."],
  ["I made a mistake","Tap Edit on the card, or Delete and then Undo right away."],
  ["How do I make it simpler?","Tap More and turn on Simple mode. It hides the extra tabs."],
  ["Something is not working","Close the app and open it again. Then tap More and Send feedback so Jayden can fix it."]
 ];
-const TOUR=[["Welcome 💛","This is a private space for the two of you to share faith, prayers and adventures."],["Add something","Tap a tab at the bottom, then the big Add button. We ask one question at a time."],["Stay close","Tap 💛 Thinking of you, send a message, or react to anything with ❤️ or 🙏."],["Daily verse","Turn on notifications in More to get a verse every day at noon. Tap the ? button any time for help."]];
+const TOUR=[["Welcome 💛","This is a private space for the three of you to share faith, prayers and adventures."],["Add something","Tap a tab at the bottom, then the big Add button. We ask one question at a time."],["Stay close","Tap 💛 Thinking of you, send a message, or react to anything with ❤️ or 🙏."],["Daily verse","Turn on notifications in More to get a verse every day at noon. Tap the ? button any time for help."]];
 const NEWS=["Choose your own notifications: evening prayer, reading reminder, weekly recap, countdowns and more (More, Notifications)","Daily verse notifications at noon (turn on in More)","Simple mode, a welcome tour and a Help button","One chapter a month, split into small parts","Chat, letters, voice notes, photo album and more","Verse share cards, topics, Psalm of the day, plans and challenges"];
 
 let items=[], metas={}, grp="home", subSel={faith:"chapter",together:"chat",outdoor:"outdoor"}, filt="all", q="", catFilt="all";
@@ -461,7 +461,7 @@ function openForm(type,it,preset){
   const lookupBtn=type==="verse"?`<div class="row"><button type="button" class="btn small ghost" data-act="lookup">🔎 Look up verse text</button></div>`:"";
   openDlg(`<h3>${it?"Edit":"Add"}: ${esc(S.title)}</h3><form id="f">${inputs}${lookupBtn}
     <label>Photo (optional)</label><input type="file" name="photo" accept="image/*">
-    <label><input type="checkbox" name="priv" ${v.priv?"checked":""}> Just for me (hidden from the other person in the app)</label>
+    <label><input type="checkbox" name="priv" ${v.priv?"checked":""}> Just for me (hidden from everyone else in the app)</label>
     <div class="row"><button class="btn" type="submit">Save</button><button class="btn ghost" type="button" data-act="close">Cancel</button></div></form>`);
   const f=$("f");
   f.onsubmit=async e=>{
@@ -668,7 +668,7 @@ function homeView(){
   const pool=items.filter(i=>i.type==="verse"&&i.text&&visible(i)),bv=pool.length?pool[dayNum()%pool.length]:null;
   const nx=upcoming(),today=ymd(new Date());
   const reads=(metas.reads||{})[me]||[],readToday=reads.includes(today);
-  const other=PEOPLE.find(p=>p!==me),seen=(metas.seen||{})[other];
+  const others=PEOPLE.filter(p=>p!==me),other=others.length>1?"everyone":(others[0]||"them"),seenList=others.filter(p=>(metas.seen||{})[p]).map(p=>`${p} was here ${ago((metas.seen||{})[p])}`).join(" · "),seen=seenList;
   const pushOn="Notification" in window&&Notification.permission==="granted"&&localStorage.getItem("fh_push")==="1";
   const recent=items.filter(i=>!["msg","todo"].includes(i.type)&&visible(i)).slice(0,4);
   let h="";
@@ -677,13 +677,13 @@ function homeView(){
     h+=`<button class="btn giant" data-act="read" ${readToday?"disabled":""}>${readToday?"✅ I read today":"📖 I read today"}</button>
     <button class="btn giant" data-act="wiz" data-t="prayer">🙏 Write a prayer</button>
     <button class="btn giant" data-act="wiz" data-t="verse">🕊️ Share a verse</button>
-    <button class="btn giant ghost" data-act="ping">💛 Say hi to ${esc(other||"them")}</button>`+dailyCard();
-    return h+(seen?`<div class="meta">${esc(other)} was here ${esc(ago(seen))}</div>`:"");
+    <button class="btn giant ghost" data-act="ping">💛 Say hi to ${esc(other)}</button>`+dailyCard();
+    return h+(seen?`<div class="meta">${esc(seenList)}</div>`:"");
   }
   h+=dailyCard();
   if(bv)h+=`<div class="card"><div class="meta">From our verse bank</div><p class="verse" style="font-size:18px">"${esc(bv.text)}"</p><div class="meta">${esc(bv.ref||"")} · added by ${esc(bv.author||"")}</div></div>`;
   h+=`<div class="grid2"><button class="btn" data-act="read" ${readToday?"disabled":""}>${readToday?"✅ Read today":"📖 I read today"}</button><button class="btn ghost" data-act="ping">💛 Thinking of you</button></div>`;
-  if(seen)h+=`<div class="meta" style="margin:6px 0">${esc(other)} was here ${esc(ago(seen))}</div>`;
+  if(seen)h+=`<div class="meta" style="margin:6px 0">${esc(seenList)}</div>`;
   const ml=metas.moodlog||{},myLog=(ml[me]||[]);
   const last7=[];for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);const k=ymd(d);const e=[...myLog].reverse().find(x=>x.startsWith(k+":"));last7.push(e?MOODS[Number(e.split(":")[1])-1]:"·");}
   h+=`<div class="card"><div class="meta">How is your heart today?</div><div class="row">${MOODS.map((m,i)=>`<button class="react" style="font-size:24px" data-act="mood" data-m="${i+1}">${m}</button>`).join("")}</div><div class="meta" style="margin-top:6px">Your week: ${last7.join(" ")}</div></div>`;
@@ -753,7 +753,7 @@ function planView(){
     rows+=`<div class="card" style="padding:10px 14px"><div class="row" style="margin:0;justify-content:space-between"><div><b>Day ${d}</b> · ${label}</div>
       <div class="row" style="margin:0">${PEOPLE.map(p=>p===me?`<button class="react ${w.includes(p)?"on":""}" data-act="plan" data-d="${d}">${w.includes(p)?"✅":"⭕"} ${esc(p)}</button>`:`<span class="meta">${w.includes(p)?"✅":"⭕"} ${esc(p)}</span>`).join("")}</div></div></div>`;
   }
-  const pct=Math.round(total/(days*2)*100);
+  const pct=Math.round(total/(days*PEOPLE.length)*100);
   return `<h2>📆 Plans and challenges</h2><label>Choose one</label><select data-act="planpick">${Object.entries(PLANS).map(([k,p])=>`<option value="${k}" ${k===key?"selected":""}>${esc(p.n)}</option>`).join("")}</select>
   <div class="bar"><i style="width:${pct}%"></i></div><div class="meta">${pct}% done together. Tap your own circle when you finish a day.</div>${rows}`;
 }
@@ -829,7 +829,7 @@ function moreView(){
   <div class="card"><h3>This week</h3>${weekSummary()}</div>
   <div class="card"><h3>Badges</h3>${badges().map(([i,t,o])=>`<div style="opacity:${o?1:.35}">${i} ${esc(t)}${o?" ✅":""}</div>`).join("")}</div>
   <div class="card"><h3>Keepsakes</h3><div class="row"><button class="btn small ghost" data-act="review">🎉 Year in review</button><button class="btn small ghost" data-act="journal">📄 Download journal</button><button class="btn small ghost" data-act="backup">💾 Backup file</button></div></div>
-  <div class="card"><h3>Privacy</h3><div class="meta">"Just for me" hides an entry from the other person inside the app. It is not a strong lock, so keep truly secret things elsewhere.</div><div class="row"><button class="btn small ghost" data-act="setpin">${localStorage.getItem("fh_pin")?"Change PIN":"Set an app PIN"}</button>${localStorage.getItem("fh_pin")?`<button class="btn small ghost" data-act="clearpin">Remove PIN</button>`:""}</div></div>
+  <div class="card"><h3>Privacy</h3><div class="meta">"Just for me" hides an entry from the others inside the app. It is not a strong lock, so keep truly secret things elsewhere.</div><div class="row"><button class="btn small ghost" data-act="setpin">${localStorage.getItem("fh_pin")?"Change PIN":"Set an app PIN"}</button>${localStorage.getItem("fh_pin")?`<button class="btn small ghost" data-act="clearpin">Remove PIN</button>`:""}</div></div>
   <div class="card"><h3>Resources</h3><div class="meta"><a href="https://tourette.org" target="_blank" rel="noopener">Tourette Association of America</a></div></div>
   <div class="card"><h3>Help and updates</h3><div class="row"><button class="btn small ghost" data-act="help">❓ Help</button><button class="btn small ghost" data-act="feedback">✉️ Send feedback</button><button class="btn small ghost" data-act="news">✨ What's new</button><button class="btn small ghost" data-act="tourreplay">Replay tour</button></div>
     <div class="meta" style="margin-top:8px">Version ${APP_VER}. Android: Chrome menu, then Add to Home screen. iPhone: Share, then Add to Home Screen.</div>
