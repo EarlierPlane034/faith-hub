@@ -109,6 +109,38 @@ html[data-font=clean] body{font-family:system-ui,-apple-system,sans-serif}
 html[data-font=easy] body{font-family:Verdana,Tahoma,sans-serif;letter-spacing:.02em;line-height:1.75;word-spacing:.1em}
 .cf{position:fixed;inset:0;pointer-events:none;z-index:50}
 .lbox{width:100%;border-radius:10px;touch-action:pan-y}
+
+/* v4.1 polish */
+:root{--bg:#fbf7f1;--acc:#c2703a;--acc2:#f7e6d3;--line:#f0e4d4;--ok:#2f8f5b}
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:radial-gradient(900px 420px at 50% -120px,rgba(224,140,70,.22),transparent),var(--bg);padding-bottom:120px}
+html[data-font=serif] body{font-family:Georgia,serif}
+h1,h2,h3,.verse{font-family:Georgia,"Times New Roman",serif}
+h1{font-size:28px;letter-spacing:-.3px}
+h2{font-size:23px;margin:14px 0 6px}
+.card{border-radius:22px;border-color:transparent;box-shadow:0 2px 6px #00000008,0 14px 34px #0000000e;padding:16px 18px}
+.btn{background:linear-gradient(135deg,var(--acc),#e48f4f);border-radius:14px;box-shadow:0 4px 14px #c2703a40}
+.btn.ghost{background:none;box-shadow:none}
+.chip{border-radius:99px;box-shadow:0 1px 2px #0000000a}
+nav{left:10px;right:10px;bottom:max(10px,env(safe-area-inset-bottom));border:0;border-radius:24px;padding:6px;box-shadow:0 10px 34px #00000030}
+nav button{border-radius:18px;font-weight:600}
+nav button.on{background:linear-gradient(135deg,var(--acc2),transparent)}
+.tile{border-radius:22px;border-color:transparent;background:linear-gradient(180deg,var(--card),var(--acc2));padding:24px 8px;box-shadow:0 2px 6px #00000008,0 12px 28px #0000000d;transition:transform .15s}
+.tile:active{transform:scale(.96)}
+.tile span{font-size:42px}
+.bigact{border-radius:22px;border-color:transparent;box-shadow:0 2px 6px #00000008,0 12px 28px #0000000d}
+.vcard{border-radius:26px;padding:26px 22px;box-shadow:0 14px 36px #0003}
+.toast{bottom:112px}
+.poke{background:linear-gradient(135deg,#ff7a59,#ff4f81 55%,#9b5cff);background-size:200% 200%;animation:pg 7s ease infinite;color:#fff;border-radius:28px;padding:20px 16px;margin:14px 0;box-shadow:0 14px 34px #ff4f8150;text-align:center}
+.poke h3{color:#fff;margin:0 0 2px;font-size:28px}
+.poke p{margin:0 0 12px;opacity:.95;font-size:15px}
+.pokebtn{background:#fff;color:#e23a6e;border:0;border-radius:99px;padding:15px 26px;font:800 20px system-ui,sans-serif;cursor:pointer;margin:4px;box-shadow:0 5px 0 #0002;animation:wob 2.4s ease-in-out infinite}
+.pokebtn:nth-child(2){animation-delay:.5s}
+.pokebtn:active{transform:translateY(4px) scale(.97);box-shadow:none}
+@keyframes pg{50%{background-position:100% 50%}}
+@keyframes wob{0%,100%{transform:rotate(0)}8%{transform:rotate(-5deg) translateX(-4px)}16%{transform:rotate(4deg) translateX(4px)}24%{transform:rotate(0)}}
+.fly{position:fixed;left:-70px;z-index:60;pointer-events:none;animation:flyx 2.4s linear forwards}
+@keyframes flyx{to{transform:translateX(calc(100vw + 140px)) rotate(25deg)}}
+@keyframes flyl{to{transform:translateX(calc(-100vw - 140px)) rotate(-25deg)}}
 </style>
 </head>
 <body>
@@ -240,11 +272,11 @@ const HELP=[
  ["How do I get a daily verse notification?","Tap More, then Turn on daily notifications, and tap Allow. On iPhone, add the app to your Home Screen first."],
  ["I made a mistake","Tap Edit on the card, or Delete and then Undo right away."],
  ["How do I make it simpler?","Tap More and turn on Simple mode. It hides the extra tabs."],
- ["I need someone right now","Tap 🤍 I need someone on Home. Pick who to notify and they get a message. If you might hurt yourself, call or text 988."],
+ ["I need someone right now","Tap 👉 Poke at the top of Home and pick a name. They get a notification. If you might hurt yourself, call or text 988."],
  ["Something is not working","Close the app and open it again. Then tap More and Send feedback so Jayden can fix it."]
 ];
-const TOUR=[["Welcome 💛","This is a private space for the three of you to share faith, prayers and adventures."],["Add something","Tap a tab at the bottom, pick a tile, then the big Add button. We ask one question at a time."],["Stay close","Tap 💛 Thinking of you, send a message, or react to anything with ❤️ or 🙏. Need someone? Tap 🤍 I need someone on Home."],["Daily verse","Turn on notifications in More to get a verse every day. Tap the ? button any time for help."],["Who sees what","Sign in with your own PIN. Check ins, questions and prayers start out private, and Home has Our space and My journal. You choose who sees anything else."]];
-const NEWS=["Real sign in: your own 6 to 8 number PIN","Home split into Our space and My journal (only you)","🤍 I need someone: notify a friend when you are struggling","Tiles instead of tabs, a bigger calmer Home, prayer wall, shared playlist, trip planner with weather, sunrise, sunset and moon","Verse pictures with scenes, font choices, photo swipe, search, plan invites, monthly backup reminder"];
+const TOUR=[["Welcome 💛","This is a private space for the three of you to share faith, prayers and adventures."],["Add something","Tap a tab at the bottom, pick a tile, then the big Add button. We ask one question at a time."],["Stay close","Tap 💛 Thinking of you, send a message, or react to anything with ❤️ or 🙏. Want to talk? Tap 👉 Poke at the top of Home."],["Daily verse","Turn on notifications in More to get a verse every day. Tap the ? button any time for help."],["Who sees what","Sign in with your own PIN. Check ins, questions and prayers start out private, and Home has Our space and My journal. You choose who sees anything else."]];
+const NEWS=["Real sign in: your own 6 to 8 number PIN","Home split into Our space and My journal (only you)","👉 Poke: tap a name and they get a notification when you want to talk","Tiles instead of tabs, a bigger calmer Home, prayer wall, shared playlist, trip planner with weather, sunrise, sunset and moon","Verse pictures with scenes, font choices, photo swipe, search, plan invites, monthly backup reminder"];
 
 let items=[], metas={}, grp="home", subSel={faith:null,together:null,outdoor:null}, filt="all", q="", catFilt="all";
 let me=localStorage.getItem("fh_me"), memoI=0, memoShow=false, db=null, firstItems=true, startTime=Date.now(), offline=!navigator.onLine;
@@ -330,7 +362,7 @@ function start(){
   }
   const th=localStorage.getItem("fh_theme");if(th&&th!=="auto")document.documentElement.dataset.theme=th;
   if(localStorage.getItem("fh_calm")==="1")document.documentElement.dataset.calm="1";
-  const fnt=localStorage.getItem("fh_font");if(fnt&&fnt!=="serif")document.documentElement.dataset.font=fnt;
+  const fnt=localStorage.getItem("fh_font");if(fnt&&fnt!=="clean")document.documentElement.dataset.font=fnt;
   if(!localStorage.getItem("fh_lastbackup"))localStorage.setItem("fh_lastbackup",String(Date.now()));
   const fs=localStorage.getItem("fh_fs");if(fs)document.body.style.fontSize=fs+"px";
   else if(simple)document.body.style.fontSize="19px";
@@ -488,7 +520,7 @@ function attach(){
       if(!d.from||d.from===me||!(d.ts>startTime))return;
       if(d.to&&!d.to.includes(me))return;
       const t=d.text?": "+String(d.text).slice(0,80):"";
-      notify("Faith Hub",d.kind==="support"?`💛 ${d.from} could use you right now${t}`:d.kind==="prayer"?`🙏 ${d.from} asks for prayer${t}`:d.kind==="invite"?`📆 ${d.from}${t}`:`💛 ${d.from} is thinking of you`);
+      notify("Faith Hub",d.kind==="poke"?`👉 ${d.from} poked you. They want to talk.`:d.kind==="support"?`💛 ${d.from} could use you right now${t}`:d.kind==="prayer"?`🙏 ${d.from} asks for prayer${t}`:d.kind==="invite"?`📆 ${d.from}${t}`:`💛 ${d.from} is thinking of you`);
     });
   },()=>{}));
 }
@@ -902,7 +934,7 @@ function moreView(){
   <div class="card"><h3>Look and feel</h3><div class="row">${["auto","light","dark"].map(t=>`<button class="chip ${th===t?"on":""}" data-act="theme" data-t="${t}">${t==="auto"?"Auto":t[0].toUpperCase()+t.slice(1)}</button>`).join("")}</div>
     <div class="row">${ACC.map(c=>`<button class="react" style="background:${c};width:34px;height:34px;border-radius:50%" data-act="accent" data-c="${c}" aria-label="color"></button>`).join("")}</div>
     <div class="row"><button class="btn small ghost" data-act="fs" data-d="-1">A−</button><button class="btn small ghost" data-act="fs" data-d="1">A+</button><span class="meta">Text size</span></div>
-    <div class="row">${[["serif","Classic"],["clean","Clean"],["easy","Easy read"]].map(([k,n])=>`<button class="chip ${(localStorage.getItem("fh_font")||"serif")===k?"on":""}" data-act="font" data-f="${k}">${n}</button>`).join("")}<span class="meta">Font</span></div>
+    <div class="row">${[["clean","Clean"],["serif","Classic"],["easy","Easy read"]].map(([k,n])=>`<button class="chip ${(localStorage.getItem("fh_font")||"clean")===k?"on":""}" data-act="font" data-f="${k}">${n}</button>`).join("")}<span class="meta">Font</span></div>
     <label>Bible version for lookups</label><select data-act="verpick"><option value="web" ${ver==="web"?"selected":""}>WEB (modern English)</option><option value="kjv" ${ver==="kjv"?"selected":""}>KJV (classic)</option><option value="bbe" ${ver==="bbe"?"selected":""}>BBE (Basic English, easy words)</option>${ESV_KEY?`<option value="esv" ${ver==="esv"?"selected":""}>ESV (English Standard Version)</option>`:""}</select>
     <label>Open in my Bible uses</label><select data-act="linkpick">${LINKVERS.map(v=>`<option ${(localStorage.getItem("fh_linkver")||"NIV")===v?"selected":""}>${v}</option>`).join("")}</select>${ver==="esv"?`<div class="meta" style="margin-top:8px">Scripture quotations are from the ESV® Bible (The Holy Bible, English Standard Version®), © 2001 by Crossway, a publishing ministry of Good News Publishers. Used by permission. All rights reserved.</div>`:""}</div>
   <div class="card"><h3>This week</h3>${weekSummary()}</div>
@@ -1050,16 +1082,32 @@ function readingCard(){
 function homeView(){
   return `<div class="chips"><button class="chip ${homeTab==="us"?"on":""}" data-act="htab" data-t="us">👥 Our space</button><button class="chip ${homeTab==="me"?"on":""}" data-act="htab" data-t="me">🔒 My journal</button></div>`+(homeTab==="me"?journalHome():ourHome());
 }
+function pokeCard(){
+  const o=PEOPLE.filter(p=>p!==me);
+  return `<div class="poke"><h3>👉 Poke</h3><p>Need to talk? Tap a name. They get a notification.</p><div>${o.map(p=>`<button class="pokebtn" data-act="poke" data-p="${esc(p)}">👉 ${esc(p)}</button>`).join("")}</div><button class="btn small ghost" style="color:#fff;border-color:#ffffffaa;margin-top:10px" data-act="support">Add a message or get help</button></div>`;
+}
+function pokeFly(){
+  if(document.documentElement.dataset.calm)return;
+  try{navigator.vibrate&&navigator.vibrate([30,40,30]);}catch(e){}
+  const L=["👉","☝️","💛","👉","🫵"],R=["👈","👆","✨","👈","💛"];
+  for(let i=0;i<46;i++){
+    const rtl=i%2,E=rtl?R:L,sp=document.createElement("span");
+    sp.className="fly";sp.textContent=E[Math.floor(i/2)%E.length];
+    sp.style.top=(4+Math.random()*88)+"vh";sp.style.fontSize=(24+Math.random()*30)+"px";
+    sp.style.animationDelay=(Math.random()*1.3)+"s";sp.style.animationDuration=(1.5+Math.random()*1.5)+"s";
+    if(rtl){sp.style.left="auto";sp.style.right="-70px";sp.style.animationName="flyl";}
+    document.body.appendChild(sp);setTimeout(()=>sp.remove(),4500);
+  }
+}
 function ourHome(){
   const today=ymd(new Date()),readToday=(((metas.reads||{})[me])||[]).includes(today);
   const pushOn="Notification" in window&&Notification.permission==="granted"&&localStorage.getItem("fh_push")==="1";
-  let h="";
+  let h=pokeCard();
   if(!pushOn&&db&&"Notification" in window&&Notification.permission!=="denied")h+=`<div class="card"><b>🔔 Get your verse every day</b><div class="meta">Turn on notifications so it arrives on your phone.</div><div class="row"><button class="btn" data-act="notif">Turn on notifications</button></div></div>`;
   if(Date.now()-Number(localStorage.getItem("fh_lastbackup")||0)>30*864e5)h+=`<div class="card"><b>💾 Monthly backup</b><div class="meta">Save a copy of everything you can see. It takes a second.</div><div class="row"><button class="btn small" data-act="backup">Download backup</button><button class="btn small ghost" data-act="backuplater">Remind me later</button></div></div>`;
   h+=dailyCard();
   h+=`<div class="trio"><button class="bigact" data-act="read" ${readToday?"disabled":""}><span>${readToday?"✅":"📖"}</span>${readToday?"Read today":"I read"}</button><button class="bigact" data-act="wiz" data-t="prayer"><span>🙏</span>Pray</button><button class="bigact" data-act="goto" data-g="together" data-s="chat"><span>💬</span>Message</button></div>`;
   h+=readingCard()+skyLine();
-  h+=`<div class="row"><button class="btn ghost" data-act="ping">💛 Thinking of you</button><button class="btn ghost" data-act="support">🤍 I need someone</button></div>`;
   if(simple)return h;
   return h+`<details class="more"><summary>More for today</summary>${homeMore()}</details>`;
 }
@@ -1090,9 +1138,9 @@ function ppSend(){
 }
 function supportDlg(){
   const others=PEOPLE.filter(p=>p!==me);
-  openDlg(`<h3>🤍 I need someone</h3><p>If you feel an urge to do something you will regret, reach out before you act. Pick who to notify. They get a message right away.</p>${others.map(o=>`<label style="font-weight:400"><input type="checkbox" class="spto" value="${esc(o)}" checked> ${esc(o)}</label>`).join("")}
+  openDlg(`<h3>👉 Poke with a message</h3><p>Reaching out first is a strong move. Pick who to notify and say a few words if you want.</p>${others.map(o=>`<label style="font-weight:400"><input type="checkbox" class="spto" value="${esc(o)}" checked> ${esc(o)}</label>`).join("")}
    <label>A few words (optional)</label><input id="spt" placeholder="Example: Can you call me?" maxlength="120">
-   <div class="row"><button class="btn" data-act="supportsend">Notify them</button><button class="btn ghost" data-act="close">Cancel</button></div>
+   <div class="row"><button class="btn" data-act="supportsend">Send</button><button class="btn ghost" data-act="close">Cancel</button></div>
    <div class="row"><button class="btn small ghost" data-act="goto" data-g="faith" data-s="calm">🌿 Breathe first</button><button class="btn small ghost" data-act="hard">🌧️ A verse</button></div>
    <div class="meta" style="margin-top:10px">If you might hurt yourself or someone else, call or text 988 (Suicide and Crisis Lifeline) or call 911. The notification can take a few minutes to reach a phone, so call or text them too.</div>`);
 }
@@ -1354,6 +1402,7 @@ document.addEventListener("click",async e=>{
   else if(a==="scene"){scn=d.s;localStorage.setItem("fh_scene",scn);if(shareCur)shareCard(shareCur.ref,shareCur.text);}
   else if(a==="shareout")shareOut();
   else if(a==="support")supportDlg();
+  else if(a==="poke"){pokeFly();sendPing([d.p],"wants to talk","poke").then(()=>toast("Poked "+d.p+" 👉"));}
   else if(a==="supportsend")supportSend();
   else if(a==="pleasepray")pleasePrayDlg();
   else if(a==="ppsend")ppSend();
@@ -1364,7 +1413,7 @@ document.addEventListener("click",async e=>{
   else if(a==="planleave")setMeta("planmem",{[planKey]:FV.arrayRemove(me)});
   else if(a==="planinvite"){sendPing([d.p],"invited you to "+PLANS[planKey].n,"invite").then(()=>toast("Invite sent to "+d.p));}
   else if(a==="notiftest"){sendPing([me],"test","test").then(()=>toast("Test sent. It can take up to 5 minutes."));}
-  else if(a==="font"){localStorage.setItem("fh_font",d.f);if(d.f==="serif")delete document.documentElement.dataset.font;else document.documentElement.dataset.font=d.f;render();}
+  else if(a==="font"){localStorage.setItem("fh_font",d.f);if(d.f==="clean")delete document.documentElement.dataset.font;else document.documentElement.dataset.font=d.f;render();}
   else if(a==="backuplater"){localStorage.setItem("fh_lastbackup",String(Date.now()-23*864e5));render();}
   else if(a==="defvis"){}
   else if(a==="allprivate"){if(db&&confirm("Hide all of your existing entries from the others? You can change any entry later with Edit.")){const mine=items.filter(i=>i.author===me&&!i.vis&&!i.priv&&i.type!=="msg");const bt=db.batch();mine.slice(0,450).forEach(i=>bt.update(db.collection("items").doc(i.id),{vis:[me],audience:[lc(me)]}));bt.commit().then(()=>toast("Done. "+mine.length+" entries are now only yours.")).catch(()=>toast("Could not update"));}}
