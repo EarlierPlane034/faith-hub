@@ -20,6 +20,7 @@ async function main() {
     const to = p.kind === "test" ? [from] : (p.to || []).filter(u => USERS.includes(u) && u !== from);
     let title, body;
     if (p.kind === "test") { title = "🔔 Faith Hub test"; body = "It works! Notifications reach this phone."; }
+    else if (p.kind === "poke") { title = "👉 " + from + " poked you"; body = "They want to talk. Tap to open."; }
     else if (p.kind === "support") { title = "💛 " + from + " could use you"; body = p.text ? clip(p.text, 120) : "Please check in with them when you can."; }
     else if (p.kind === "prayer") { title = "🙏 " + from + " asks for prayer"; body = clip(p.text, 140) || "Please pray for them."; }
     else { title = "Faith Hub"; body = from + " " + clip(p.text, 120); }
