@@ -30,6 +30,25 @@ async function main() {
     return res.successCount;
   }
 
+  // per-user alert preferences (categories + quiet hours)
+  const nsnap = await db.collection("meta").doc("notif").get().catch(() => null);
+  const ncfg = (nsnap && nsnap.exists ? nsnap.data() : {}) || {};
+  const CAT = { chat: "c_chat", activity: "c_activity", prayer: "c_prayer", goodnews: "c_cheer", goodnight: "c_cheer" };
+  const URGENT = ["poke", "support", "reply", "askpray", "test", "invite"];
+  function allowed(u, kind) {
+    if (URGENT.includes(kind)) return true;
+    const c = ncfg[u] || {};
+    const k = CAT[kind];
+    if (k && c[k] === false) return false;
+    if (c.quiet === true) {
+      let t; try { t = new Date().toLocaleTimeString("en-GB", { timeZone: c.tz || "America/Denver", hour: "2-digit", minute: "2-digit", hour12: false }); } catch (e) { return true; }
+      const s = c.quietS || "22:00", e = c.quietE || "07:00";
+      const inq = s <= e ? (t >= s && t < e) : (t >= s || t < e);
+      if (inq) return false;
+    }
+    return true;
+  }
+
   // 1) New pings
   const snap = await db.collection("pings").where("push", "==", true).where("pushed", "==", false).get();
   for (const doc of snap.docs) {
@@ -49,7 +68,7 @@ async function main() {
     else if (p.kind === "chat") { title = "💬 " + from; body = clip(p.text, 140) || "Sent a message"; }
     else if (p.kind === "activity") { title = "Faith Hub"; body = from + " " + clip(p.text, 100); }
     else { title = "Faith Hub"; body = from + " " + clip(p.text, 120); }
-    for (const u of to) await pushTo(u, title, body);
+    for (const u of to) if (allowed(u, p.kind)) await pushTo(u, title, body);
     await doc.ref.update({ pushed: true });
   }
 
