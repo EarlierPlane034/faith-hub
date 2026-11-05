@@ -2,7 +2,7 @@
 // Each person picks which ones they want, the time, and their time zone in the app (More > Notifications).
 const admin = require("firebase-admin");
 const SITE = "https://earlierplane034.github.io/faith-hub/";
-const USERS = ["Jayden", "Summer"];
+const USERS = ["Jayden", "Summer", "Madison"];
 const REFS = ["Psalm 46:10","Joshua 1:9","Philippians 4:13","Isaiah 41:10","Proverbs 3:5-6","Matthew 11:28","1 Peter 5:7","Psalm 23:1","Romans 8:28","Jeremiah 29:11","Psalm 121:1-2","Isaiah 40:31","Philippians 4:6-7","Romans 12:12","Psalm 34:8","John 3:16","John 14:27","2 Corinthians 12:9","Psalm 27:1","Lamentations 3:22-23","Matthew 6:33","Psalm 119:105","Galatians 5:22-23","Hebrews 11:1","Colossians 3:23","Psalm 37:4","Micah 6:8","Ephesians 2:8-9","1 Corinthians 13:4-5","Psalm 91:1-2","Deuteronomy 31:6","Romans 15:13","Psalm 139:14","James 1:2-3","Proverbs 16:3","Psalm 56:3","Isaiah 26:3","Zephaniah 3:17","Psalm 30:5","1 John 4:19"];
 const DEFAULTS = {
   morning: true, morningT: "12:00", evening: true, eveningT: "20:00", reading: true, readingT: "19:00",
@@ -25,6 +25,7 @@ const addDays = (s, n) => { const d = new Date(s + "T12:00:00Z"); d.setUTCDate(d
 const clip = (s, n) => { s = String(s || "").replace(/\s+/g, " ").trim(); return s.length > n ? s.slice(0, n - 3) + "..." : s; };
 const easter = y => { const a = y % 19, b = Math.floor(y / 100), c = y % 100, d = Math.floor(b / 4), e = b % 4, f = Math.floor((b + 8) / 25), g = Math.floor((b - f + 1) / 3), h = (19 * a + b - d - g + 15) % 30, i = Math.floor(c / 4), k = c % 4, l = (32 + 2 * e + 2 * i - h - k) % 7, m = Math.floor((a + 11 * h + 22 * l) / 451), mo = Math.floor((h + l - 7 * m + 114) / 31), da = ((h + l - 7 * m + 114) % 31) + 1; return `${y}-${String(mo).padStart(2, "0")}-${String(da).padStart(2, "0")}`; };
 const thanksgiving = y => { const first = new Date(Date.UTC(y, 10, 1)).getUTCDay(); const day = 1 + ((4 - first + 7) % 7) + 21; return `${y}-11-${String(day).padStart(2, "0")}`; };
+const canSee = (p, u) => p.audience ? p.audience.includes(u.toLowerCase()) : (!(p.priv && p.priv !== u) && !(p.vis && p.author !== u && !p.vis.includes(u)));
 const dayNum = () => Math.floor(Date.now() / 864e5);
 
 async function fetchVerse(ref) {
@@ -46,8 +47,8 @@ async function main() {
     db.collection("tokens").get(),
     db.collection("meta").doc("notif").get(),
     db.collection("meta").doc("reads").get(),
-    db.collection("items").where("type", "==", "prayer").select("text", "for", "answered", "update", "priv", "author", "created", "followupSent").get(),
-    db.collection("items").where("type", "==", "event").select("title", "date", "repeat", "priv", "author").get()
+    db.collection("items").where("type", "==", "prayer").select("text", "for", "answered", "update", "priv", "vis", "audience", "author", "created", "followupSent").get(),
+    db.collection("items").where("type", "==", "event").select("title", "date", "repeat", "priv", "vis", "audience", "author").get()
   ]);
   const tokensBy = {};
   tokSnap.docs.forEach(d => { const u = d.data().user; if (USERS.includes(u)) (tokensBy[u] = tokensBy[u] || []).push(d.id); });
@@ -57,7 +58,7 @@ async function main() {
   const events = eventSnap.docs.map(d => d.data());
   console.log("Devices: " + USERS.map(u => u + "=" + (tokensBy[u] || []).length).join(", "));
 
-  const visiblePrayers = u => prayers.filter(p => !p.answered && (!p.priv || p.priv === u));
+  const visiblePrayers = u => prayers.filter(p => !p.answered && canSee(p, u));
   const cache = {};
   const verseFor = async () => cache.v || (cache.v = await fetchVerse(REFS[dayNum() % REFS.length]));
 
@@ -79,9 +80,9 @@ async function main() {
     async recap(u, L) {
       if (L.dow !== "Sun") return null;
       const since = Date.now() - 7 * 864e5;
-      const snap = await db.collection("items").where("created", ">=", since).select("author", "type").get();
+      const snap = await db.collection("items").where("created", ">=", since).select("author", "type", "priv", "vis", "audience").get();
       const counts = Object.fromEntries(USERS.map(x => [x, 0]));
-      snap.docs.forEach(d => { const a = d.data().author; if (a in counts && d.data().type !== "msg") counts[a]++; });
+      snap.docs.forEach(d => { const a = d.data().author; if (a in counts && d.data().type !== "msg" && !d.data().priv && !d.data().vis && !(d.data().audience && d.data().audience.length < USERS.length)) counts[a]++; });
       const cut = addDays(L.date, -7);
       const rd = x => (reads[x] || []).filter(dt => dt > cut).length;
       const ans = prayers.filter(p => p.answered).length;
@@ -91,7 +92,7 @@ async function main() {
       const tomorrow = addDays(L.date, 1);
       const hit = [];
       events.forEach(e => {
-        if (!e.date || (e.priv && e.priv !== u)) return;
+        if (!e.date || !canSee(e, u)) return;
         const md = e.date.slice(5), same = d => e.repeat === "Every year" ? d.slice(5) === md : d === e.date;
         if (same(L.date)) hit.push(`Today: ${e.title || "Event"}`);
         else if (same(tomorrow)) hit.push(`Tomorrow: ${e.title || "Event"}`);
