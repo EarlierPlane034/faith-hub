@@ -7,9 +7,9 @@ const REFS = ["Psalm 46:10","Joshua 1:9","Philippians 4:13","Isaiah 41:10","Prov
 const DEFAULTS = {
   morning: true, morningT: "12:00", evening: true, eveningT: "20:00", reading: true, readingT: "19:00",
   recap: true, recapT: "09:00", countdown: true, countdownT: "09:00", followup: true, followupT: "10:00",
-  monthly: true, monthlyT: "09:00", seasonal: true, seasonalT: "09:00", tz: "America/Denver"
+  monthly: true, monthlyT: "09:00", seasonal: true, seasonalT: "09:00", hard: false, hardT: "22:00", hard2: false, hard2T: "15:00", prayernow: true, prayernowT: "20:30", tz: "America/Denver"
 };
-const TYPES = ["morning", "evening", "reading", "recap", "countdown", "followup", "monthly", "seasonal"];
+const TYPES = ["morning", "evening", "reading", "recap", "countdown", "followup", "monthly", "seasonal", "hard", "hard2", "prayernow"];
 const WINDOW = 540; // GitHub timers run late (sometimes 6+ hours), so a run up to 9 hours after the chosen time (same day) may still send; each type sends once per day
 
 function localTime(tz, d = new Date()) {
@@ -66,7 +66,17 @@ async function main() {
 
   // Each builder returns { title, body } or null (nothing to send).
   const builders = {
+    async hard() {
+      const v = ["Be still, and know that I am God.","Draw near to God, and he will draw near to you.","The Lord is my light and my salvation.","Cast all your anxiety on him, because he cares for you."];
+      return { title: "🌙 Quick check-in", body: v[dayNum() % v.length] + "\nWant to talk to someone? Tap to open." };
+    },
     async morning() { return { title: "Your verse for today", body: clip(await verseFor(), 200) + "\nTap to open Faith Hub" }; },
+    async hard2() { return builders.hard(); },
+    async prayernow(u, L) {
+      const s = await db.collection("meta").doc("praydays").get();
+      if ((((s.data() || {})[u]) || []).includes(L.date)) return null;
+      return { title: "🙏 Time to pray together", body: "Take a minute to pray. Tap I prayed in the app when you are done." };
+    },
     async evening(u) {
       const l = visiblePrayers(u);
       if (!l.length) return { title: "Evening prayer", body: "Take a quiet minute to pray tonight. 🙏" };
@@ -134,12 +144,14 @@ async function main() {
     const res = await admin.messaging().sendEachForMulticast({
       tokens,
       notification: { title, body },
-      webpush: { fcmOptions: { link: SITE }, notification: { icon: SITE + "icon-192.png" } }
+      webpush: { headers: { Urgency: "high", TTL: "86400" }, fcmOptions: { link: SITE }, notification: { icon: SITE + "icon-192.png" } },
+      android: { priority: "high" }
     });
     console.log(`[${user}] "${title}": ${res.successCount} sent, ${res.failureCount} failed`);
     const dead = [];
     res.responses.forEach((r, i) => { if (!r.success && r.error && /not-registered|invalid-registration-token|invalid-argument/.test(r.error.code || "")) dead.push(tokens[i]); });
     await Promise.all(dead.map(t => db.collection("tokens").doc(t).delete()));
+    if (res.successCount > 0) await db.collection("meta").doc("delivery").set({ [user]: { ts: Date.now(), title: String(title).slice(0, 40), devices: tokens.length - dead.length } }, { merge: true }).catch(() => {});
   }
 
   for (const user of USERS) {
@@ -149,11 +161,12 @@ async function main() {
     const logSnap = await logRef.get();
     const log = logSnap.exists ? logSnap.data() : {};
     for (const type of TYPES) {
+      if (type.startsWith("hard") && user === "Madison") continue;
       if (forceType) { if (type !== forceType) continue; }
       else {
         if (!s[type]) continue;
         const t = toMin(s[type + "T"]);
-        if (!(L.min >= t && L.min < t + WINDOW)) continue;
+        if (!(L.min >= t && L.min < t + ((type.startsWith("hard") || type === "prayernow") ? 90 : WINDOW))) continue;
         if (log[type]) continue;
       }
       try {
