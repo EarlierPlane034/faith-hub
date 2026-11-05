@@ -131,6 +131,13 @@ nav button.on{background:linear-gradient(135deg,var(--acc2),transparent)}
 .vcard{border-radius:26px;padding:26px 22px;box-shadow:0 14px 36px #0003}
 .toast{bottom:112px}
 .poke{background:linear-gradient(135deg,#ff7a59,#ff4f81 55%,#9b5cff);background-size:200% 200%;animation:pg 7s ease infinite;color:#fff;border-radius:28px;padding:20px 16px;margin:14px 0;box-shadow:0 14px 34px #ff4f8150;text-align:center}
+.stay{background:linear-gradient(135deg,#2f8f5b,#3d6fb5);color:#fff;border-radius:24px;padding:18px 16px;margin:14px 0;box-shadow:0 10px 28px #3d6fb544}
+.stay h3{color:#fff;margin:0 0 2px;font-size:24px}.stay p{margin:0 0 10px;opacity:.95;font-size:15px}
+.stay .sbtn{background:#fff;color:#256b8f;border:0;border-radius:99px;padding:13px 20px;font:800 17px system-ui,sans-serif;cursor:pointer;margin:4px 4px 0 0}
+.stay .sbtn.o{background:#ffffff26;color:#fff;border:1px solid #fff9}
+.stay .streak{font-size:34px;font-weight:800;line-height:1}
+.breath{width:130px;height:130px;border-radius:50%;margin:14px auto;background:radial-gradient(circle,#9fd8ff,#3d6fb5);animation:br 8s ease-in-out infinite}
+@keyframes br{0%,100%{transform:scale(.55);opacity:.6}50%{transform:scale(1.05);opacity:1}}
 .poke h3{color:#fff;margin:0 0 2px;font-size:28px}
 .poke p{margin:0 0 12px;opacity:.95;font-size:15px}
 .pokebtn{background:#fff;color:#e23a6e;border:0;border-radius:99px;padding:15px 26px;font:800 20px system-ui,sans-serif;cursor:pointer;margin:4px;box-shadow:0 5px 0 #0002;animation:wob 2.4s ease-in-out infinite}
@@ -141,12 +148,59 @@ nav button.on{background:linear-gradient(135deg,var(--acc2),transparent)}
 .fly{position:fixed;left:-70px;z-index:60;pointer-events:none;animation:flyx 2.4s linear forwards}
 @keyframes flyx{to{transform:translateX(calc(100vw + 140px)) rotate(25deg)}}
 @keyframes flyl{to{transform:translateX(calc(-100vw - 140px)) rotate(-25deg)}}
+
+/* v4.2 calm and gorgeous */
+:root{--bg:#fcf9f4;--acc:#bd6b3c;--acc2:#f6e7d6;--line:#f1e6d8}
+body{font-size:18px;line-height:1.6}
+.hello{font-size:26px;font-weight:700;margin:6px 2px 4px;letter-spacing:-.3px}
+.card{border-radius:24px;padding:18px 20px}
+.card.gentle{background:linear-gradient(135deg,#fff7ea,#fff0e0);border:1px solid #f3dcc0}
+:root[data-theme=dark] .card.gentle{background:#332b24;border-color:#4a3c2e}
+.card h3{margin:0 0 6px;font-size:21px}
+.btn{border-radius:16px;padding:13px 20px;font-size:17px;transition:transform .12s}
+.btn:active{transform:scale(.97)}
+.trio{gap:12px}
+.bigact{padding:22px 6px;font-size:17px;border-radius:24px;transition:transform .12s}
+.bigact:active{transform:scale(.96)}
+.bigact span{font-size:40px;margin-bottom:4px}
+.more>summary{font-size:18px;padding:14px 4px;color:var(--mute)}
+.meta{font-size:15px;line-height:1.5}
+.streak2{font-size:28px;font-weight:800;color:var(--acc);margin:2px 0}
+@media (prefers-reduced-motion:no-preference){.card{animation:fade .35s ease}}
+
+/* v4.5 scenes, motion, polish */
+body{background:radial-gradient(900px 420px at 50% -120px,var(--glow,rgba(224,140,70,.22)),transparent),var(--bg)}
+html[data-scene=sunrise]{--acc:#d9772b;--glow:rgba(255,150,70,.28);--acc2:#fbe3cb}
+html[data-scene=forest]{--acc:#2f8f5b;--glow:rgba(60,170,110,.22);--acc2:#d8eddf}
+html[data-scene=ocean]{--acc:#2f78b5;--glow:rgba(70,150,220,.24);--acc2:#d6e8f6}
+html[data-scene=lavender]{--acc:#8a4fb5;--glow:rgba(160,110,220,.24);--acc2:#eadcf6}
+html[data-scene=rose]{--acc:#c2476b;--glow:rgba(230,110,150,.24);--acc2:#f8dbe4}
+.btn{background:linear-gradient(135deg,var(--acc),color-mix(in srgb,var(--acc) 72%,#fff))}
+.vcard{background-size:220% 220%;animation:vg 16s ease-in-out infinite}
+@keyframes vg{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+:root[data-calm] .vcard{animation:none}
+@media (prefers-reduced-motion:reduce){.vcard{animation:none}}
+.chip,.btn,.react,.bigact,.pokebtn,.sbtn,nav button{transition:transform .15s ease,box-shadow .2s ease,background .2s ease}
+.chip:active,.react:active{transform:scale(.93)}
+dialog[open]{animation:pop .22s ease}
+@keyframes pop{from{opacity:0;transform:translateY(12px) scale(.97)}to{opacity:1;transform:none}}
+.hstat{position:absolute;right:66px;top:max(20px,env(safe-area-inset-top));display:flex;gap:8px;align-items:center;font:700 15px system-ui,sans-serif}
+.hstat .av{font-size:22px}.hbell{background:var(--acc);color:#fff;border:0;border-radius:99px;padding:5px 10px;font:700 14px system-ui,sans-serif;cursor:pointer}
+.agrid{grid-template-columns:repeat(2,1fr);gap:10px}
+.agrid figure{margin:0;position:relative;border-radius:18px;overflow:hidden;box-shadow:0 6px 18px #0002}
+.agrid figure:first-child{grid-column:span 2}
+.agrid figure img{border-radius:0;display:block;width:100%;aspect-ratio:1;object-fit:cover}
+.agrid figure:first-child img{aspect-ratio:16/10}
+.agrid figcaption{position:absolute;left:0;right:0;bottom:0;padding:22px 10px 8px;color:#fff;font:600 13px system-ui,sans-serif;background:linear-gradient(transparent,#000a)}
+#biolock{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:24px}
+#biolock .big{font-size:64px}
 </style>
 </head>
 <body>
 <header>
   <h1>✝️ Faith Hub</h1>
   <div class="sub" id="hello"></div>
+  <span class="hstat" id="hstat"></span>
   <button class="hbtn" data-act="gsearch" aria-label="Search">🔍</button>
 </header>
 <main id="main"></main>
@@ -157,7 +211,7 @@ nav button.on{background:linear-gradient(135deg,var(--acc2),transparent)}
 
 <script>
 /* ============ SETUP (Jayden only) ============ */
-const APP_VER="4.0";
+const APP_VER="4.5";
 const FIREBASE_CONFIG = {
   apiKey:"AIzaSyDhwY77B-wZL7f4077kEC_tn0K2AgJ6bIs",
   authDomain:"faith-hub-71ae2.firebaseapp.com",
@@ -200,6 +254,10 @@ const SECTIONS={
  question:{label:"Questions",icon:"❓",title:"Question I am wrestling with",f:[["text","What are you wondering about?","area"]],p:{text:"What are you wondering about?"}},
  photo:{label:"Photo",icon:"📸",title:"Photo",f:[["text","Caption"]]},
  msg:{label:"Chat",icon:"💬",title:"Message",f:[["text","Message"]]},
+ strong:{label:"Stay strong",icon:"💪",title:"Stay strong log",f:[["status","How did it go?","select",["Stayed strong","I fell"]],["text","Note (optional)","area"]]},
+ replace:{label:"Replace list",icon:"🌿",title:"Replace it list",f:[["text","List","area"]]},
+ why:{label:"My reason",icon:"❤️",title:"Why I am fighting",f:[["text","My reason","area"]]},
+ weekly:{label:"Weekly check-in",icon:"📝",title:"Weekly check-in",f:[["week","How was the week?"],["weak","Where I was weakest","area"],["win","A win this week","area"]]},
  voice:{label:"Voice",icon:"🎙️",title:"Voice note",f:[["title","Title"]]},
  journal:{label:"Journal",icon:"📓",title:"Journal entry",f:[["title","Title (optional)"],["text","What is on your heart","area"]]},
  song:{label:"Playlist",icon:"🎵",title:"Song",f:[["title","Song"],["artist","Artist"],["link","Link (optional)","url"],["text","Why it matters to you","area"]]},
@@ -276,7 +334,7 @@ const HELP=[
  ["Something is not working","Close the app and open it again. Then tap More and Send feedback so Jayden can fix it."]
 ];
 const TOUR=[["Welcome 💛","This is a private space for the three of you to share faith, prayers and adventures."],["Add something","Tap a tab at the bottom, pick a tile, then the big Add button. We ask one question at a time."],["Stay close","Tap 💛 Thinking of you, send a message, or react to anything with ❤️ or 🙏. Want to talk? Tap 👉 Poke at the top of Home."],["Daily verse","Turn on notifications in More to get a verse every day. Tap the ? button any time for help."],["Who sees what","Sign in with your own PIN. Check ins, questions and prayers start out private, and Home has Our space and My journal. You choose who sees anything else."]];
-const NEWS=["Real sign in: your own 6 to 8 number PIN","Home split into Our space and My journal (only you)","👉 Poke: tap a name and they get a notification when you want to talk","Tiles instead of tabs, a bigger calmer Home, prayer wall, shared playlist, trip planner with weather, sunrise, sunset and moon","Verse pictures with scenes, font choices, photo swipe, search, plan invites, monthly backup reminder"];
+const NEWS=["💪 Stay strong: streak, badges, my reason, 10 minute pause (Jayden and Summer)","🤝 Pray together time, verse of the week and our week summary","🤍 Ask how to pray for someone, and one tap replies to pokes","🎙️ Voice messages in chat","🎨 Color themes, night mode and a prettier photo album","🔐 Optional fingerprint lock (More)","📬 Missed notifications card and delivery check"];
 
 let items=[], metas={}, grp="home", subSel={faith:null,together:null,outdoor:null}, filt="all", q="", catFilt="all";
 let me=localStorage.getItem("fh_me"), memoI=0, memoShow=false, db=null, firstItems=true, startTime=Date.now(), offline=!navigator.onLine;
@@ -360,7 +418,7 @@ function start(){
     if(p!==PASSCODE){document.body.innerHTML="<p class='empty'>Wrong passcode. Refresh to try again.</p>";return;}
     localStorage.setItem("fh_pass",PASSCODE);
   }
-  const th=localStorage.getItem("fh_theme");if(th&&th!=="auto")document.documentElement.dataset.theme=th;
+  applyTheme();setInterval(applyTheme,600000);
   if(localStorage.getItem("fh_calm")==="1")document.documentElement.dataset.calm="1";
   const fnt=localStorage.getItem("fh_font");if(fnt&&fnt!=="clean")document.documentElement.dataset.font=fnt;
   if(!localStorage.getItem("fh_lastbackup"))localStorage.setItem("fh_lastbackup",String(Date.now()));
@@ -398,12 +456,19 @@ function afterWho(){
 }
 function markSeen(){if(db&&me)db.collection("meta").doc("seen").set({[me]:Date.now()},{merge:true}).catch(()=>{});}
 function persist(){if(!db)localStorage.setItem("fh_items",JSON.stringify(items));}
-function save(it){
+function save(it,noPing){
   if(db){
     const {id,...rest}=it;
     rest.audience=(rest.audience&&rest.author&&rest.author!==me)?rest.audience:audOf(rest);
     const p=id?db.collection("items").doc(id).set(rest,{merge:true}):db.collection("items").add(rest);
     p.catch(()=>toast("Could not save. Check your connection."));
+    if(!id&&!noPing&&rest.type!=="journal"&&me){
+      const to=PEOPLE.filter(x=>x!==me&&(rest.audience||[]).includes(lc(x)));
+      if(to.length){const S=SECTIONS[rest.type];
+        if(rest.type==="msg")sendPing(to,rest.text,"chat");
+        else if(rest.type==="prayer")sendPing(to,rest.text,"prayer");
+        else sendPing(to,"added to "+(S?S.label:"the hub"),"activity");}
+    }
   } else {
     if(it.id){items=items.map(x=>x.id===it.id?it:x);}else{it.id=String(Date.now());items.unshift(it);}
     persist();render();
@@ -512,15 +577,16 @@ function attach(){
     items=s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(b.created||0)-(a.created||0));
     render();
   },()=>toast("Could not load. Check your connection.")));
-  unsubs.push(db.collection("meta").onSnapshot(s=>{metas={};s.docs.forEach(d=>metas[d.id]=d.data());metaReady=true;render();},()=>{}));
-  unsubs.push(db.collection("pings").orderBy("ts","desc").limit(5).onSnapshot(s=>{
+  unsubs.push(db.collection("meta").onSnapshot(s=>{metas={};s.docs.forEach(d=>metas[d.id]=d.data());metaReady=true;{const ms=(metas.theme||{})[me];if(ms!==undefined&&localStorage.getItem("fh_scene")===null){localStorage.setItem("fh_scene",ms);applyTheme();}}render();},()=>{}));
+  unsubs.push(db.collection("pings").orderBy("ts","desc").limit(12).onSnapshot(s=>{
+    pingsAll=s.docs.map(x=>({id:x.id,...x.data()}));if(grp==="home"&&homeTab==="us"&&metaReady&&!$("dlg").open)render();
     s.docChanges().forEach(c=>{
       if(c.type!=="added")return;
       const d=c.doc.data();
       if(!d.from||d.from===me||!(d.ts>startTime))return;
       if(d.to&&!d.to.includes(me))return;
       const t=d.text?": "+String(d.text).slice(0,80):"";
-      notify("Faith Hub",d.kind==="poke"?`👉 ${d.from} poked you. They want to talk.`:d.kind==="support"?`💛 ${d.from} could use you right now${t}`:d.kind==="prayer"?`🙏 ${d.from} asks for prayer${t}`:d.kind==="invite"?`📆 ${d.from}${t}`:`💛 ${d.from} is thinking of you`);
+      notify("Faith Hub",d.kind==="poke"?`👉 ${d.from} poked you. They want to talk.`:d.kind==="support"?`💛 ${d.from} could use you right now${t}`:d.kind==="prayer"?`🙏 ${d.from} asks for prayer${t}`:d.kind==="invite"?`📆 ${d.from}${t}`:d.kind==="chat"?`💬 ${d.from}${t}`:d.kind==="reply"?`💛 ${d.from}${t}`:d.kind==="goodnews"?`🎉 ${d.from} has good news${t}`:d.kind==="askpray"?`🤍 ${d.from} wants to pray for you`:d.kind==="goodnight"?`🌙 ${d.from}: goodnight, praying for you`:d.kind==="activity"?`${d.from} ${d.text||"did something"}`:`💛 ${d.from} is thinking of you`);
     });
   },()=>{}));
 }
@@ -763,7 +829,7 @@ function card(it){
   return `<div class="card ${it.answered?"done":""}">
     ${title?`<h3>${esc(title)}${it.answered?" ✅":""}</h3>`:""}
     <div class="meta"><span class="who">${esc(who(it.author))}</span>${it.created?fmt(it.created):""}${it.type==="sermon"&&it.date?" · "+esc(it.date):""}${visBadge(it)}</div>
-    ${body}${prog}${photo}${audio}
+    ${body}${it.answered&&it.answer?`<div class="meta">🙌 ${nl(it.answer)}</div>`:""}${prog}${photo}${audio}
     <div class="row">${reacts}</div>${cms}
     <div class="row">${extra}<button class="btn small ghost" data-act="comment" data-id="${it.id}">💬 Comment</button>${it.author===me?`<button class="btn small ghost" data-act="edit" data-id="${it.id}">Edit</button><button class="btn small ghost" data-act="del" data-id="${it.id}">Delete</button>`:""}</div></div>`;
 }
@@ -799,7 +865,7 @@ function homeMore(){
   const reads=(metas.reads||{})[me]||[],readToday=reads.includes(today);
   const others=PEOPLE.filter(p=>p!==me),other=others.length>1?"everyone":(others[0]||"them"),seenList=others.filter(p=>(metas.seen||{})[p]).map(p=>`${p} was here ${ago((metas.seen||{})[p])}`).join(" · "),seen=seenList;
   const pushOn="Notification" in window&&Notification.permission==="granted"&&localStorage.getItem("fh_push")==="1";
-  const recent=items.filter(i=>!["msg","todo"].includes(i.type)&&visible(i)).slice(0,4);
+  const recent=items.filter(i=>!["msg","todo","strong","replace","why"].includes(i.type)&&visible(i)).slice(0,4);
   let h="";
   if(simple){
     h+=`<button class="btn giant" data-act="read" ${readToday?"disabled":""}>${readToday?"✅ I read today":"📖 I read today"}</button>
@@ -822,7 +888,7 @@ function homeMore(){
   if(!lastRead||daysUntil(lastRead)<=-3)h+=`<div class="card"><b>🌿 Want a short place to start?</b><div class="meta">Try today's Psalm. It only takes a few minutes.</div><div class="row"><button class="btn small" data-act="goto" data-g="faith" data-s="psalm">Open Psalm of the day</button></div></div>`;
   const old=items.filter(i=>i.type==="prayer"&&!i.answered&&!i.update&&visible(i)&&Date.now()-(i.created||Date.now())>14*864e5).slice(0,3);
   if(old.length)h+=`<div class="card"><b>🙏 Check in on these prayers</b>${old.map(i=>`<div class="meta">• ${esc((i.text||"").slice(0,70))}</div>`).join("")}<div class="row"><button class="btn small ghost" data-act="goto" data-g="faith" data-s="prayer">Open prayers</button></div></div>`;
-  const t=new Date(),oty=items.filter(i=>visible(i)&&i.created&&!["msg","todo"].includes(i.type)&&new Date(i.created).getFullYear()<t.getFullYear()&&new Date(i.created).getMonth()===t.getMonth()&&new Date(i.created).getDate()===t.getDate()).slice(0,2);
+  const t=new Date(),oty=items.filter(i=>visible(i)&&i.created&&!["msg","todo","strong","replace","why"].includes(i.type)&&new Date(i.created).getFullYear()<t.getFullYear()&&new Date(i.created).getMonth()===t.getMonth()&&new Date(i.created).getDate()===t.getDate()).slice(0,2);
   if(oty.length)h+=`<div class="card"><b>📅 On this day</b>${oty.map(i=>`<div class="meta">${esc(i.author)}: ${esc((i.text||i.title||i.ref||"").slice(0,80))}</div>`).join("")}</div>`;
   h+=`<div class="row"><button class="btn ghost" data-act="hard">🌧️ Hard day? Give me a verse</button><button class="btn ghost" data-act="jarpull">🫙 Open the jar</button></div>`;
   h+=`<h3 style="margin-top:18px">Recent</h3>${recent.length?recent.map(card).join(""):`<p class="empty">Nothing yet. Pick a tab below and add the first one.</p>`}`;
@@ -884,9 +950,9 @@ function chatView(){
   <div class="meta">${chatTo==="all"?"Everyone can see these messages.":"Only you and "+esc(chatTo)+" can see these messages."}</div>
   <div class="chat" id="chatlist">${chatHtml(chatList())}</div>
   <div class="row">${["Good morning ☀️","Goodnight 🌙","Praying for you 🙏","Proud of you 💛"].map(m=>`<button class="chip" data-act="quick" data-m="${esc(m)}">${m}</button>`).join("")}</div>
-  <div class="row stick"><input id="cin" placeholder="Write a message" style="flex:1"><button class="btn" data-act="send">Send</button></div>`;
+  <div class="row stick"><input id="cin" placeholder="Write a message" style="flex:1"><button class="btn ghost" data-act="chatrec" aria-label="Voice message">${crec&&crec.state==="recording"?"⏹️":"🎙️"}</button><button class="btn" data-act="send">Send</button></div>`;
 }
-function chatHtml(l){return l.length?l.map(m=>`<div class="bub ${m.author===me?"me":""}"><small>${esc(who(m.author))} · ${m.created?fmt(m.created):""}</small>${nl(m.text)}${m.author===me?` <a href="#" data-act="del" data-id="${m.id}" style="font-size:11px;color:var(--mute)">delete</a>`:""}</div>`).join(""):`<p class="empty">Say hello 💛</p>`;}
+function chatHtml(l){return l.length?l.map(m=>`<div class="bub ${m.author===me?"me":""}"><small>${esc(who(m.author))} · ${m.created?fmt(m.created):""}</small>${nl(m.text)}${m.audio?`<audio controls src="${m.audio}" style="width:100%;margin-top:6px"></audio>`:""}${m.author===me?` <a href="#" data-act="del" data-id="${m.id}" style="font-size:11px;color:var(--mute)">delete</a>`:""}</div>`).join(""):`<p class="empty">Say hello 💛</p>`;}
 function voiceView(){
   const recording=rec&&rec.state==="recording";
   const l=items.filter(i=>i.type==="voice"&&visible(i)).sort((a,b)=>(b.created||0)-(a.created||0));
@@ -930,8 +996,8 @@ function moreView(){
     <div class="meta" style="margin-top:10px">Pick your picture</div><div class="row">${AV.map(a=>`<button class="react" style="font-size:22px" data-act="avatar" data-a="${a}">${a}</button>`).join("")}</div></div>
   <div class="card"><h3>Make it easier</h3><div class="row"><button class="chip ${simple?"on":""}" data-act="simple">${simple?"✅ Simple mode is on":"Turn on Simple mode"}</button><button class="chip ${localStorage.getItem("fh_calm")==="1"?"on":""}" data-act="calm">Calm mode</button></div>
     <div class="meta">Simple mode shows big buttons and fewer tabs. Calm mode softens colors and stops animations.</div></div>
-  ${notifCard(pushOn)}
-  <div class="card"><h3>Look and feel</h3><div class="row">${["auto","light","dark"].map(t=>`<button class="chip ${th===t?"on":""}" data-act="theme" data-t="${t}">${t==="auto"?"Auto":t[0].toUpperCase()+t.slice(1)}</button>`).join("")}</div>
+  ${healthCard()}${bioCard()}${notifCard(pushOn)}
+  <div class="card"><h3>Look and feel</h3><div class="row">${["auto","light","dark","night"].map(t=>`<button class="chip ${th===t?"on":""}" data-act="theme" data-t="${t}">${t==="auto"?"Auto":t==="night"?"🌙 Night mode":t[0].toUpperCase()+t.slice(1)}</button>`).join("")}</div><div class="meta">Night mode turns dark from 8 pm to 6 am.</div><div class="row">${[["","Classic"],["sunrise","🌅 Sunrise"],["forest","🌲 Forest"],["ocean","🌊 Ocean"],["lavender","💜 Lavender"],["rose","🌸 Rose"]].map(([k,n])=>`<button class="chip ${(localStorage.getItem("fh_scene")||"")===k?"on":""}" data-act="scene" data-s="${k}">${n}</button>`).join("")}</div>
     <div class="row">${ACC.map(c=>`<button class="react" style="background:${c};width:34px;height:34px;border-radius:50%" data-act="accent" data-c="${c}" aria-label="color"></button>`).join("")}</div>
     <div class="row"><button class="btn small ghost" data-act="fs" data-d="-1">A−</button><button class="btn small ghost" data-act="fs" data-d="1">A+</button><span class="meta">Text size</span></div>
     <div class="row">${[["clean","Clean"],["serif","Classic"],["easy","Easy read"]].map(([k,n])=>`<button class="chip ${(localStorage.getItem("fh_font")||"clean")===k?"on":""}" data-act="font" data-f="${k}">${n}</button>`).join("")}<span class="meta">Font</span></div>
@@ -952,11 +1018,11 @@ function moreView(){
     <div class="meta" style="margin-top:8px">Version ${APP_VER}. Android: Chrome menu, then Add to Home screen. iPhone: Share, then Add to Home Screen.</div>
     <div class="row"><a class="btn small" href="today.html">Open verse of the day page</a></div></div>`;
 }
-const NOTIF_DEFS={morning:["🕊️ Daily verse","12:00"],evening:["🙏 Evening prayer","20:00"],reading:["📖 Reading reminder (only if you have not read)","19:00"],recap:["📊 Sunday weekly recap","09:00"],countdown:["📅 Event countdowns","09:00"],followup:["🌿 Prayer follow ups","10:00"],monthly:["📆 Monthly chapter reminders","09:00"],seasonal:["🎄 Holidays","09:00"]};
-function notifCfg(){const o=((metas.notif||{})[me])||{};const c={tz:o.tz||"America/Denver"};Object.keys(NOTIF_DEFS).forEach(k=>{c[k]=o[k]!==false;c[k+"T"]=o[k+"T"]||NOTIF_DEFS[k][1];});return c;}
+const NOTIF_DEFS={morning:["🕊️ Daily verse","12:00"],evening:["🙏 Evening prayer","20:00"],reading:["📖 Reading reminder (only if you have not read)","19:00"],recap:["📊 Sunday weekly recap","09:00"],countdown:["📅 Event countdowns","09:00"],followup:["🌿 Prayer follow ups","10:00"],monthly:["📆 Monthly chapter reminders","09:00"],seasonal:["🎄 Holidays","09:00"],hard:["🌙 Late night check-in","22:00"],hard2:["🌅 Second check-in","15:00"],prayernow:["🤝 Pray together time","20:30"]};
+function notifCfg(){const o=((metas.notif||{})[me])||{};const c={tz:o.tz||"America/Denver"};Object.keys(NOTIF_DEFS).forEach(k=>{c[k]=k.startsWith("hard")?o[k]===true:o[k]!==false;c[k+"T"]=o[k+"T"]||NOTIF_DEFS[k][1];});return c;}
 function notifCard(pushOn){
   const c=notifCfg();
-  const rows=Object.entries(NOTIF_DEFS).map(([k,[l]])=>`<div class="row" style="justify-content:space-between;margin:8px 0"><button class="chip ${c[k]?"on":""}" data-act="ntog" data-k="${k}">${c[k]?"✅":"⭕"} ${esc(l)}</button><input type="time" style="width:auto" value="${esc(c[k+"T"])}" data-act="ntime" data-k="${k}"></div>`).join("");
+  const rows=Object.entries(NOTIF_DEFS).filter(([k])=>!k.startsWith("hard")||STRONGP.includes(me)).map(([k,[l]])=>`<div class="row" style="justify-content:space-between;margin:8px 0"><button class="chip ${c[k]?"on":""}" data-act="ntog" data-k="${k}">${c[k]?"✅":"⭕"} ${esc(l)}</button><input type="time" style="width:auto" value="${esc(c[k+"T"])}" data-act="ntime" data-k="${k}"></div>`).join("");
   return `<div class="card"><h3>🔔 Notifications</h3><div class="meta">${pushOn?"Notifications are on for this phone.":"Turn them on so they reach this phone."}</div><div class="row"><button class="btn small" data-act="notif">${pushOn?"Refresh notifications":"Turn on notifications"}</b<button class="btn small ghost" data-act="notiftest">Send me a test</button></div>
   <div class="meta">Android tip: if alerts only show when the app is open, tap Refresh notifications, then in Chrome allow notifications for this site and set the app battery to Unrestricted.</div>
   <div class="meta" style="margin-top:12px">Pick what you want and when. Times use your time zone below.</div>${rows}
@@ -981,7 +1047,7 @@ function hardDay(){
    <div class="row"><button class="btn" data-act="hard">Another</button><button class="btn ghost" data-act="goto" data-g="faith" data-s="calm">🌿 Breathe</button><button class="btn ghost" data-act="close">Close</button></div>`);
 }
 function journalHtml(){
-  const parts=Object.entries(SECTIONS).filter(([k])=>!["msg","todo"].includes(k)).map(([k,S])=>{
+  const parts=Object.entries(SECTIONS).filter(([k])=>!["msg","todo","strong","replace","why"].includes(k)).map(([k,S])=>{
     const l=items.filter(i=>i.type===k&&visible(i)).sort((a,b)=>(a.created||0)-(b.created||0));
     if(!l.length)return"";
     return `<h2>${S.icon} ${esc(S.title)}</h2>`+l.map(i=>`<div style="margin:10px 0;padding:8px;border-bottom:1px solid #ddd"><b>${esc(i.title||i.place||i.church||i.for||i.tag||i.ref||"")}</b> <small>${esc(i.author)} ${i.created?fmt(i.created):""}</small><br>${[i.ref,i.text,i.note,i.update,i.apply].filter(Boolean).map(nl).join("<br>")}</div>`).join("");
@@ -1035,6 +1101,7 @@ function render(){
   if(db&&auth&&!me){$("main").innerHTML=`<p class="empty">Please sign in to open Faith Hub.</p><div class="row" style="justify-content:center"><button class="btn" data-act="showlogin">Sign in</button></div>`;$("nav").innerHTML="";return;}
   if(!(grp==="faith"&&subSel.faith==="calm"))stopCalm();
   $("hello").textContent=me?`Hi ${me}. This is your shared space.`:"";
+  headerStat();
   const gk=Object.keys(GROUPS).filter(k=>!(simple&&k==="outdoor"));
   $("nav").style.gridTemplateColumns=`repeat(${gk.length},1fr)`;
   $("nav").innerHTML=gk.map(k=>`<button class="${k===grp?"on":""}" data-act="nav" data-g="${k}"><span>${GROUPS[k].icon}</span>${GROUPS[k].label}</button>`).join("");
@@ -1054,7 +1121,7 @@ function render(){
 }
 
 /* ---------- v4 features ---------- */
-const PRIVDEF={checkin:"me",question:"me",prayer:"me",journal:"me"};
+const PRIVDEF={strong:"me",checkin:"me",question:"me",prayer:"me",journal:"me"};
 const onlyMe=i=>i.audience?(i.audience.length===1&&i.audience[0]===lc(me)):!!((i.vis&&i.vis.length===1)||i.priv===me);
 const EMPTY={prayer:["🙏","No prayers yet. Write the first one, even a short one."],verse:["🕊️","Save a verse that means something to you."],thanks:["🌻","What is one small thing you are thankful for today?"],checkin:["💛","How is your heart today? A check in takes a minute."],sermon:["⛪","Went to church? Jot down one thing that stood out."],question:["❓","Something you are wondering about? Questions are welcome here."],goal:["🎯","Pick one thing to work toward together."],event:["📅","Add a visit or birthday and it counts down on Home."],letter:["💌","Write a letter or a time capsule that opens later."],jar:["🫙","Drop in a note of encouragement for a hard day."],memory:["🎞️","Write down a favorite memory."],dream:["✨","What do you hope for?"],song:["🎵","Share a song that lifts you up. Paste a link if you have one."],trip:["🧭","Plan a trip and check the weather before you go."],journal:["📓","This page is only yours. Write what is on your heart."],todo:["✅","Nothing on the list yet. Add the first thing."],outdoor:["🌲","Spent time outside? Pair a place with a verse."],hike:["🥾","Log your first hike."],stars:["🔭","Write down what you saw in the sky."]};
 function emptyHtml(def){
@@ -1082,6 +1149,270 @@ function readingCard(){
 function homeView(){
   return `<div class="chips"><button class="chip ${homeTab==="us"?"on":""}" data-act="htab" data-t="us">👥 Our space</button><button class="chip ${homeTab==="me"?"on":""}" data-act="htab" data-t="me">🔒 My journal</button></div>`+(homeTab==="me"?journalHome():ourHome());
 }
+const TEMPT=[["1 Corinthians 10:13","No temptation has taken you except what is common to man. God is faithful, who will not allow you to be tempted above what you are able, but with the temptation will also make the way of escape, that you may be able to endure it."],["James 4:7","Be subject therefore to God. Resist the devil, and he will flee from you."],["Matthew 26:41","Watch and pray, that you do not enter into temptation. The spirit indeed is willing, but the flesh is weak."],["2 Timothy 2:22","Flee from youthful lusts, but pursue after righteousness, faith, love, and peace, with those who call on the Lord out of a pure heart."],["Hebrews 4:16","Let us therefore draw near with boldness to the throne of grace, that we may receive mercy and may find grace to help in time of need."]];
+const GRACE=[["1 John 1:9","If we confess our sins, he is faithful and righteous to forgive us the sins and to cleanse us from all unrighteousness."],["Lamentations 3:22-23","Because of his loving kindnesses we are not consumed, because his compassion does not fail. They are new every morning. Great is your faithfulness."],["Romans 8:1","There is therefore now no condemnation to those who are in Christ Jesus."]];
+const STRONGP=["Jayden","Summer"];
+let pingsAll=[];
+
+function deliveryLines(){
+  const d=metas.delivery||{};
+  const l=PEOPLE.filter(n=>d[n]&&d[n].ts).map(n=>`<div class="meta">📬 Last notification sent to ${esc(n)}'s phone: ${ago(d[n].ts)}${d[n].devices?" ("+d[n].devices+" device"+(d[n].devices>1?"s":"")+")":""}</div>`);
+  return l.join("")||`<div class="meta">📬 No notification has been sent to a phone yet.</div>`;
+}
+function missedList(){
+  const seen=Number(localStorage.getItem("fh_seenmissed")||0)||Date.now()-864e5,pk=pokesForMe().map(x=>x.id);
+  return pingsAll.filter(x=>x.from&&x.from!==me&&(!x.to||x.to.includes(me))&&x.ts>seen&&!["test","poke","support"].includes(x.kind)&&!pk.includes(x.id)&&Date.now()-x.ts<864e5);
+}
+function missedLine(x){const t=x.text?": "+esc(String(x.text).slice(0,60)):"";return x.kind==="prayer"?`🙏 ${esc(x.from)} asked for prayer${t}`:x.kind==="chat"?`💬 ${esc(x.from)}${t}`:x.kind==="reply"?`💛 ${esc(x.from)}${t}`:x.kind==="goodnews"?`🎉 ${esc(x.from)} has good news${t}`:x.kind==="invite"?`📆 ${esc(x.from)} ${esc(x.text||"")}`:`${esc(x.from)} ${esc(x.text||"did something")}`;}
+function missedCard(){
+  const l=missedList();
+  try{if(navigator.setAppBadge){l.length?navigator.setAppBadge(l.length):navigator.clearAppBadge();}}catch(e){}
+  if(!l.length)return "";
+  return `<div class="card gentle"><b>📬 You missed ${l.length} thing${l.length>1?"s":""}</b>${l.slice(0,5).map(x=>`<div class="meta">${missedLine(x)}</div>`).join("")}${l.length>5?`<div class="meta">and ${l.length-5} more</div>`:""}<div class="row"><button class="btn small" data-act="seenmissed">Got it</button></div></div>`;
+}
+function togetherStreak(){
+  const r=metas.reads||{},cnt={};
+  Object.keys(r).forEach(n=>(r[n]||[]).forEach(d=>{cnt[d]=(cnt[d]||0)+1;}));
+  const d=new Date();if((cnt[ymd(d)]||0)<2)d.setDate(d.getDate()-1);
+  let n=0;while((cnt[ymd(d)]||0)>=2){n++;d.setDate(d.getDate()-1);}
+  return {n,today:(cnt[ymd(new Date())]||0)>=2};
+}
+function togetherCard(){
+  const t=togetherStreak();
+  if(t.today&&localStorage.getItem("fh_tcele")!==ymd(new Date())){localStorage.setItem("fh_tcele",ymd(new Date()));setTimeout(confetti,300);}
+  return `<div class="card"><b>📖 Reading together</b><div class="streak2">${t.n} day${t.n===1?"":"s"} in a row</div><div class="meta">Counts days when at least two of us read. ${t.today?"You did it today! 🎉":"Read today to keep it going."}</div></div>`;
+}
+function answeredCard(){
+  const l=items.filter(i=>i.type==="prayer"&&i.answered&&visible(i)&&!onlyMe(i)).sort((a,b)=>(b.created||0)-(a.created||0)).slice(0,3);
+  if(!l.length)return "";
+  return `<div class="card"><b>🎉 God answered</b>${l.map(i=>`<div style="margin-top:6px">🙌 ${esc(String(i.text||i.for||"").slice(0,90))}</div>`).join("")}<div class="meta">Tap Prayer wall to see all.</div></div>`;
+}
+function goodNewsDlg(){
+  const o=PEOPLE.filter(p=>p!==me);
+  openDlg(`<h3>🎉 Share good news</h3><p>Tell them something good that happened, big or small.</p><textarea id="gnt" rows="3" maxlength="140" placeholder="Example: I got the interview!"></textarea>${o.map(x=>`<label style="font-weight:400"><input type="checkbox" class="gnto" value="${esc(x)}" checked> ${esc(x)}</label>`).join("")}<div class="row"><button class="btn" data-act="gnsend">Send</button><button class="btn ghost" data-act="close">Cancel</button></div>`);
+}
+const REPLIES=[["🙏","I am praying for you"],["📞","Call me"],["💬","I am here. Text me"]];
+function repliedSet(){try{return JSON.parse(localStorage.getItem("fh_replied")||"[]");}catch(e){return[];}}
+function pokesForMe(){const done=repliedSet();return pingsAll.filter(x=>(x.kind==="poke"||x.kind==="support")&&x.from&&x.from!==me&&(!x.to||x.to.includes(me))&&Date.now()-(x.ts||0)<864e5&&!done.includes(x.id)).slice(0,2);}
+function pokesCard(){
+  return pokesForMe().map(x=>`<div class="card gentle"><b>👉 ${esc(x.from)} poked you</b> <span class="meta">${ago(x.ts)}</span><div class="meta">They want to talk. Tap to answer:</div><div class="row">${REPLIES.map(([e,t])=>`<button class="btn small" data-act="reply" data-id="${esc(x.id)}" data-p="${esc(x.from)}" data-t="${esc(t)}">${e} ${esc(t)}</button>`).join("")}</div></div>`).join("");
+}
+function replaceItem(){return items.find(i=>i.type==="replace"&&i.author===me);}
+function replaceDlg(){
+  const r=replaceItem();
+  openDlg(`<h3>🌿 My replace it list</h3><p>When you feel tempted, what is one good thing you can do instead? Write 3 to 5, one per line. Only you see this.</p><textarea id="rpl" rows="6" placeholder="Pray out loud&#10;Go for a walk&#10;Text a friend&#10;Listen to a worship song">${esc((r&&r.text)||"")}</textarea><div class="row"><button class="btn" data-act="replacesave">Save</button><button class="btn ghost" data-act="close">Cancel</button></div>`);
+}
+function replaceSave(){
+  const t=($("rpl").value||"").trim(),r=replaceItem();
+  save({...(r||{}),type:"replace",text:t,priv:me,author:me,created:(r&&r.created)||Date.now()},true);closeDlg();toast("Saved 🌿");
+}
+function healthCard(){
+  const ok=[],bad=[];
+  const perm="Notification" in window?Notification.permission:"unsupported";
+  (perm==="granted"?ok:bad).push(perm==="granted"?"Notifications are allowed":"Notifications are blocked. Tap Fix below, then Allow.");
+  (localStorage.getItem("fh_push")==="1"?ok:bad).push(localStorage.getItem("fh_push")==="1"?"This phone is registered":"This phone is not registered yet. Tap Fix.");
+  const sa=window.matchMedia&&matchMedia("(display-mode: standalone)").matches;
+  (sa?ok:bad).push(sa?"Installed as an app":"Not installed. In Chrome tap the menu, then Add to Home screen.");
+  const all=!bad.length;
+  return `<div class="card"><h3>${all?"✅":"⚠️"} Notification check</h3>${ok.map(x=>`<div class="meta">✅ ${esc(x)}</div>`).join("")}${bad.map(x=>`<div>⚠️ ${esc(x)}</div>`).join("")}
+  ${deliveryLines()}<div class="meta" style="margin-top:8px">Also check in phone Settings: Chrome battery set to Unrestricted, and Do Not Disturb off.</div>
+  <div class="row"><button class="btn small" data-act="notif">Fix notifications</button><button class="btn small ghost" data-act="notiftest">Send me a test</button></div></div>`;
+}
+
+const MEMV=[...TEMPT,["Psalm 119:11","I have hidden your word in my heart, that I might not sin against you."],["Proverbs 4:23","Keep your heart with all diligence, for out of it is the wellspring of life."]];
+const ARMOR=[["🛡️ Belt of truth","Be honest today with God and with each other. Nothing hidden.","Ephesians 6:14"],["❤️ Breastplate of righteousness","Guard your heart. Choose what is right, even in small things.","Ephesians 6:14"],["👟 Shoes of peace","Walk away from trouble and toward peace.","Ephesians 6:15"],["🛡️ Shield of faith","When doubts and temptations fly at you, hold up trust in God.","Ephesians 6:16"],["⛑️ Helmet of salvation","Guard your mind. You belong to God, and that is settled.","Ephesians 6:17"],["⚔️ Sword of the Spirit","Use the Word. Say a verse out loud when you are tempted.","Ephesians 6:17"],["🙏 Prayer","Pray at all times, for yourself and for each other.","Ephesians 6:18"]];
+function whyItem(){return items.find(i=>i.type==="why"&&i.author===me);}
+function whyDlg(){const r=whyItem();openDlg(`<h3>❤️ Why I am fighting</h3><p>Write your reason in your own words: who you want to be, who you are doing this for. You will see it when things get hard. Only you see this.</p><textarea id="whyt" rows="5" placeholder="Example: I want a clean heart and to honor God, and I want to be someone Summer can trust.">${esc((r&&r.text)||"")}</textarea><div class="row"><button class="btn" data-act="whysave">Save</button><button class="btn ghost" data-act="close">Cancel</button></div>`);}
+function whySave(){const t=($("whyt").value||"").trim(),r=whyItem();save({...(r||{}),type:"why",text:t,priv:me,author:me,created:(r&&r.created)||Date.now()},true);closeDlg();toast("Saved ❤️");}
+function strongBest(){const m=strongLog(),k=Object.keys(m).sort();let best=0,cur=0,prev=null;k.forEach(d=>{if(m[d]!=="strong"){cur=0;prev=d;return;}const pd=prev&&new Date(prev+"T12:00:00");const ok=prev&&m[prev]==="strong"&&Math.round((new Date(d+"T12:00:00")-pd)/864e5)===1;cur=ok?cur+1:1;prev=d;if(cur>best)best=cur;});return best;}
+const BADGES=[3,7,30,90];
+function badgeRow(){const b=Math.max(strongBest(),strongStreak());return `<div class="meta" style="color:#fff;opacity:.95;margin-top:8px">🏅 ${BADGES.map(n=>b>=n?`<b>${n}</b>`:`<span style="opacity:.55">${n}</span>`).join(" · ")} days${b?" · Best: "+b:""}</div>`;}
+function weekKey(){const d=new Date();d.setDate(d.getDate()-((d.getDay()+6)%7));return ymd(d);}
+function weeklyDone(){const w=weekKey();return items.some(i=>i.type==="weekly"&&i.author===me&&i.wk===w);}
+function weeklyCard(){
+  if(!STRONGP.includes(me)||weeklyDone())return "";
+  return `<div class="card gentle"><b>📝 Weekly check-in</b><div class="meta">Three quick questions. Private unless you choose to share with ${esc(STRONGP.find(x=>x!==me))}.</div><div class="row"><button class="btn small" data-act="weeklydlg">Start</button></div></div>`;
+}
+function weeklyDlg(){
+  const pt=STRONGP.find(x=>x!==me);
+  openDlg(`<h3>📝 Weekly check-in</h3><label>How was your week?</label><select id="wk1"><option>Good week</option><option>Mixed week</option><option>Hard week</option></select><label>Where were you weakest?</label><textarea id="wk2" rows="2"></textarea><label>A win this week</label><textarea id="wk3" rows="2"></textarea><label style="font-weight:400"><input type="checkbox" id="wk4"> Share this with ${esc(pt)}</label><div class="row"><button class="btn" data-act="weeklysave">Save</button><button class="btn ghost" data-act="close">Cancel</button></div>`);
+}
+function weeklySave(){
+  const pt=STRONGP.find(x=>x!==me),sh=$("wk4").checked;
+  const it={type:"weekly",week:$("wk1").value,weak:($("wk2").value||"").trim(),win:($("wk3").value||"").trim(),wk:weekKey(),author:me,created:Date.now()};
+  if(sh)it.vis=[me,pt];else it.priv=me;
+  save(it,true);if(sh)sendPing([pt],"shared a weekly check-in with you","activity");closeDlg();toast(sh?"Shared 💛":"Saved 🔒");
+}
+function memVerse(){const w=Math.floor(Date.now()/6048e5);return MEMV[w%MEMV.length];}
+function memCard(){
+  if(!STRONGP.includes(me))return "";
+  const v=memVerse();
+  return `<div class="card"><b>🧠 Memorize this week</b><div style="margin:6px 0"><b>${esc(v[0])}</b><div>${esc(v[1])}</div></div><div class="row"><button class="btn small" data-act="memtest">Test me</button></div></div>`;
+}
+function memTest(){
+  const v=memVerse(),w=v[1].split(" ");
+  const bl=w.map((x,i)=>i%3===1?"_____":x).join(" ");
+  openDlg(`<h3>🧠 ${esc(v[0])}</h3><p style="font-size:20px">${esc(bl)}</p><div id="mans" style="display:none" class="card"><b>${esc(v[1])}</b></div><div class="row"><button class="btn" data-act="memshow">Show answer</button><button class="btn ghost" data-act="close">Close</button></div>`);
+}
+function armorCard(){const a=ARMOR[new Date().getDay()%7];return `<div class="card"><b>${a[0]}</b><div>${esc(a[1])}</div><div class="meta">${esc(a[2])}</div></div>`;}
+
+function applyTheme(){
+  const th=localStorage.getItem("fh_theme")||"auto",r=document.documentElement;
+  if(th==="auto")delete r.dataset.theme;
+  else if(th==="night"){const h=new Date().getHours();r.dataset.theme=(h>=20||h<6)?"dark":"light";}
+  else r.dataset.theme=th;
+  const sc=localStorage.getItem("fh_scene")||"";if(sc)r.dataset.scene=sc;else delete r.dataset.scene;
+}
+function myReadStreak(){
+  const set=new Set(((metas.reads||{})[me])||[]),d=new Date();
+  if(!set.has(ymd(d)))d.setDate(d.getDate()-1);
+  let n=0;while(set.has(ymd(d))){n++;d.setDate(d.getDate()-1);}return n;
+}
+function headerStat(){
+  const el=$("hstat");if(!el)return;
+  if(!me){el.innerHTML="";return;}
+  const n=myReadStreak(),m=db?missedList().length:0;
+  el.innerHTML=`<span class="av">${esc((metas.avatars||{})[me]||"🙂")}</span>${n?`<span title="Reading streak">🔥${n}</span>`:""}${m?`<button class="hbell" data-act="nav" data-g="home" aria-label="Missed">🔔 ${m}</button>`:""}`;
+}
+function prayDayCard(){
+  const pd=metas.praydays||{},t=ymd(new Date()),who=PEOPLE.filter(p=>(pd[p]||[]).includes(t)),cnt={};
+  PEOPLE.forEach(p=>(pd[p]||[]).forEach(d=>{cnt[d]=(cnt[d]||0)+1;}));
+  const dd=new Date();if((cnt[ymd(dd)]||0)<2)dd.setDate(dd.getDate()-1);
+  let n=0;while((cnt[ymd(dd)]||0)>=2){n++;dd.setDate(dd.getDate()-1);}
+  const done=who.includes(me);
+  return `<div class="card"><b>🤝 Pray together today</b><div class="meta">${PEOPLE.map(p=>(who.includes(p)?"✅ ":"⭕ ")+esc(p)).join("&nbsp;&nbsp;")}</div>${n?`<div class="meta">🔥 ${n} day${n>1?"s":""} in a row with two or more of us</div>`:""}<div class="row"><button class="btn ${done?"ghost":""}" data-act="prayday" ${done?"disabled":""}>${done?"✅ I prayed":"🙏 I prayed"}</button></div></div>`;
+}
+function sotwCard(){
+  const v=metas.sotw;
+  if(v&&v.wk===weekKey())return `<div class="card"><b>📖 Verse of the week</b><div style="margin:6px 0"><b>${esc(v.ref)}</b><div>${esc(v.text)}</div></div><div class="meta">Picked by ${esc(v.by)}. Read it and talk about it this week.</div><div class="row"><button class="btn small ghost" data-act="sotwdlg">Change</button></div></div>`;
+  return `<div class="card"><b>📖 Verse of the week</b><div class="meta">Pick one verse for all of us to read and talk about this week.</div><div class="row"><button class="btn small" data-act="sotwdlg">Pick a verse</button></div></div>`;
+}
+function sotwDlg(){
+  openDlg(`<h3>📖 Pick the verse of the week</h3><label>Reference (example: Psalm 23:1-3)</label><input id="sotwr" placeholder="Book chapter:verse"><div class="row">${["Psalm 46:10","Joshua 1:9","Philippians 4:13","Isaiah 41:10"].map(r=>`<button class="chip" data-act="sotwfill" data-r="${r}">${r}</button>`).join("")}</div><div class="row"><button class="btn" data-act="sotwsave">Save</button><button class="btn ghost" data-act="close">Cancel</button></div>`);
+}
+async function sotwSave(){
+  const ref=($("sotwr").value||"").trim();if(!ref)return;
+  try{const r=await fetch("https://bible-api.com/"+encodeURIComponent(ref)+"?translation=web");const j=await r.json();if(!j.text)throw 0;
+    const nm=j.reference||ref;setMeta("sotw",{ref:nm,text:j.text.trim().replace(/\s*\n\s*/g," "),by:me,wk:weekKey()});
+    closeDlg();toast("Verse set 📖");sendPing(PEOPLE.filter(p=>p!==me),"picked the verse of the week: "+nm,"activity");
+  }catch(e){toast("Could not find that verse");}
+}
+function weekCard(){
+  const days=[];for(let i=0;i<7;i++){const d=new Date();d.setDate(d.getDate()-i);days.push(ymd(d));}
+  const rd=metas.reads||{},pd=metas.praydays||{};
+  const rows=PEOPLE.map(p=>`<div>${esc(p)}: read ${(rd[p]||[]).filter(x=>days.includes(x)).length} days, prayed together ${(pd[p]||[]).filter(x=>days.includes(x)).length} days</div>`).join("");
+  let mine="";if(STRONGP.includes(me)){const m=strongLog();mine=`<div class="meta" style="margin-top:6px">💪 Your strong days this week: ${days.filter(x=>m[x]==="strong").length} of 7 (only you see this)</div>`;}
+  return `<div class="card"><b>📅 Our week</b><div style="margin-top:6px">${rows}</div>${mine}</div>`;
+}
+function askCards(){
+  const done=repliedSet();
+  return pingsAll.filter(x=>x.kind==="askpray"&&x.from!==me&&(x.to||[]).includes(me)&&Date.now()-x.ts<3*864e5&&!done.includes(x.id)).slice(0,2).map(x=>`<div class="card gentle"><b>🤍 ${esc(x.from)} wants to pray for you</b><div class="meta">How can they pray for you?</div><div class="row"><button class="btn small" data-act="tellpray" data-id="${esc(x.id)}" data-p="${esc(x.from)}">Tell ${esc(x.from)}</button></div></div>`).join("");
+}
+function askPrayDlg(){
+  const o=PEOPLE.filter(p=>p!==me);
+  openDlg(`<h3>🤍 How can I pray for you?</h3><p>Pick who to ask. They get a notification and can answer in one tap.</p><div class="row">${o.map(x=>`<button class="btn" data-act="askprayto" data-p="${esc(x)}">${esc(x)}</button>`).join("")}</div><div class="row"><button class="btn ghost" data-act="close">Cancel</button></div>`);
+}
+function tellPrayDlg(id,p){
+  openDlg(`<h3>🙏 Tell ${esc(p)}</h3><label>What would you like prayer for?</label><textarea id="tpt" rows="3"></textarea><div class="row"><button class="btn" data-act="tellprayend" data-id="${esc(id)}" data-p="${esc(p)}">Send</button><button class="btn ghost" data-act="close">Cancel</button></div>`);
+}
+function answerDlg(id){
+  openDlg(`<h3>🎉 Prayer answered!</h3><label>How did God answer? (optional)</label><textarea id="ans" rows="3"></textarea><div class="row"><button class="btn" data-act="answersave" data-id="${esc(id)}">Save</button><button class="btn ghost" data-act="close">Cancel</button></div>`);
+}
+let crec=null,cch=[],ctimer=null;
+async function chatRec(){
+  if(crec&&crec.state==="recording"){crec.stop();return;}
+  try{
+    const st=await navigator.mediaDevices.getUserMedia({audio:true});
+    const mime=MediaRecorder.isTypeSupported("audio/webm;codecs=opus")?"audio/webm;codecs=opus":"";
+    crec=new MediaRecorder(st,mime?{mimeType:mime,audioBitsPerSecond:24000}:{audioBitsPerSecond:24000});cch=[];
+    crec.ondataavailable=e=>{if(e.data.size)cch.push(e.data);};
+    crec.onstop=()=>{clearTimeout(ctimer);st.getTracks().forEach(t=>t.stop());const b=new Blob(cch,{type:crec.mimeType||"audio/webm"});
+      if(b.size>700000){toast("Too long. Try a shorter one.");render();return;}
+      const fr=new FileReader();fr.onload=()=>{saveNew("msg",{text:"🎙️ Voice message",audio:fr.result,vis:chatTo==="all"?null:[me,chatTo]});render();};fr.readAsDataURL(b);};
+    crec.start();ctimer=setTimeout(()=>{if(crec&&crec.state==="recording")crec.stop();},45000);render();
+  }catch(e){toast("Microphone is blocked. Allow it in Chrome settings.");}
+}
+const b2s=b=>btoa(String.fromCharCode(...new Uint8Array(b)));
+const s2b=t=>Uint8Array.from(atob(t),c=>c.charCodeAt(0));
+function bioShow(){
+  if(localStorage.getItem("fh_bio")!=="1"||!window.PublicKeyCredential||$("biolock"))return;
+  const o=document.createElement("div");o.id="biolock";
+  o.innerHTML=`<div class="big">🔐</div><h2>Faith Hub is locked</h2><div class="meta" id="biomsg">Use your fingerprint, face or phone screen lock.</div><button class="btn" id="biobtn">Unlock</button>`;
+  document.body.appendChild(o);$("biobtn").onclick=bioAuth;bioAuth();
+}
+async function bioAuth(){
+  try{
+    await navigator.credentials.get({publicKey:{challenge:crypto.getRandomValues(new Uint8Array(32)),allowCredentials:[{type:"public-key",id:s2b(localStorage.getItem("fh_bioid")),transports:["internal"]}],userVerification:"required",timeout:60000}});
+    const o=$("biolock");if(o)o.remove();
+  }catch(e){const m=$("biomsg");if(m)m.textContent="Not unlocked. Tap Unlock to try again.";}
+}
+async function bioEnable(){
+  try{
+    const c=await navigator.credentials.create({publicKey:{challenge:crypto.getRandomValues(new Uint8Array(32)),rp:{name:"Faith Hub"},user:{id:crypto.getRandomValues(new Uint8Array(16)),name:me||"user",displayName:me||"user"},pubKeyCredParams:[{type:"public-key",alg:-7},{type:"public-key",alg:-257}],authenticatorSelection:{authenticatorAttachment:"platform",userVerification:"required",residentKey:"discouraged"},timeout:60000}});
+    localStorage.setItem("fh_bioid",b2s(c.rawId));localStorage.setItem("fh_bio","1");toast("Lock is on 🔐");render();
+  }catch(e){toast("Could not turn on. Set a screen lock on your phone first.");}
+}
+let hiddenAt=0;
+document.addEventListener("visibilitychange",()=>{if(document.hidden)hiddenAt=Date.now();else if(hiddenAt&&Date.now()-hiddenAt>120000)bioShow();});
+function bioCard(){
+  if(!window.PublicKeyCredential)return "";
+  const on=localStorage.getItem("fh_bio")==="1";
+  return `<div class="card"><h3>🔐 Fingerprint lock</h3><div class="meta">Locks the app on this phone and asks for your fingerprint, face or screen lock when you open it. ${on?"It is on.":""}</div><div class="row">${on?`<button class="btn small ghost" data-act="bioff">Turn off</button>`:`<button class="btn small" data-act="bioon">Turn on</button>`}</div></div>`;
+}
+let goDone=false;
+setInterval(()=>{
+  if(goDone||!me)return;goDone=true;
+  const g=new URLSearchParams(location.search).get("go");if(!g)return;
+  try{history.replaceState(null,"",location.pathname);}catch(e){}
+  grp="home";homeTab="us";render();
+  if(g==="pause"&&STRONGP.includes(me))setTimeout(strongSos,300);
+  else if(g==="pray")setTimeout(()=>{const b=document.querySelector("[data-act=wiz][data-t=prayer]");if(b)b.click();},300);
+},800);
+let urgeTimer=null;
+function urgeStart(){
+  clearInterval(urgeTimer);const end=Date.now()+600000;
+  const tick=()=>{const el=$("urge");if(!el){clearInterval(urgeTimer);return;}const r=Math.max(0,end-Date.now()),m=Math.floor(r/6e4),sc=String(Math.floor(r/1e3)%60).padStart(2,"0");
+    if(r<=0){clearInterval(urgeTimer);el.innerHTML="🎉 You rode it out. The urge has passed or is much weaker now.";confetti();}else el.innerHTML=`⏱ <b>${m}:${sc}</b> Most urges fade in about 10 minutes. Stay with this screen.`;};
+  tick();urgeTimer=setInterval(tick,1000);
+}
+function strongLog(){const m={};items.filter(i=>i.type==="strong"&&i.author===me&&i.day).forEach(i=>{m[i.day]=i.status==="I fell"?"fell":"strong";});return m;}
+function strongStreak(){
+  const m=strongLog(),d=new Date();
+  if(!m[ymd(d)])d.setDate(d.getDate()-1);
+  let n=0;while(m[ymd(d)]==="strong"){n++;d.setDate(d.getDate()-1);}
+  return n;
+}
+function strongCard(){
+  if(!STRONGP.includes(me))return "";
+  const m=strongLog(),t=m[ymd(new Date())],n=strongStreak();
+  const top=n?`<div class="streak">${n} day${n===1?"":"s"} strong 💪</div>`:`<div class="streak">Fresh start 🌅</div>`;
+  const row=t==="strong"?`<p>Logged today. Well done. 🙌</p>`:t==="fell"?`<p>Grace is new this morning. Tomorrow is a fresh start. 💛</p>`:`<p>How did today go?</p><button class="sbtn" data-act="strongok">Stayed strong 💪</button><button class="sbtn o" data-act="strongfell">I fell</button>`;
+  return `<div class="stay"><h3>💪 Stay strong</h3>${top}${row}<div style="margin-top:10px"><button class="sbtn" data-act="strongsos">I am struggling right now</button></div>${badgeRow()}<div class="meta" style="color:#fff;opacity:.85;margin-top:8px"><span data-act="whydlg" style="color:#fff;text-decoration:underline;cursor:pointer">❤️ My reason</span> · Only you see your streak. Nobody is told unless you choose to tell them.</div></div>`;
+}
+function strongLogSave(status){
+  const day=ymd(new Date());
+  items.filter(i=>i.type==="strong"&&i.author===me&&i.day===day).forEach(i=>{if(db&&i.id)db.collection("items").doc(i.id).delete().catch(()=>{});});
+  save({type:"strong",status,day,priv:me,author:me,created:Date.now()},true);
+}
+function strongSos(){
+  const v=TEMPT[Math.floor(Math.random()*TEMPT.length)],o=STRONGP.filter(p=>p!==me);
+  openDlg(`<h3>🛑 Pause. You are not alone.</h3>${(()=>{const w=whyItem();return w&&w.text?`<div class="card gentle"><b>❤️ Why I am fighting</b><div>${nl(w.text)}</div></div>`:`<button class="btn small ghost" data-act="whydlg">❤️ Write why I am fighting</button>`;})()}<div id="urge" class="card gentle"></div><div class="breath"></div><p style="text-align:center;margin:0">Breathe in slowly... and out slowly.</p>
+  <div class="card"><b>${esc(v[0])}</b><div>${esc(v[1])}</div></div>
+  ${(()=>{const r=replaceItem();const l=r&&r.text?r.text.split(/\n+/).filter(Boolean):[];return l.length?`<div class="card"><b>🌿 Your replace it list</b>${l.map(x=>`<div>• ${esc(x)}</div>`).join("")}</div>`:`<p><b>Do one small thing right now:</b> put your phone down or leave the room, drink some water, step outside, or pray out loud.</p><button class="btn small ghost" data-act="replacedlg">+ Make my own replace it list</button>`;})()}<div class="row"><button class="btn small ghost" data-act="goto" data-g="together" data-s="song">🎵 Our playlist</button></div>
+  <p style="margin-bottom:4px"><b>Tell someone (they get a notification):</b></p>
+  <div class="row">${o.map(x=>`<button class="btn" data-act="strongtell" data-p="${esc(x)}" data-k="sos">👉 ${esc(x)}</button>`).join("")}</div>
+  <div class="row"><button class="btn ghost" data-act="strongok">I made it through 💪</button><button class="btn ghost" data-act="close">Close</button></div>`);
+  urgeStart();
+}
+function strongFell(){
+  const v=GRACE[Math.floor(Math.random()*GRACE.length)],o=STRONGP.filter(p=>p!==me);
+  strongLogSave("I fell");render();
+  openDlg(`<h3>💛 You are still loved</h3><p>Falling is not the end. Be honest with God, get back up, and keep going.</p>
+  <div class="card"><b>${esc(v[0])}</b><div>${esc(v[1])}</div></div>
+  <p><b>Want someone to pray for you?</b> They only get "needs grace and prayer today", nothing more.</p>
+  <div class="row">${o.map(x=>`<button class="btn" data-act="strongtell" data-p="${esc(x)}" data-k="fell">🙏 ${esc(x)}</button>`).join("")}</div>
+  <div class="row"><button class="btn ghost" data-act="close">Not now</button></div>`);
+}
 function pokeCard(){
   const o=PEOPLE.filter(p=>p!==me);
   return `<div class="poke"><h3>👉 Poke</h3><p>Need to talk? Tap a name. They get a notification.</p><div>${o.map(p=>`<button class="pokebtn" data-act="poke" data-p="${esc(p)}">👉 ${esc(p)}</button>`).join("")}</div><button class="btn small ghost" style="color:#fff;border-color:#ffffffaa;margin-top:10px" data-act="support">Add a message or get help</button></div>`;
@@ -1102,17 +1433,20 @@ function pokeFly(){
 function ourHome(){
   const today=ymd(new Date()),readToday=(((metas.reads||{})[me])||[]).includes(today);
   const pushOn="Notification" in window&&Notification.permission==="granted"&&localStorage.getItem("fh_push")==="1";
-  let h=pokeCard();
-  if(!pushOn&&db&&"Notification" in window&&Notification.permission!=="denied")h+=`<div class="card"><b>🔔 Get your verse every day</b><div class="meta">Turn on notifications so it arrives on your phone.</div><div class="row"><button class="btn" data-act="notif">Turn on notifications</button></div></div>`;
-  if(Date.now()-Number(localStorage.getItem("fh_lastbackup")||0)>30*864e5)h+=`<div class="card"><b>💾 Monthly backup</b><div class="meta">Save a copy of everything you can see. It takes a second.</div><div class="row"><button class="btn small" data-act="backup">Download backup</button><button class="btn small ghost" data-act="backuplater">Remind me later</button></div></div>`;
-  h+=dailyCard();
+  const hr=new Date().getHours(),gr=hr<12?"Good morning":hr<18?"Good afternoon":"Good evening";
+  let h=`<div class="hello">${gr}, ${esc(me||"friend")} 🌤️</div>`+pokesCard()+askCards()+missedCard()+pokeCard()+strongCard()+weeklyCard();
+  if(!pushOn&&db&&"Notification" in window&&Notification.permission!=="denied")h+=`<div class="card gentle"><b>🔔 Turn on notifications</b><div class="meta">So pokes and your verse reach this phone.</div><div class="row"><button class="btn" data-act="notif">Turn on</button></div></div>`;
   h+=`<div class="trio"><button class="bigact" data-act="read" ${readToday?"disabled":""}><span>${readToday?"✅":"📖"}</span>${readToday?"Read today":"I read"}</button><button class="bigact" data-act="wiz" data-t="prayer"><span>🙏</span>Pray</button><button class="bigact" data-act="goto" data-g="together" data-s="chat"><span>💬</span>Message</button></div>`;
-  h+=readingCard()+skyLine();
-  if(simple)return h;
-  return h+`<details class="more"><summary>More for today</summary>${homeMore()}</details>`;
+  h+=`<div class="row" style="justify-content:center"><button class="chip" data-act="goodnews">🎉 Share good news</button><button class="chip" data-act="goodnight">🌙 Goodnight</button><button class="chip" data-act="askpraydlg">🤍 Ask how to pray</button><button class="chip" data-act="goto" data-g="faith" data-s="topics">🔎 Verses for...</button></div>`;
+  h+=dailyCard()+prayDayCard();
+  let more=sotwCard()+togetherCard()+answeredCard()+armorCard()+memCard()+readingCard()+skyLine();
+  if(Date.now()-Number(localStorage.getItem("fh_lastbackup")||0)>30*864e5)more+=`<div class="card"><b>💾 Monthly backup</b><div class="meta">Save a copy of everything you can see. It takes a second.</div><div class="row"><button class="btn small" data-act="backup">Download backup</button><button class="btn small ghost" data-act="backuplater">Remind me later</button></div></div>`;
+  more+=weekCard()+`<div class="row"><button class="chip" data-act="add" data-t="event" data-pre='{"repeat":"Every year","title":"Birthday: "}'>🎂 Add a birthday</button></div>`+healthCard();
+  if(!simple)more+=homeMore();
+  return h+`<details class="more"><summary>More for today</summary>${more}</details>`;
 }
 function journalHome(){
-  const l=items.filter(i=>i.author===me&&i.type!=="msg"&&(i.type==="journal"||onlyMe(i))).sort((a,b)=>(b.created||0)-(a.created||0));
+  const l=items.filter(i=>i.author===me&&!["msg","strong","replace","why"].includes(i.type)&&(i.type==="journal"||onlyMe(i))).sort((a,b)=>(b.created||0)-(a.created||0));
   return `<div class="card"><b>🔒 Only you can see this page</b><div class="meta">Check ins, questions and prayers start out private. You can share any entry later with Edit.</div></div>
   <button class="btn add" data-act="add" data-t="journal">+ Write in my journal</button>
   <div class="row"><button class="btn small ghost" data-act="wiz" data-t="checkin">💛 Check in</button><button class="btn small ghost" data-act="wiz" data-t="prayer">🙏 Private prayer</button><button class="btn small ghost" data-act="wiz" data-t="question">❓ A question</button></div>
@@ -1133,7 +1467,7 @@ function pleasePrayDlg(){
 function ppSend(){
   const t=($("ppt").value||"").trim(),to=[...document.querySelectorAll(".ppto")].filter(x=>x.checked).map(x=>x.value);
   if(!t||!to.length){toast("Write a request and pick someone");return;}
-  save({type:"prayer",text:t,for:"Prayer request",cat:"Friends",author:me,created:Date.now(),vis:[me,...to]});
+  save({type:"prayer",text:t,for:"Prayer request",cat:"Friends",author:me,created:Date.now(),vis:[me,...to]},true);
   sendPing(to,t,"prayer");closeDlg();toast("Sent 🙏");
 }
 function supportDlg(){
@@ -1172,7 +1506,7 @@ function planView(){
 function albumView(){
   albumList=items.filter(i=>i.photo&&visible(i)).sort((a,b)=>(b.created||0)-(a.created||0));
   return `<h2>📸 Photo album</h2><button class="btn add" data-act="add" data-t="photo">+ Add a photo</button>
-  <div class="agrid">${albumList.map(i=>`<img src="${i.photo}" alt="${esc(i.text||i.title||"photo")}" data-act="bigphoto" data-id="${i.id}">`).join("")}</div>${albumList.length?"":`<div class="empty"><div class="big">📸</div><p>No photos yet. Add one from a hike, a church day or a good meal.</p></div>`}`;
+  <div class="agrid">${albumList.map(i=>`<figure><img src="${i.photo}" alt="${esc(i.text||i.title||"photo")}" data-act="bigphoto" data-id="${i.id}">${(i.text||i.title)?`<figcaption>${esc(i.text||i.title)}</figcaption>`:""}</figure>`).join("")}</div>${albumList.length?"":`<div class="empty"><div class="big">📸</div><p>No photos yet. Add one from a hike, a church day or a good meal.</p></div>`}`;
 }
 function photoDlg(k){
   const n=albumList.length;if(!n)return;k=((k%n)+n)%n;const it=albumList[k];
@@ -1281,7 +1615,7 @@ function typeLoc(it){
 function runSearch(v){
   v=lc(v).trim();const box=$("gres");if(!box)return;
   if(v.length<2){box.innerHTML="";return;}
-  const r=items.filter(i=>visible(i)&&lc(JSON.stringify({...i,photo:"",audio:"",audience:"",reactions:"",type:""})).includes(v)).sort((a,b)=>(b.created||0)-(a.created||0)).slice(0,25);
+  const r=items.filter(i=>visible(i)&&!["strong","replace","why"].includes(i.type)&&lc(JSON.stringify({...i,photo:"",audio:"",audience:"",reactions:"",type:""})).includes(v)).sort((a,b)=>(b.created||0)-(a.created||0)).slice(0,25);
   box.innerHTML=r.length?r.map(i=>{const S=SECTIONS[i.type]||{icon:"",label:""};return `<div class="card" style="padding:10px 14px"><div class="meta">${S.icon} ${esc(S.label)} · ${esc(i.author)}</div><div>${esc(String(i.title||i.text||i.ref||i.place||i.for||"").slice(0,90))}</div><div class="row"><button class="btn small ghost" data-act="gopen" data-id="${i.id}">Open</button></div></div>`;}).join(""):`<p class="empty">Nothing found.</p>`;
 }
 
@@ -1328,7 +1662,7 @@ document.addEventListener("click",async e=>{
     patch(d.id,{["votes."+d.k]:FV.arrayUnion(me),["votes."+o]:FV.arrayRemove(me)});
   }
   else if(a==="todo"&&it)save({...it,done:!it.done});
-  else if(a==="answered"&&it){if(!it.answered)confetti();save({...it,answered:!it.answered});}
+  else if(a==="answered"&&it){if(!it.answered)answerDlg(it.id);else save({...it,answered:false,answer:""});}
   else if(a==="goal"&&it)save({...it,progress:d.v});
   else if(a==="sharecard"&&it)shareCard(it.ref||"",it.text);
   else if(a==="speak"&&it)speak(it.text);
@@ -1420,7 +1754,8 @@ document.addEventListener("click",async e=>{
   else if(a==="avatar"){setMeta("avatars",{[me||"Someone"]:d.a});}
   else if(a==="simple"){simple=!simple;localStorage.setItem("fh_simple",simple?"1":"0");if(simple&&!localStorage.getItem("fh_fs"))document.body.style.fontSize="19px";else if(!simple&&!localStorage.getItem("fh_fs"))document.body.style.fontSize="";grp="home";render();}
   else if(a==="calm"){const on=localStorage.getItem("fh_calm")!=="1";localStorage.setItem("fh_calm",on?"1":"0");if(on)document.documentElement.dataset.calm="1";else delete document.documentElement.dataset.calm;render();}
-  else if(a==="theme"){localStorage.setItem("fh_theme",d.t);if(d.t==="auto")delete document.documentElement.dataset.theme;else document.documentElement.dataset.theme=d.t;render();}
+  else if(a==="theme"){localStorage.setItem("fh_theme",d.t);applyTheme();render();}
+  else if(a==="scene"){localStorage.setItem("fh_scene",d.s);localStorage.removeItem("fh_acc");document.documentElement.style.removeProperty("--acc");applyTheme();if(me)setMeta("theme",{[me]:d.s});render();}
   else if(a==="accent"){localStorage.setItem("fh_acc",d.c);document.documentElement.style.setProperty("--acc",d.c);}
   else if(a==="fs"){const cur=parseInt(getComputedStyle(document.body).fontSize)||17;const n=Math.max(14,Math.min(26,cur+Number(d.d)*2));document.body.style.fontSize=n+"px";localStorage.setItem("fh_fs",n);}
   else if(a==="notif")enablePush();
@@ -1438,11 +1773,41 @@ document.addEventListener("click",async e=>{
   else if(a==="lookup")lookup(false);
   else if(a==="lookupw"){wizCapture();lookup(true);}
   else if(a==="dictate")dictate(d.n);
+  else if(a==="reply"){const dn=repliedSet();dn.push(d.id);localStorage.setItem("fh_replied",JSON.stringify(dn.slice(-40)));sendPing([d.p],d.t,"reply").then(()=>toast("Sent 💛"));render();}
+  else if(a==="prayday"){if(db){setMeta("praydays",{[me]:FV.arrayUnion(ymd(new Date()))});confetti();toast("Thank you for praying 🙏");}else toast("Sharing is not set up yet");}
+  else if(a==="sotwdlg")sotwDlg();
+  else if(a==="sotwfill"){$("sotwr").value=d.r;}
+  else if(a==="sotwsave")sotwSave();
+  else if(a==="askpraydlg")askPrayDlg();
+  else if(a==="askprayto"){sendPing([d.p],"","askpray").then(()=>{closeDlg();toast("Asked "+d.p+" 🤍");});}
+  else if(a==="tellpray")tellPrayDlg(d.id,d.p);
+  else if(a==="tellprayend"){const t=($("tpt").value||"").trim();if(!t){toast("Write something first");return;}const dn=repliedSet();dn.push(d.id);localStorage.setItem("fh_replied",JSON.stringify(dn.slice(-40)));save({type:"prayer",text:t,for:"Prayer request",cat:"Friends",author:me,created:Date.now(),vis:[me,d.p]},true);sendPing([d.p],t,"prayer");closeDlg();toast("Sent 🙏");render();}
+  else if(a==="answersave"){const it2=items.find(x=>x.id===d.id);if(it2){save({...it2,answered:true,answer:($("ans").value||"").trim()});confetti();}closeDlg();}
+  else if(a==="chatrec")chatRec();
+  else if(a==="bioon")bioEnable();
+  else if(a==="bioff"){localStorage.removeItem("fh_bio");toast("Lock is off");render();}
+  else if(a==="whydlg")whyDlg();
+  else if(a==="whysave")whySave();
+  else if(a==="weeklydlg")weeklyDlg();
+  else if(a==="weeklysave")weeklySave();
+  else if(a==="memtest")memTest();
+  else if(a==="memshow"){$("mans").style.display="block";}
+  else if(a==="goodnight"){const o=PEOPLE.filter(p=>p!==me);sendPing(o,"Goodnight. Praying for you tonight.","goodnight").then(()=>toast("Goodnight sent 🌙"));}
+  else if(a==="seenmissed"){localStorage.setItem("fh_seenmissed",String(Date.now()));render();}
+  else if(a==="goodnews")goodNewsDlg();
+  else if(a==="gnsend"){const t=($("gnt").value||"").trim(),to=[...document.querySelectorAll(".gnto")].filter(x=>x.checked).map(x=>x.value);if(!t||!to.length){toast("Write something and pick someone");return;}sendPing(to,t,"goodnews").then(()=>{closeDlg();confetti();toast("Sent 🎉");});}
+  else if(a==="replacedlg")replaceDlg();
+  else if(a==="replacesave")replaceSave();
+  else if(a==="strongsos")strongSos();
+  else if(a==="strongok"){const was=strongLog()[ymd(new Date())]==="strong",n=strongStreak()+(was?0:1);strongLogSave("Stayed strong");closeDlg();confetti();toast(!was&&BADGES.includes(n)?"🏅 "+n+" days strong!":"Great job. Keep going 💪");render();}
+  else if(a==="strongfell")strongFell();
+  else if(a==="strongtell"){sendPing([d.p],d.k==="fell"?"could use a prayer today":"wants to talk","support").then(()=>{closeDlg();toast(d.p+" has been notified 💛");});}
   else if(a==="close")closeDlg();
 });
 window.addEventListener("error",e=>{if(db&&errCount++<5)db.collection("errors").add({msg:String(e.message).slice(0,200),line:e.lineno||0,from:me||"?",ts:Date.now(),v:APP_VER}).catch(()=>{});});
 window.addEventListener("unhandledrejection",e=>{if(db&&errCount++<5)db.collection("errors").add({msg:String(e.reason&&e.reason.message||e.reason).slice(0,200),from:me||"?",ts:Date.now(),v:APP_VER}).catch(()=>{});});
 if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
+setTimeout(bioShow,0);
 start();
 </script>
 </body>

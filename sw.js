@@ -20,7 +20,7 @@ self.addEventListener("notificationclick", e => {
   }));
 });
 
-const CACHE = "faith-hub-v4-0";
+const CACHE = "faith-hub-v4-5";
 const CORE = ["./", "index.html", "today.html", "manifest.json", "manifest-today.json", "icon-192.png", "icon-512.png"];
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(CORE)).then(() => self.skipWaiting()));
