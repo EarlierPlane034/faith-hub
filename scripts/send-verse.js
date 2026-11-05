@@ -10,7 +10,7 @@ const DEFAULTS = {
   monthly: true, monthlyT: "09:00", seasonal: true, seasonalT: "09:00", tz: "America/Denver"
 };
 const TYPES = ["morning", "evening", "reading", "recap", "countdown", "followup", "monthly", "seasonal"];
-const WINDOW = 75; // minutes after the chosen time that a delayed run may still send
+const WINDOW = 540; // GitHub timers run late (sometimes 6+ hours), so a run up to 9 hours after the chosen time (same day) may still send; each type sends once per day
 
 function localTime(tz, d = new Date()) {
   let f;
