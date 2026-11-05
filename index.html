@@ -95,7 +95,7 @@ header{position:relative}
 .trio{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0}
 .bigact{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px 4px;font:600 16px system-ui,sans-serif;color:var(--ink);cursor:pointer}
 .bigact span{display:block;font-size:34px}
-.bigact[disabled]{opacity:.55}
+.bigact[disabled]{opacity:.85}
 .vcard{color:#fff;border:0;padding:22px 20px;border-radius:20px;text-shadow:0 1px 6px #0006}
 .vcard .meta{color:#ffffffcc}
 .vcard .verse{font-size:23px}
@@ -154,8 +154,10 @@ nav button.on{background:linear-gradient(135deg,var(--acc2),transparent)}
 body{font-size:18px;line-height:1.6}
 .hello{font-size:26px;font-weight:700;margin:6px 2px 4px;letter-spacing:-.3px}
 .card{border-radius:24px;padding:18px 20px}
-.card.gentle{background:linear-gradient(135deg,#fff7ea,#fff0e0);border:1px solid #f3dcc0}
-:root[data-theme=dark] .card.gentle{background:#332b24;border-color:#4a3c2e}
+.card.gentle{background:color-mix(in srgb,var(--acc) 13%,var(--card));border:1px solid color-mix(in srgb,var(--acc) 30%,var(--line));color:var(--ink)}
+.card.gentle b,.card.gentle h3{color:var(--ink)}
+.card.gentle .meta{color:var(--mute)}
+
 .card h3{margin:0 0 6px;font-size:21px}
 .btn{border-radius:16px;padding:13px 20px;font-size:17px;transition:transform .12s}
 .btn:active{transform:scale(.97)}
@@ -175,7 +177,10 @@ html[data-scene=forest]{--acc:#2f8f5b;--glow:rgba(60,170,110,.22);--acc2:#d8eddf
 html[data-scene=ocean]{--acc:#2f78b5;--glow:rgba(70,150,220,.24);--acc2:#d6e8f6}
 html[data-scene=lavender]{--acc:#8a4fb5;--glow:rgba(160,110,220,.24);--acc2:#eadcf6}
 html[data-scene=rose]{--acc:#c2476b;--glow:rgba(230,110,150,.24);--acc2:#f8dbe4}
-.btn{background:linear-gradient(135deg,var(--acc),color-mix(in srgb,var(--acc) 72%,#fff))}
+.btn{background:linear-gradient(135deg,var(--acc),color-mix(in srgb,var(--acc) 78%,#fff));color:#fff}
+.btn.ghost{background:transparent;color:var(--acc)}
+:root[data-theme=dark] .btn:not(.ghost){color:#2a1b0c}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]) .btn:not(.ghost){color:#2a1b0c}}
 .vcard{background-size:220% 220%;animation:vg 16s ease-in-out infinite}
 @keyframes vg{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
 :root[data-calm] .vcard{animation:none}
@@ -194,6 +199,68 @@ dialog[open]{animation:pop .22s ease}
 .agrid figcaption{position:absolute;left:0;right:0;bottom:0;padding:22px 10px 8px;color:#fff;font:600 13px system-ui,sans-serif;background:linear-gradient(transparent,#000a)}
 #biolock{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:24px}
 #biolock .big{font-size:64px}
+
+/* v4.6 gorgeous pass */
+:root{--bg:#fbf7f1;--card:#ffffff;--ink:#2a2530;--mute:#7b7384;--line:#efe5d8;--glow:rgba(224,140,70,.20)}
+:root[data-theme=dark]{--bg:#16131b;--card:#211d29;--ink:#f3eee7;--mute:#a9a1b3;--line:#342e3d;--acc2:#3a2f26;--glow:rgba(150,110,220,.16)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#16131b;--card:#211d29;--ink:#f3eee7;--mute:#a9a1b3;--line:#342e3d;--acc2:#3a2f26;--glow:rgba(150,110,220,.16)}}
+body{background:radial-gradient(800px 380px at 85% -100px,var(--glow,rgba(224,140,70,.2)),transparent),radial-gradient(700px 420px at 0% 110%,var(--glow,rgba(224,140,70,.14)),transparent),var(--bg);background-attachment:fixed;-webkit-font-smoothing:antialiased}
+::selection{background:var(--acc);color:#fff}
+header{padding-bottom:10px}
+h1{font-size:30px;letter-spacing:-.5px}
+h1,h2,h3,.verse,.hello{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif}
+.hello{font-size:30px;font-weight:700;letter-spacing:-.4px;margin:10px 2px 6px}
+.sub{color:var(--mute);font:15px system-ui,sans-serif}
+.card{border-radius:26px;box-shadow:0 1px 2px #0000000a,0 10px 30px #3a2a1a14}
+.card:not(.vcard):not(.gentle){background:var(--card);border:1px solid color-mix(in srgb,var(--line) 70%,transparent)}
+.card.vcard{border:0}
+:root[data-theme=dark] .card{box-shadow:0 1px 2px #0006,0 12px 32px #0004}
+nav{background:color-mix(in srgb,var(--card) 74%,transparent);-webkit-backdrop-filter:blur(18px) saturate(1.4);backdrop-filter:blur(18px) saturate(1.4);border:1px solid color-mix(in srgb,var(--line) 60%,transparent);box-shadow:0 12px 36px #0000002e}
+nav button{font-weight:600;letter-spacing:.2px}
+nav button.on{background:color-mix(in srgb,var(--acc) 18%,transparent);color:var(--acc)}
+nav button span{filter:drop-shadow(0 2px 3px #0002)}
+.chip{background:color-mix(in srgb,var(--card) 90%,transparent);border-color:color-mix(in srgb,var(--line) 80%,transparent);font-weight:600}
+.chip.on{background:linear-gradient(135deg,var(--acc),color-mix(in srgb,var(--acc) 70%,#fff));border-color:transparent;box-shadow:0 4px 12px color-mix(in srgb,var(--acc) 35%,transparent)}
+input,textarea,select{border-radius:14px;border:1.5px solid var(--line);background:color-mix(in srgb,var(--card) 70%,var(--bg));transition:border-color .15s,box-shadow .15s}
+input:focus,textarea:focus,select:focus{outline:0;border-color:var(--acc);box-shadow:0 0 0 4px color-mix(in srgb,var(--acc) 20%,transparent)}
+dialog{border-radius:28px;padding:22px;box-shadow:0 30px 80px #0006;border:1px solid color-mix(in srgb,var(--line) 70%,transparent)}
+dialog::backdrop{background:#0009;-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px)}
+.poke{background:linear-gradient(135deg,#ff8a5c,#ff4f81 55%,#8f5cff);border-radius:32px;padding:24px 18px;box-shadow:0 18px 44px #ff4f8144,inset 0 1px 0 #ffffff55}
+.poke h3{font-size:32px;text-shadow:0 2px 8px #0003}
+.pokebtn{font-size:21px;padding:16px 28px}
+.stay{background:radial-gradient(500px 220px at 90% 0%,#7fd6a455,transparent),linear-gradient(135deg,#2a8a5a,#2f6fa8 70%,#3d5db5);border-radius:30px;padding:22px 18px;box-shadow:0 16px 40px #2f6fa840,inset 0 1px 0 #ffffff44}
+.stay .streak{font-family:"Iowan Old Style",Georgia,serif;font-size:38px;letter-spacing:-.5px}
+.vcard{border-radius:30px;padding:28px 22px 22px;position:relative;overflow:hidden;box-shadow:0 18px 44px #1a2a5a40}
+.vcard::before{content:"\201C";position:absolute;top:-18px;left:12px;font:140px/1 Georgia,serif;color:#fff;opacity:.16;pointer-events:none}
+.vcard .verse{font-style:italic;font-size:25px;line-height:1.42;position:relative}
+.tile{border-radius:26px;font-weight:700}
+.tile span,.bigact span{filter:drop-shadow(0 4px 6px #0002)}
+.bigact{background:var(--card);border:1px solid color-mix(in srgb,var(--line) 70%,transparent);border-radius:28px;box-shadow:0 2px 4px #0000000a,0 14px 30px #3a2a1a12;font-weight:700}
+.more>summary{border-radius:20px;background:color-mix(in srgb,var(--card) 85%,transparent);color:var(--mute)}
+.who{background:color-mix(in srgb,var(--acc) 16%,transparent);color:var(--acc);font-weight:700}
+.bub{border-radius:20px;border-color:transparent;box-shadow:0 2px 8px #0000000d}
+.bub.me{background:linear-gradient(135deg,var(--acc),color-mix(in srgb,var(--acc) 70%,#fff));color:#fff}
+.bub.me small{color:#ffffffcc}
+.help{box-shadow:0 8px 20px color-mix(in srgb,var(--acc) 45%,transparent)}
+.hbtn{box-shadow:0 4px 14px #0000001f}
+.banner{border-radius:16px}
+.empty{font-style:italic}
+
+.tlist{display:flex;flex-direction:column;gap:10px;margin:12px 0}
+.trow{display:flex;align-items:center;gap:14px;text-align:left;width:100%;padding:12px 16px 12px 12px;border-radius:24px;background:var(--card);border:1px solid color-mix(in srgb,var(--line) 70%,transparent);color:var(--ink);cursor:pointer;box-shadow:0 2px 4px #0000000a,0 10px 24px #3a2a1a10;font-family:system-ui,sans-serif}
+.trow:active{transform:scale(.98)}
+.trow .ti{flex:0 0 54px;height:54px;border-radius:18px;display:grid;place-items:center;font-size:30px;background:color-mix(in srgb,var(--c) 18%,var(--card));box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--c) 30%,transparent)}
+.trow .tx{flex:1;min-width:0}
+.trow b{display:block;font-size:18px;font-family:"Iowan Old Style",Georgia,serif}
+.trow small{display:block;color:var(--mute);font-size:14px;line-height:1.35;margin-top:2px}
+.trow .ch{color:var(--mute);font-size:26px}
+
+details.fold{margin:14px 0;border-radius:28px;background:color-mix(in srgb,var(--card) 55%,transparent);border:1px solid color-mix(in srgb,var(--line) 80%,transparent);padding:0 8px 8px}
+details.fold>summary{list-style:none;cursor:pointer;padding:18px 14px;font:700 19px "Iowan Old Style",Georgia,serif;display:flex;align-items:center;justify-content:space-between}
+details.fold>summary::-webkit-details-marker{display:none}
+details.fold>summary::after{content:"›";font:400 28px system-ui;color:var(--mute);transition:transform .2s}
+details.fold[open]>summary::after{transform:rotate(90deg)}
+details.fold>.card{box-shadow:none;margin:8px 0}
 </style>
 </head>
 <body>
@@ -211,7 +278,7 @@ dialog[open]{animation:pop .22s ease}
 
 <script>
 /* ============ SETUP (Jayden only) ============ */
-const APP_VER="4.5";
+const APP_VER="4.7";
 const FIREBASE_CONFIG = {
   apiKey:"AIzaSyDhwY77B-wZL7f4077kEC_tn0K2AgJ6bIs",
   authDomain:"faith-hub-71ae2.firebaseapp.com",
@@ -258,6 +325,7 @@ const SECTIONS={
  replace:{label:"Replace list",icon:"🌿",title:"Replace it list",f:[["text","List","area"]]},
  why:{label:"My reason",icon:"❤️",title:"Why I am fighting",f:[["text","My reason","area"]]},
  weekly:{label:"Weekly check-in",icon:"📝",title:"Weekly check-in",f:[["week","How was the week?"],["weak","Where I was weakest","area"],["win","A win this week","area"]]},
+ camp:{label:"Camping",icon:"🏕️",title:"Camping log",f:[["place","Campsite or park"],["date","Date","date"],["text","Notes and memories","area"]]},
  voice:{label:"Voice",icon:"🎙️",title:"Voice note",f:[["title","Title"]]},
  journal:{label:"Journal",icon:"📓",title:"Journal entry",f:[["title","Title (optional)"],["text","What is on your heart","area"]]},
  song:{label:"Playlist",icon:"🎵",title:"Song",f:[["title","Song"],["artist","Artist"],["link","Link (optional)","url"],["text","Why it matters to you","area"]]},
@@ -268,11 +336,11 @@ const GROUPS={
  home:{label:"Home",icon:"🏠"},
  faith:{label:"Faith",icon:"📖",subs:["chapter","psalm","verse","prayer","sermon","thanks","plan","memo","topics","learn","question","wall","calm"]},
  together:{label:"Together",icon:"💬",subs:["chat","checkin","goal","event","letter","jar","memory","dream","album","voice","timeline","prayfor","fun","ideas","wins","song","todo"]},
- outdoor:{label:"Outdoors",icon:"🌲",subs:["outdoor","hike","stars","gear","vote","trip","sky"]},
+ outdoor:{label:"Outdoors",icon:"🌲",subs:["outdoor","hike","stars","gear","vote","trip","sky","camp"]},
  more:{label:"More",icon:"⚙️"}
 };
 const SIMPLE_SUBS={faith:["chapter","verse","prayer","thanks"],together:["chat","checkin","album"],outdoor:["outdoor"]};
-const LBL={wall:"🙏 Prayer wall",song:"🎵 Playlist",trip:"🧭 Trips",sky:"🌅 Sky",chapter:"📖 Reading",psalm:"🎶 Psalm",verse:"🕊️ Verses",prayer:"🙏 Prayer",sermon:"⛪ Sermons",thanks:"🌻 Thanks",plan:"📆 Plans",memo:"🧠 Memorize",topics:"🔎 Topics",learn:"📚 Learn",question:"❓ Questions",calm:"🌿 Calm",chat:"💬 Chat",checkin:"💛 Check in",goal:"🎯 Goals",event:"📅 Events",letter:"💌 Letters",jar:"🫙 Jar",memory:"🎞️ Memories",dream:"✨ Dreams",album:"📸 Album",voice:"🎙️ Voice",timeline:"🌱 Timeline",prayfor:"🤝 Pray together",fun:"🎲 Fun",ideas:"💡 Ideas",wins:"🏆 Wins",todo:"✅ To do",outdoor:"🌲 Devotionals",hike:"🥾 Hikes",stars:"🔭 Stars",gear:"🎒 Gear",vote:"🗳️ Next trip"};
+const LBL={wall:"🙏 Prayer wall",song:"🎵 Playlist",trip:"🧭 Trips",sky:"🌅 Sky",chapter:"📖 Reading",psalm:"🎶 Psalm",verse:"🕊️ Verses",prayer:"🙏 Prayer",sermon:"⛪ Sermons",thanks:"🌻 Thanks",plan:"📆 Plans",memo:"🧠 Memorize",topics:"🔎 Topics",learn:"📚 Learn",question:"❓ Questions",calm:"🌿 Calm",chat:"💬 Chat",checkin:"💛 Check in",goal:"🎯 Goals",event:"📅 Events",letter:"💌 Letters",jar:"🫙 Jar",memory:"🎞️ Memories",dream:"✨ Dreams",album:"📸 Album",voice:"🎙️ Voice",timeline:"🌱 Timeline",prayfor:"🤝 Pray together",fun:"🎲 Fun",ideas:"💡 Ideas",wins:"🏆 Wins",todo:"✅ To do",outdoor:"🌲 Devotionals",hike:"🥾 Hikes",stars:"🔭 Stars",gear:"🎒 Gear",vote:"🗳️ Next trip",camp:"🏕️ Camping"};
 const SUBDEFS={
  song:{type:"song",title:"Our playlist"},trip:{type:"trip",title:"Trip planner"},
  gear:{type:"todo",where:i=>i.list==="Gear",preset:{list:"Gear"},title:"Gear and packing"},
@@ -334,7 +402,7 @@ const HELP=[
  ["Something is not working","Close the app and open it again. Then tap More and Send feedback so Jayden can fix it."]
 ];
 const TOUR=[["Welcome 💛","This is a private space for the three of you to share faith, prayers and adventures."],["Add something","Tap a tab at the bottom, pick a tile, then the big Add button. We ask one question at a time."],["Stay close","Tap 💛 Thinking of you, send a message, or react to anything with ❤️ or 🙏. Want to talk? Tap 👉 Poke at the top of Home."],["Daily verse","Turn on notifications in More to get a verse every day. Tap the ? button any time for help."],["Who sees what","Sign in with your own PIN. Check ins, questions and prayers start out private, and Home has Our space and My journal. You choose who sees anything else."]];
-const NEWS=["💪 Stay strong: streak, badges, my reason, 10 minute pause (Jayden and Summer)","🤝 Pray together time, verse of the week and our week summary","🤍 Ask how to pray for someone, and one tap replies to pokes","🎙️ Voice messages in chat","🎨 Color themes, night mode and a prettier photo album","🔐 Optional fingerprint lock (More)","📬 Missed notifications card and delivery check"];
+const NEWS=["✨ A brand new, calmer look in light and dark","📖 Clear lists with a short description for every section","⚙️ More is tidier: tap a heading to open it","💪 Stay strong, 🤍 ask how to pray, 🤝 pray together, 🎙️ voice messages","🎨 Pick a color theme in More > Look and feel","📬 Notifications: missed card, delivery check and auto resend"];
 
 let items=[], metas={}, grp="home", subSel={faith:null,together:null,outdoor:null}, filt="all", q="", catFilt="all";
 let me=localStorage.getItem("fh_me"), memoI=0, memoShow=false, db=null, firstItems=true, startTime=Date.now(), offline=!navigator.onLine;
@@ -996,27 +1064,30 @@ function moreView(){
     <div class="meta" style="margin-top:10px">Pick your picture</div><div class="row">${AV.map(a=>`<button class="react" style="font-size:22px" data-act="avatar" data-a="${a}">${a}</button>`).join("")}</div></div>
   <div class="card"><h3>Make it easier</h3><div class="row"><button class="chip ${simple?"on":""}" data-act="simple">${simple?"✅ Simple mode is on":"Turn on Simple mode"}</button><button class="chip ${localStorage.getItem("fh_calm")==="1"?"on":""}" data-act="calm">Calm mode</button></div>
     <div class="meta">Simple mode shows big buttons and fewer tabs. Calm mode softens colors and stops animations.</div></div>
-  ${healthCard()}${bioCard()}${notifCard(pushOn)}
-  <div class="card"><h3>Look and feel</h3><div class="row">${["auto","light","dark","night"].map(t=>`<button class="chip ${th===t?"on":""}" data-act="theme" data-t="${t}">${t==="auto"?"Auto":t==="night"?"🌙 Night mode":t[0].toUpperCase()+t.slice(1)}</button>`).join("")}</div><div class="meta">Night mode turns dark from 8 pm to 6 am.</div><div class="row">${[["","Classic"],["sunrise","🌅 Sunrise"],["forest","🌲 Forest"],["ocean","🌊 Ocean"],["lavender","💜 Lavender"],["rose","🌸 Rose"]].map(([k,n])=>`<button class="chip ${(localStorage.getItem("fh_scene")||"")===k?"on":""}" data-act="scene" data-s="${k}">${n}</button>`).join("")}</div>
+  <details class="fold"><summary>🔔 Notifications</summary>${healthCard()}${notifCard(pushOn)}</details>
+  <details class="fold"><summary>🎨 Look and feel</summary><div class="card"><div class="row">${["auto","light","dark","night"].map(t=>`<button class="chip ${th===t?"on":""}" data-act="theme" data-t="${t}">${t==="auto"?"Auto":t==="night"?"🌙 Night mode":t[0].toUpperCase()+t.slice(1)}</button>`).join("")}</div><div class="meta">Night mode turns dark from 8 pm to 6 am.</div><div class="row">${[["","Classic"],["sunrise","🌅 Sunrise"],["forest","🌲 Forest"],["ocean","🌊 Ocean"],["lavender","💜 Lavender"],["rose","🌸 Rose"]].map(([k,n])=>`<button class="chip ${(localStorage.getItem("fh_scene")||"")===k?"on":""}" data-act="scene" data-s="${k}">${n}</button>`).join("")}</div>
     <div class="row">${ACC.map(c=>`<button class="react" style="background:${c};width:34px;height:34px;border-radius:50%" data-act="accent" data-c="${c}" aria-label="color"></button>`).join("")}</div>
     <div class="row"><button class="btn small ghost" data-act="fs" data-d="-1">A−</button><button class="btn small ghost" data-act="fs" data-d="1">A+</button><span class="meta">Text size</span></div>
     <div class="row">${[["clean","Clean"],["serif","Classic"],["easy","Easy read"]].map(([k,n])=>`<button class="chip ${(localStorage.getItem("fh_font")||"clean")===k?"on":""}" data-act="font" data-f="${k}">${n}</button>`).join("")}<span class="meta">Font</span></div>
     <label>Bible version for lookups</label><select data-act="verpick"><option value="web" ${ver==="web"?"selected":""}>WEB (modern English)</option><option value="kjv" ${ver==="kjv"?"selected":""}>KJV (classic)</option><option value="bbe" ${ver==="bbe"?"selected":""}>BBE (Basic English, easy words)</option>${ESV_KEY?`<option value="esv" ${ver==="esv"?"selected":""}>ESV (English Standard Version)</option>`:""}</select>
     <label>Open in my Bible uses</label><select data-act="linkpick">${LINKVERS.map(v=>`<option ${(localStorage.getItem("fh_linkver")||"NIV")===v?"selected":""}>${v}</option>`).join("")}</select>${ver==="esv"?`<div class="meta" style="margin-top:8px">Scripture quotations are from the ESV® Bible (The Holy Bible, English Standard Version®), © 2001 by Crossway, a publishing ministry of Good News Publishers. Used by permission. All rights reserved.</div>`:""}</div>
-  <div class="card"><h3>This week</h3>${weekSummary()}</div>
+  </details>
+  <details class="fold"><summary>📊 My progress</summary><div class="card"><h3>This week</h3>${weekSummary()}</div>
   <div class="card"><h3>Badges</h3>${badges().map(([i,t,o])=>`<div style="opacity:${o?1:.35}">${i} ${esc(t)}${o?" ✅":""}</div>`).join("")}</div>
   <div class="card"><h3>Keepsakes</h3><div class="row"><button class="btn small ghost" data-act="review">🎉 Year in review</button><button class="btn small ghost" data-act="journal">📄 Download journal</button><button class="btn small ghost" data-act="backup">💾 Backup file</button></div></div>
-  <div class="card"><h3>🔒 Privacy and PIN</h3>
+  </details>
+  <details class="fold"><summary>🔒 Privacy and lock</summary>${bioCard()}<div class="card"><h3>🔒 Privacy and PIN</h3>
     <div class="meta">Each entry has a "Who can see this?" choice: everyone, only you, or you and one friend. Chat can be private one on one too.</div>
     <label>When I add something, start with</label><select data-act="defvis"><option value="" ${localStorage.getItem("fh_defvis")?"":"selected"}>Automatic (private for check ins, questions, prayers)</option>${visOptions(localStorage.getItem("fh_defvis")||"")}</select>
     <div class="row"><button class="btn small ghost" data-act="allprivate">Hide all my past entries</button></div>
     <div class="row"><button class="btn small ghost" data-act="changepin">Change my PIN</button><button class="btn small ghost" data-act="askwho">Sign out</button></div>
     <div class="meta" style="margin-top:10px">Forgot your PIN? Ask Jayden to remove your sign in in Firebase, then make a new PIN. Nothing you wrote is lost.</div>
     <div class="meta" style="margin-top:10px">How it works: other people cannot read entries that are not shared with them, once the strict database rules are on. Reading streaks, mood emojis and who prayed are visible to all three of you. Jayden runs the database, so he can technically see raw data in the Firebase console. Keep anything truly secret out of any app.</div></div>
-  <div class="card"><h3>Resources</h3><div class="meta"><a href="https://tourette.org" target="_blank" rel="noopener">Tourette Association of America</a></div></div>
+  </details>
+  <details class="fold"><summary>ℹ️ Help and about</summary><div class="card"><h3>Resources</h3><div class="meta"><a href="https://tourette.org" target="_blank" rel="noopener">Tourette Association of America</a></div></div>
   <div class="card"><h3>Help and updates</h3><div class="row"><button class="btn small ghost" data-act="help">❓ Help</button><button class="btn small ghost" data-act="feedback">✉️ Send feedback</button><button class="btn small ghost" data-act="news">✨ What's new</button><button class="btn small ghost" data-act="tourreplay">Replay tour</button></div>
     <div class="meta" style="margin-top:8px">Version ${APP_VER}. Android: Chrome menu, then Add to Home screen. iPhone: Share, then Add to Home Screen.</div>
-    <div class="row"><a class="btn small" href="today.html">Open verse of the day page</a></div></div>`;
+    <div class="row"><a class="btn small" href="today.html">Open verse of the day page</a></div></div></details>`;
 }
 const NOTIF_DEFS={morning:["🕊️ Daily verse","12:00"],evening:["🙏 Evening prayer","20:00"],reading:["📖 Reading reminder (only if you have not read)","19:00"],recap:["📊 Sunday weekly recap","09:00"],countdown:["📅 Event countdowns","09:00"],followup:["🌿 Prayer follow ups","10:00"],monthly:["📆 Monthly chapter reminders","09:00"],seasonal:["🎄 Holidays","09:00"],hard:["🌙 Late night check-in","22:00"],hard2:["🌅 Second check-in","15:00"],prayernow:["🤝 Pray together time","20:30"]};
 function notifCfg(){const o=((metas.notif||{})[me])||{};const c={tz:o.tz||"America/Denver"};Object.keys(NOTIF_DEFS).forEach(k=>{c[k]=k.startsWith("hard")?o[k]===true:o[k]!==false;c[k+"T"]=o[k+"T"]||NOTIF_DEFS[k][1];});return c;}
@@ -1129,9 +1200,11 @@ function emptyHtml(def){
   const e=EMPTY[def.type]||["🌱","Nothing here yet."];
   return `<div class="empty"><div class="big">${e[0]}</div><p>${esc(e[1])}</p><button class="btn" data-act="add" data-t="${def.type}" ${def.preset?`data-pre="${esc(JSON.stringify(def.preset))}"`:""}>+ Add the first one</button></div>`;
 }
+const TILEDESC={wall:"Prayer requests everyone can see",song:"Songs we share",trip:"Plan trips with the weather",sky:"Sunrise, sunset and stars",chapter:"Read a chapter and share thoughts",psalm:"A psalm to pray today",verse:"Save the verses you love",prayer:"Write and track your prayers",sermon:"Notes from church",thanks:"What you are thankful for",plan:"Reading plans to follow together",memo:"Learn a verse by heart",topics:"Verses for what you are feeling",learn:"Simple Bible basics",question:"Questions you are wrestling with",calm:"Breathe and slow down",chat:"Message each other",checkin:"How is your heart today?",goal:"Goals we share",event:"Dates and countdowns",letter:"Letters and time capsules",jar:"Encouragement to save",memory:"Memories we keep",dream:"Dreams and hopes",album:"Our photos",voice:"Record a voice note",timeline:"Moments in our faith story",prayfor:"Pray for each other this week",fun:"Games and fun",ideas:"Content ideas",wins:"Advocacy wins",todo:"Our shared to do list",outdoor:"Devotionals outside",hike:"Your hike log",stars:"Stargazing log",gear:"Gear and packing",vote:"Vote on the next trip",camp:"Camping trips and memories"};
+const TCOL=["#e0803a","#3d6fb5","#2f8f5b","#8a4fb5","#c2476b","#d19a1f"];
 function tilesView(subs){
   const g=GROUPS[grp];
-  return `<h2>${g.icon} ${esc(g.label)}</h2><div class="tiles">${subs.map(s=>{const l=(LBL[s]||s),i=l.indexOf(" ");return `<button class="tile" data-act="sub" data-s="${s}"><span>${i>0?l.slice(0,i):"•"}</span>${esc(i>0?l.slice(i+1):l)}</button>`;}).join("")}</div>`;
+  return `<h2>${g.icon} ${esc(g.label)}</h2><div class="meta">Tap one to open it.</div><div class="tlist">${subs.map((s,n)=>{const l=(LBL[s]||s),i=l.indexOf(" ");return `<button class="trow tile" data-act="sub" data-s="${s}" style="--c:${TCOL[n%TCOL.length]}"><span class="ti">${i>0?l.slice(0,i):"•"}</span><span class="tx"><b>${esc(i>0?l.slice(i+1):l)}</b><small>${esc(TILEDESC[s]||"")}</small></span><span class="ch">›</span></button>`;}).join("")}</div>`;
 }
 const SCENEKEYS=["dusk","forest","ocean","sunrise","night"];
 function dailyCard(){
