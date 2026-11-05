@@ -261,6 +261,30 @@ details.fold>summary::-webkit-details-marker{display:none}
 details.fold>summary::after{content:"›";font:400 28px system-ui;color:var(--mute);transition:transform .2s}
 details.fold[open]>summary::after{transform:rotate(90deg)}
 details.fold>.card{box-shadow:none;margin:8px 0}
+
+main>h2{font-size:29px;letter-spacing:-.3px}
+main>h2::after{content:"";display:block;width:46px;height:4px;border-radius:4px;background:linear-gradient(90deg,var(--acc),transparent);margin-top:7px}
+.tvhero{background:radial-gradient(420px 200px at 90% 0%,#ffffff33,transparent),linear-gradient(135deg,#6b4fd8,#c2476b 60%,#ee8a4a);color:#fff;border-radius:30px;padding:24px 20px;margin:12px 0;box-shadow:0 16px 40px #6b4fd844,inset 0 1px 0 #ffffff55;font:16px/1.5 system-ui,sans-serif}
+.tvbig{font:800 38px/1.1 "Iowan Old Style",Georgia,serif;margin-bottom:6px}
+.pill{background:color-mix(in srgb,var(--acc) 16%,transparent);color:var(--acc);font:700 14px system-ui,sans-serif;padding:7px 14px;border-radius:99px}
+.pbar{height:10px;border-radius:99px;background:color-mix(in srgb,var(--line) 90%,transparent);overflow:hidden;margin:12px 0 8px}
+.pbar span{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--acc),color-mix(in srgb,var(--acc) 55%,#fff));transition:width .35s ease}
+.tvq h3{font-size:24px;line-height:1.3;margin:0 0 12px}
+.opt{display:flex;align-items:center;gap:12px;width:100%;text-align:left;margin:8px 0;padding:14px;border-radius:18px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font:600 17px system-ui,sans-serif;cursor:pointer;transition:transform .12s,border-color .15s,background .15s}
+.opt:active{transform:scale(.98)}
+.opt .ltr{flex:0 0 34px;height:34px;border-radius:12px;display:grid;place-items:center;background:color-mix(in srgb,var(--acc) 16%,transparent);color:var(--acc);font-weight:800}
+.opt .mk{margin-left:auto;font-weight:800;font-size:20px}
+.opt.good{border-color:#2f8f5b;background:color-mix(in srgb,#2f8f5b 16%,var(--card))}
+.opt.good .ltr{background:#2f8f5b;color:#fff}
+.opt.bad{border-color:#c0392b;background:color-mix(in srgb,#c0392b 14%,var(--card))}
+.opt.bad .ltr{background:#c0392b;color:#fff}
+.opt.dim{opacity:.55}
+.opt[disabled]{cursor:default}
+.card a:not(.btn){color:var(--acc);font-weight:600}
+.compact .card{padding:10px 14px;margin:8px 0}
+.compact .card .row:has(.react){display:none}
+details.fold.mini{margin:8px 0}
+details.fold.mini>summary{font:700 16px system-ui,sans-serif;padding:12px 12px}
 </style>
 </head>
 <body>
@@ -278,7 +302,7 @@ details.fold>.card{box-shadow:none;margin:8px 0}
 
 <script>
 /* ============ SETUP (Jayden only) ============ */
-const APP_VER="4.7";
+const APP_VER="5.0";
 const FIREBASE_CONFIG = {
   apiKey:"AIzaSyDhwY77B-wZL7f4077kEC_tn0K2AgJ6bIs",
   authDomain:"faith-hub-71ae2.firebaseapp.com",
@@ -334,13 +358,13 @@ const SECTIONS={
 const SIMPLE_WIZ=["verse","prayer","thanks","checkin","outdoor","reading","question","jar","sermon"];
 const GROUPS={
  home:{label:"Home",icon:"🏠"},
- faith:{label:"Faith",icon:"📖",subs:["chapter","psalm","verse","prayer","sermon","thanks","plan","memo","topics","learn","question","wall","calm"]},
- together:{label:"Together",icon:"💬",subs:["chat","checkin","goal","event","letter","jar","memory","dream","album","voice","timeline","prayfor","fun","ideas","wins","song","todo"]},
+ faith:{label:"Faith",icon:"📖",subs:["chapter","psalm","verse","prayer","guided","habits","sermon","thanks","plan","memo","topics","learn","question","wall","calm"]},
+ together:{label:"Together",icon:"💬",subs:["chat","checkin","goal","event","letter","jar","memory","dream","album","voice","timeline","prayfor","fun","trivia","ideas","wins","song","todo"]},
  outdoor:{label:"Outdoors",icon:"🌲",subs:["outdoor","hike","stars","gear","vote","trip","sky","camp"]},
  more:{label:"More",icon:"⚙️"}
 };
 const SIMPLE_SUBS={faith:["chapter","verse","prayer","thanks"],together:["chat","checkin","album"],outdoor:["outdoor"]};
-const LBL={wall:"🙏 Prayer wall",song:"🎵 Playlist",trip:"🧭 Trips",sky:"🌅 Sky",chapter:"📖 Reading",psalm:"🎶 Psalm",verse:"🕊️ Verses",prayer:"🙏 Prayer",sermon:"⛪ Sermons",thanks:"🌻 Thanks",plan:"📆 Plans",memo:"🧠 Memorize",topics:"🔎 Topics",learn:"📚 Learn",question:"❓ Questions",calm:"🌿 Calm",chat:"💬 Chat",checkin:"💛 Check in",goal:"🎯 Goals",event:"📅 Events",letter:"💌 Letters",jar:"🫙 Jar",memory:"🎞️ Memories",dream:"✨ Dreams",album:"📸 Album",voice:"🎙️ Voice",timeline:"🌱 Timeline",prayfor:"🤝 Pray together",fun:"🎲 Fun",ideas:"💡 Ideas",wins:"🏆 Wins",todo:"✅ To do",outdoor:"🌲 Devotionals",hike:"🥾 Hikes",stars:"🔭 Stars",gear:"🎒 Gear",vote:"🗳️ Next trip",camp:"🏕️ Camping"};
+const LBL={wall:"🙏 Prayer wall",song:"🎵 Playlist",trip:"🧭 Trips",sky:"🌅 Sky",chapter:"📖 Reading",psalm:"🎶 Psalm",verse:"🕊️ Verses",prayer:"🙏 Prayer",sermon:"⛪ Sermons",thanks:"🌻 Thanks",plan:"📆 Plans",memo:"🧠 Memorize",topics:"🔎 Topics",learn:"📚 Learn",question:"❓ Questions",calm:"🌿 Calm",chat:"💬 Chat",checkin:"💛 Check in",goal:"🎯 Goals",event:"📅 Events",letter:"💌 Letters",jar:"🫙 Jar",memory:"🎞️ Memories",dream:"✨ Dreams",album:"📸 Album",voice:"🎙️ Voice",timeline:"🌱 Timeline",prayfor:"🤝 Pray together",fun:"🎲 Fun",ideas:"💡 Ideas",wins:"🏆 Wins",todo:"✅ To do",outdoor:"🌲 Devotionals",hike:"🥾 Hikes",stars:"🔭 Stars",gear:"🎒 Gear",vote:"🗳️ Next trip",camp:"🏕️ Camping",trivia:"🧠 Trivia",guided:"🕯️ Guided prayer",habits:"✅ Habits"};
 const SUBDEFS={
  song:{type:"song",title:"Our playlist"},trip:{type:"trip",title:"Trip planner"},
  gear:{type:"todo",where:i=>i.list==="Gear",preset:{list:"Gear"},title:"Gear and packing"},
@@ -374,24 +398,181 @@ const TOPICS={Anxiety:["Philippians 4:6-7","1 Peter 5:7","Matthew 6:34","Psalm 9
 const LEARN={
  "Fruit of the Spirit (Galatians 5:22-23)":[["Love","Caring for others with no strings attached."],["Joy","Gladness that does not depend on circumstances."],["Peace","A calm heart even when things are uncertain."],["Patience","Staying gentle when waiting or when others are hard."],["Kindness","Small acts that make someone's day better."],["Goodness","Choosing what is right and helpful."],["Faithfulness","Being someone people can count on."],["Gentleness","Strength that stays soft with people."],["Self-control","Guiding your words and actions with wisdom."]],
  "Armor of God (Ephesians 6:13-17)":[["Belt of truth","Live honestly and stand on what is true."],["Breastplate of righteousness","Guard your heart by doing what is right."],["Shoes of peace","Be ready to share good news calmly."],["Shield of faith","Trust that blocks doubt and fear."],["Helmet of salvation","Protect your mind with hope in Jesus."],["Sword of the Spirit","God's word, used in prayer and truth."]],
- "Names of God":[["Elohim","God the Creator"],["Jehovah Jireh","The Lord who provides"],["Jehovah Rapha","The Lord who heals"],["Jehovah Nissi","The Lord is my banner"],["Jehovah Shalom","The Lord is peace"],["Jehovah Rohi","The Lord is my shepherd"],["El Shaddai","God Almighty"],["Adonai","Lord and Master"]]
+ "Names of God":[["Elohim","God the Creator"],["Jehovah Jireh","The Lord who provides"],["Jehovah Rapha","The Lord who heals"],["Jehovah Nissi","The Lord is my banner"],["Jehovah Shalom","The Lord is peace"],["Jehovah Rohi","The Lord is my shepherd"],["El Shaddai","God Almighty"],["Adonai","Lord and Master"]],
+ "The Ten Commandments (Exodus 20)":[["1. No other gods","Put God first in everything."],["2. No idols","Do not worship anything made by people."],["3. Respect God's name","Do not use it carelessly."],["4. Remember the Sabbath","Set a day apart to rest and worship."],["5. Honor your parents","Respect and care for them."],["6. Do not murder","Life is precious to God."],["7. Be faithful","Do not commit adultery."],["8. Do not steal","Respect what belongs to others."],["9. Tell the truth","Do not lie about others."],["10. Do not covet","Be content with what you have."]],
+ "The Beatitudes (Matthew 5:3-10)":[["Poor in spirit","Those who know they need God belong to his kingdom."],["Those who mourn","They will be comforted."],["The meek","Gentle people will inherit the earth."],["Hunger for righteousness","They will be satisfied."],["The merciful","They will receive mercy."],["Pure in heart","They will see God."],["Peacemakers","They will be called children of God."],["The persecuted","The kingdom of heaven is theirs."]],
+ "The Lord's Prayer (Matthew 6:9-13)":[["Our Father in heaven","Begin by honoring who God is."],["Your kingdom come","Pray for God's will to be done here."],["Give us today our daily bread","Ask God for what you need today."],["Forgive us as we forgive","Receive forgiveness and give it."],["Lead us not into temptation","Ask for help to stay away from sin."],["Deliver us from evil","Ask for God's protection and rescue."]],
+ "Names of Jesus":[["Immanuel","God with us (Matthew 1:23)"],["Good Shepherd","He knows his sheep and lays down his life (John 10:11)"],["Bread of Life","He satisfies our deepest hunger (John 6:35)"],["Light of the World","He leads us out of darkness (John 8:12)"],["Prince of Peace","He brings peace with God (Isaiah 9:6)"],["Lamb of God","He takes away the sin of the world (John 1:29)"],["The Way, the Truth and the Life","No one comes to the Father except through him (John 14:6)"],["Alpha and Omega","The beginning and the end (Revelation 22:13)"]],
+ "The Twelve Disciples":[["Peter","Fisherman. Bold, then denied Jesus, then led the early church."],["Andrew","Peter's brother. Always brought people to Jesus."],["James","Son of Zebedee. One of the inner three."],["John","Wrote a Gospel, three letters and Revelation."],["Philip","Brought Nathanael to Jesus."],["Bartholomew","Also called Nathanael."],["Thomas","Doubted, then said 'My Lord and my God!'"],["Matthew","A tax collector who wrote a Gospel."],["James son of Alphaeus","Little is known about him."],["Thaddaeus","Also called Judas son of James."],["Simon the Zealot","Had been part of a revolutionary group."],["Judas Iscariot","Betrayed Jesus."]],
+ "Spiritual gifts (Romans 12, 1 Corinthians 12)":[["Wisdom and knowledge","Understanding and applying God's truth."],["Faith","Trusting God for big things."],["Teaching","Explaining the Bible clearly."],["Encouragement","Lifting others up."],["Serving and helping","Meeting practical needs."],["Giving","Generous with what you have."],["Leading","Guiding others with care."],["Mercy","Comforting people who hurt."]],
+ "Feasts of Israel":[["Passover","Remembers rescue from Egypt. Jesus is our Passover lamb."],["Unleavened Bread","Seven days of leaving old ways behind."],["Firstfruits","Gratitude for the first of the harvest."],["Pentecost","Fifty days later. The Holy Spirit came on this day."],["Trumpets","A call to get ready."],["Day of Atonement","Confession and forgiveness."],["Tabernacles","Remembers God living with his people in the desert."]],
+ "How the Bible is organized":[["Law (5)","Genesis to Deuteronomy"],["History (12)","Joshua to Esther"],["Wisdom and poetry (5)","Job, Psalms, Proverbs, Ecclesiastes, Song of Songs"],["Major prophets (5)","Isaiah to Daniel"],["Minor prophets (12)","Hosea to Malachi"],["Gospels (4)","Matthew, Mark, Luke, John"],["Acts (1)","The early church"],["Letters (21)","Romans to Jude"],["Revelation (1)","The future and Jesus' return"]],
+ "Bible timeline":[["Creation and fall","Genesis 1 to 11"],["The patriarchs","Abraham, Isaac, Jacob, Joseph"],["Exodus and the Law","Moses, Passover, Sinai"],["Judges and kings","Joshua, David, Solomon"],["Exile and return","Babylon, then home again"],["Jesus","Born, taught, died and rose"],["The early church","Acts and the letters"],["The future","Revelation, new heaven and earth"]],
+ "Standing firm when tempted":[["Know it is common","1 Corinthians 10:13 says you are not alone. God gives a way out."],["Flee","2 Timothy 2:22. Leave the room, close the screen, change the place."],["Pray right away","Matthew 26:41. Watch and pray that you do not fall into temptation."],["Say Scripture","Jesus answered every temptation with God's word (Matthew 4)."],["Tell a friend","James 5:16. Confess to each other and pray for each other."],["Replace it","Do something good instead. Walk, call, serve, worship."],["Receive grace","1 John 1:9. If you fall, confess, get up and keep going."]]
 };
 const QUESTIONS=["What is one thing God showed you this week?","Who can you encourage today?","What are you holding on to that you can give to God?","What made you smile or feel peace today?","What is one prayer you want to see answered?","Where did you see God in the outdoors lately?","What is one thing you are learning about trust?","What does today's verse mean for a hard day?","What is a small act of kindness you can do?","What are you most thankful for right now?","What is something you need strength for?","How can we pray for each other this week?","What is a verse you want to remember?","What is one way you grew this month?"];
 const PRAYERS=["Lord, thank You for today. Help me notice Your goodness in small things.","God, give me peace when my thoughts are loud. Remind me You are near.","Father, help me love the people around me well today.","Jesus, I trust You with what I cannot control.","Lord, give me strength for what is hard and joy for what is good.","God, protect my heart and guide my steps today.","Father, thank You for friends who walk with me. Bless them today.","Lord, help me be patient with myself and with others.","God, show me one way to be kind today.","Jesus, quiet my fears and fill me with Your peace.","Lord, teach me to rest in You.","Father, make me brave to do what is right.","God, thank You for being faithful even when I am not.","Lord, help me listen for Your voice today."];
 const PRAYPROMPTS=["Pray for each other's health and rest.","Pray for your families.","Pray for friends who are struggling.","Pray for wisdom in big decisions.","Pray for your church and community.","Pray for the Tourette community and for understanding.","Pray for peace in hard moments.","Pray for your future and plans.","Pray for safety when traveling.","Pray for someone who has hurt you.","Pray with thanks for what God has done.","Pray for the world and those in need."];
 const WYR=[["Watch a sunrise on a mountain","Watch a sunset on a lake"],["Read a chapter together by a campfire","Go on a long hike together"],["Have a quiet cabin weekend","Have a road trip adventure"],["Sing worship in a big crowd","Pray quietly in a small room"],["Camp under the stars","Stay in a cozy lodge"],["Visit a new state","Revisit a favorite place"],["Learn a new instrument","Learn a new language"],["Breakfast outdoors","Dinner by a fire"],["Morning devotion","Evening devotion"],["Write a letter","Record a voice note"],["Go to a waterfall","Go to a canyon"],["Plan every detail","Be spontaneous"],["Spend a day offline","Spend a day volunteering"],["Winter snow trip","Summer lake trip"]];
 const QUIZ=[
- {q:"Who built the ark?",o:["Moses","Noah","Abraham"],a:1},
- {q:"How many books are in the Bible?",o:["39","66","72"],a:1},
- {q:"Who was swallowed by a great fish?",o:["Jonah","Peter","Elijah"],a:0},
- {q:"What did David use to defeat Goliath?",o:["A sword","A spear","A sling and a stone"],a:2},
- {q:"Who denied Jesus three times?",o:["Judas","Peter","Thomas"],a:1},
- {q:"Where was Jesus born?",o:["Nazareth","Jerusalem","Bethlehem"],a:2},
- {q:"Who led the Israelites out of Egypt?",o:["Moses","Joshua","David"],a:0},
- {q:"What is the first book of the Bible?",o:["Exodus","Genesis","Psalms"],a:1},
- {q:"How many disciples did Jesus choose?",o:["7","10","12"],a:2},
- {q:"Which is the shortest verse in the KJV Bible?",o:["Psalm 23:1","John 11:35","Genesis 1:1"],a:1}
+ {c:"Old Testament",q:"Who built the ark?",o:["Moses","Noah","Abraham"],a:1,r:"Genesis 6:14",e:"God told Noah to build it out of gopher wood. It was about 450 feet long, roughly one and a half football fields."},
+ {c:"Old Testament",q:"How long did the flood rain fall on the earth?",o:["7 days","40 days and 40 nights","100 days"],a:1,r:"Genesis 7:12",e:"The rain lasted 40 days and 40 nights. The waters stayed on the earth for 150 days."},
+ {c:"Old Testament",q:"Who was swallowed by a great fish?",o:["Jonah","Peter","Elijah"],a:0,r:"Jonah 1:17",e:"Jonah ran from God's call to Nineveh. He spent three days and three nights in the fish before he prayed and was set free."},
+ {c:"Old Testament",q:"What did David use to defeat Goliath?",o:["A sword","A spear","A sling and a stone"],a:2,r:"1 Samuel 17:49",e:"David was a young shepherd. He trusted God, not armor, and a single stone from his sling struck Goliath."},
+ {c:"Old Testament",q:"Who led the Israelites out of Egypt?",o:["Moses","Joshua","David"],a:0,r:"Exodus 12:51",e:"God used Moses to free Israel after ten plagues. Moses was 80 years old when he stood before Pharaoh."},
+ {c:"Old Testament",q:"Who was thrown into the lions' den for praying to God?",o:["Joseph","Daniel","Elijah"],a:1,r:"Daniel 6:16",e:"Daniel kept praying three times a day even after the king signed a law against it. God shut the mouths of the lions."},
+ {c:"Old Testament",q:"How many plagues did God send on Egypt?",o:["7","10","12"],a:1,r:"Exodus 7:14 to 12:30",e:"The ten plagues began with water turned to blood and ended with the death of the firstborn. Passover remembers that night."},
+ {c:"Old Testament",q:"Who received a coat of many colors from his father?",o:["Joseph","Benjamin","Reuben"],a:0,r:"Genesis 37:3",e:"Jacob loved Joseph most, and his brothers became jealous. God later used Joseph to save Egypt and his family from famine."},
+ {c:"Old Testament",q:"Whose strength was tied to his long hair?",o:["Samson","Gideon","Saul"],a:0,r:"Judges 16:17",e:"Samson was set apart to God from birth. His strength left him when his hair was cut, and returned as it grew back."},
+ {c:"Old Testament",q:"Which city's walls fell after the Israelites marched around it?",o:["Babylon","Jericho","Nineveh"],a:1,r:"Joshua 6:20",e:"They marched once a day for six days and seven times on the seventh. Then the people shouted and the walls fell."},
+ {c:"Old Testament",q:"Which king asked God for wisdom?",o:["Saul","David","Solomon"],a:2,r:"1 Kings 3:9",e:"God was pleased that Solomon asked for wisdom instead of riches. He also gave him wealth and honor."},
+ {c:"Old Testament",q:"Which queen risked her life to save her people?",o:["Ruth","Esther","Deborah"],a:1,r:"Esther 4:14",e:"Mordecai asked, 'Who knows whether you have come to the kingdom for such a time as this?' Esther spoke to the king."},
+ {c:"Old Testament",q:"God asked Abraham to offer which son?",o:["Isaac","Ishmael","Jacob"],a:0,r:"Genesis 22:2",e:"God stopped Abraham just in time and provided a ram. It points ahead to God giving his own Son."},
+ {c:"Old Testament",q:"How did God first speak to Moses in the wilderness?",o:["In a dream","Through a burning bush","In a whirlwind"],a:1,r:"Exodus 3:2",e:"The bush burned but was not consumed. God told Moses to take off his sandals because the ground was holy."},
+ {c:"Old Testament",q:"What did God give the Israelites to eat in the desert?",o:["Manna","Figs","Olives"],a:0,r:"Exodus 16:15",e:"Manna means 'What is it?'. It appeared with the dew each morning for 40 years."},
+ {c:"Old Testament",q:"Which prophet was taken up to heaven in a chariot of fire?",o:["Isaiah","Elijah","Jeremiah"],a:1,r:"2 Kings 2:11",e:"Elijah's cloak fell to his helper Elisha, who then continued his work."},
+ {c:"Old Testament",q:"Who was Ruth's mother in law?",o:["Naomi","Rebekah","Miriam"],a:0,r:"Ruth 1:16",e:"Ruth stayed with Naomi and said, 'Where you go, I will go.' She later became the great grandmother of King David."},
+ {c:"New Testament",q:"Who denied Jesus three times?",o:["Judas","Peter","Thomas"],a:1,r:"Matthew 26:75",e:"After the rooster crowed, Peter remembered what Jesus said and wept. Jesus later forgave and restored him."},
+ {c:"New Testament",q:"How many disciples did Jesus choose?",o:["7","10","12"],a:2,r:"Matthew 10:1",e:"They included fishermen, a tax collector and a zealot. Jesus also sent out 72 others."},
+ {c:"New Testament",q:"Who betrayed Jesus for thirty pieces of silver?",o:["Judas Iscariot","Pilate","Caiaphas"],a:0,r:"Matthew 26:14",e:"Judas was one of the twelve. Later he regretted it and returned the silver."},
+ {c:"New Testament",q:"Which city was Paul traveling to when he met Jesus in a bright light?",o:["Rome","Damascus","Corinth"],a:1,r:"Acts 9:3",e:"Paul, then called Saul, was persecuting Christians. After meeting Jesus he became a great missionary."},
+ {c:"New Testament",q:"Who was the first Christian martyr?",o:["Stephen","James","Barnabas"],a:0,r:"Acts 7:59",e:"Stephen prayed for those stoning him, just as Jesus prayed for his killers."},
+ {c:"New Testament",q:"Which disciple doubted until he saw Jesus' wounds?",o:["Andrew","Thomas","Philip"],a:1,r:"John 20:27",e:"Jesus showed him his hands and side. Thomas then said, 'My Lord and my God!'"},
+ {c:"New Testament",q:"Which tax collector climbed a tree to see Jesus?",o:["Matthew","Zacchaeus","Levi"],a:1,r:"Luke 19:4",e:"Jesus called him down and went to his house. Zacchaeus gave half of what he owned to the poor."},
+ {c:"New Testament",q:"What was Jesus' first miracle?",o:["Healing a blind man","Walking on water","Turning water into wine"],a:2,r:"John 2:11",e:"It happened at a wedding in Cana, when the wine ran out."},
+ {c:"New Testament",q:"Who did Jesus raise from the dead after four days?",o:["Lazarus","Jairus' daughter","Dorcas"],a:0,r:"John 11:43",e:"Jesus wept, then called, 'Lazarus, come out!' It is the shortest and most tender part of the story."},
+ {c:"New Testament",q:"How many loaves and fish fed the 5,000?",o:["Two loaves and one fish","Five loaves and two fish","Seven loaves and three fish"],a:1,r:"Matthew 14:17",e:"A boy shared his small lunch. Twelve baskets of leftovers were gathered afterward."},
+ {c:"New Testament",q:"Which of these is a fruit of the Spirit?",o:["Wealth","Self control","Pride"],a:1,r:"Galatians 5:22",e:"The list is love, joy, peace, patience, kindness, goodness, faithfulness, gentleness and self control."},
+ {c:"New Testament",q:"Who baptized Jesus?",o:["Peter","John the Baptist","Andrew"],a:1,r:"Matthew 3:13",e:"The Spirit descended like a dove and a voice said, 'This is my beloved Son.'"},
+ {c:"Jesus",q:"Where was Jesus born?",o:["Nazareth","Jerusalem","Bethlehem"],a:2,r:"Luke 2:4",e:"Joseph and Mary traveled there for the census. The prophet Micah had named Bethlehem 700 years earlier."},
+ {c:"Jesus",q:"In which town did Jesus grow up?",o:["Capernaum","Nazareth","Jericho"],a:1,r:"Luke 4:16",e:"He worked as a carpenter's son and later taught in the synagogue there."},
+ {c:"Jesus",q:"How many days did Jesus fast in the wilderness?",o:["7","40","100"],a:1,r:"Matthew 4:2",e:"After fasting, he answered each temptation by quoting Scripture. We can do the same."},
+ {c:"Jesus",q:"What did Jesus call the greatest commandment?",o:["Keep the Sabbath","Love the Lord your God with all your heart","Give a tenth"],a:1,r:"Matthew 22:37",e:"The second is like it: love your neighbor as yourself. He said all the Law and the Prophets hang on these two."},
+ {c:"Jesus",q:"Who first heard the angels announce Jesus' birth?",o:["Kings","Shepherds","Priests"],a:1,r:"Luke 2:8",e:"They were ordinary workers watching sheep at night. God chose to tell them first."},
+ {c:"Jesus",q:"On what animal did Jesus ride into Jerusalem?",o:["A horse","A camel","A donkey"],a:2,r:"Matthew 21:7",e:"The crowd laid palm branches and shouted 'Hosanna.' It fulfilled the prophecy in Zechariah 9:9."},
+ {c:"Jesus",q:"On which day did Jesus rise from the dead?",o:["The first day","The third day","The seventh day"],a:1,r:"1 Corinthians 15:4",e:"The women found the tomb empty early on the first day of the week. We celebrate this on Easter."},
+ {c:"Jesus",q:"What did Jesus do for his disciples in a storm on the lake?",o:["Told them to row harder","Calmed the wind and waves","Walked away"],a:1,r:"Mark 4:39",e:"He said, 'Peace! Be still!' and the wind stopped. The disciples asked, 'Who is this?'"},
+ {c:"Places",q:"In which river was Jesus baptized?",o:["Nile","Jordan","Euphrates"],a:1,r:"Matthew 3:13",e:"The Jordan River also marks where Israel entered the Promised Land."},
+ {c:"Places",q:"On which mountain did Moses receive the Ten Commandments?",o:["Mount Sinai","Mount Zion","Mount Carmel"],a:0,r:"Exodus 19:20",e:"God gave the Law there after leading Israel out of Egypt."},
+ {c:"Places",q:"Where did Noah's ark come to rest?",o:["Mount Ararat","Mount Sinai","Mount of Olives"],a:0,r:"Genesis 8:4",e:"The ark rested on the mountains of Ararat in the seventh month."},
+ {c:"Places",q:"In which garden did Jesus pray before his arrest?",o:["Eden","Gethsemane","Carmel"],a:1,r:"Matthew 26:36",e:"He prayed, 'Not my will, but yours be done.' Gethsemane means 'olive press'."},
+ {c:"Places",q:"Where did Adam and Eve first live?",o:["Garden of Eden","Mount Moriah","Canaan"],a:0,r:"Genesis 2:8",e:"God planted the garden and placed the man there to work it and keep it."},
+ {c:"Books of the Bible",q:"How many books are in the Bible?",o:["39","66","72"],a:1,r:"The whole Bible",e:"There are 39 books in the Old Testament and 27 in the New Testament."},
+ {c:"Books of the Bible",q:"What is the first book of the Bible?",o:["Exodus","Genesis","Psalms"],a:1,r:"Genesis 1:1",e:"Genesis means 'beginning'. It opens with 'In the beginning, God created the heavens and the earth.'"},
+ {c:"Books of the Bible",q:"What is the last book of the Bible?",o:["Jude","Acts","Revelation"],a:2,r:"Revelation 1:1",e:"Revelation was written by John and ends with the promise that Jesus is coming."},
+ {c:"Books of the Bible",q:"Which book has the most chapters?",o:["Psalms","Isaiah","Genesis"],a:0,r:"Psalms",e:"Psalms has 150 chapters. It is the Bible's songbook and prayer book."},
+ {c:"Books of the Bible",q:"Which is the shortest verse in the English Bible?",o:["Psalm 23:1","John 11:35","Genesis 1:1"],a:1,r:"John 11:35",e:"'Jesus wept.' He cried with Mary and Martha before raising Lazarus."},
+ {c:"Books of the Bible",q:"Who wrote most of the book of Proverbs?",o:["David","Solomon","Paul"],a:1,r:"Proverbs 1:1",e:"Solomon's proverbs give wisdom for daily life. It begins 'The fear of the Lord is the beginning of knowledge.'"},
+ {c:"People",q:"Who was the first woman?",o:["Eve","Sarah","Mary"],a:0,r:"Genesis 3:20",e:"God made Eve from Adam's side to be his helper. Her name means 'living'."},
+ {c:"People",q:"Who was the mother of Jesus?",o:["Mary","Martha","Elizabeth"],a:0,r:"Luke 1:30",e:"The angel Gabriel told her, 'You have found favor with God.' She answered, 'Let it be to me according to your word.'"},
+ {c:"People",q:"Who spoke for Moses to Pharaoh?",o:["Aaron","Caleb","Joshua"],a:0,r:"Exodus 4:14",e:"Moses felt he could not speak well, so God sent his brother Aaron to help."},
+ {c:"People",q:"Who wrote most of the New Testament letters?",o:["Peter","Paul","John"],a:1,r:"Romans 1:1",e:"Paul wrote 13 letters, many from prison. They encouraged the early churches."}
 ];
+QUIZ.push(
+ {c:"Parables",q:"In the parable of the lost sheep, how many sheep did the shepherd leave to find the one?",o:["9","99","50"],a:1,r:"Luke 15:4",e:"Jesus said there is more joy in heaven over one sinner who repents than over 99 who do not need to."},
+ {c:"Parables",q:"In the story of the prodigal son, what did the father do when he saw his son coming home?",o:["He waited at the door","He ran and hugged him","He sent a servant"],a:1,r:"Luke 15:20",e:"The father was filled with compassion. He gave his son a robe, a ring and a feast. It pictures how God welcomes us."},
+ {c:"Parables",q:"In the parable of the sower, how much grain did the good soil produce?",o:["Ten times","Thirty, sixty or a hundred times","Nothing"],a:1,r:"Matthew 13:8",e:"The seed is God's word. Good soil stands for a heart that hears it and understands."},
+ {c:"Parables",q:"In the story of the Good Samaritan, who stopped to help the wounded man?",o:["A priest","A Levite","A Samaritan"],a:2,r:"Luke 10:33",e:"Jews and Samaritans were enemies, yet the Samaritan showed mercy. Jesus said, 'Go and do likewise.'"},
+ {c:"Parables",q:"What did the wise man build his house on?",o:["Sand","Rock","Wood"],a:1,r:"Matthew 7:24",e:"Hearing Jesus' words and doing them is like building on rock. The storms came, but the house stood."},
+ {c:"Parables",q:"What did Jesus compare to a tiny mustard seed?",o:["The kingdom of heaven","The temple","The law"],a:0,r:"Matthew 13:31",e:"It starts as the smallest of seeds and grows into a tree where birds can rest."},
+ {c:"Parables",q:"In the parable of the ten virgins, what did the wise ones bring extra?",o:["Bread","Oil for their lamps","Water"],a:1,r:"Matthew 25:4",e:"The story reminds us to be ready for Jesus' return."},
+ {c:"Parables",q:"What did the servant with one talent do with it?",o:["Invested it","Gave it away","Buried it in the ground"],a:2,r:"Matthew 25:25",e:"He was afraid. The master wanted him to use what he was given, not hide it."},
+ {c:"Parables",q:"In the parable of the lost coin, how many coins did the woman have?",o:["Five","Ten","Twelve"],a:1,r:"Luke 15:8",e:"She lit a lamp and swept the house until she found the coin, then called her friends to celebrate."},
+ {c:"Parables",q:"In the story of the Pharisee and the tax collector, who went home right with God?",o:["The Pharisee","The tax collector","Both of them"],a:1,r:"Luke 18:14",e:"The tax collector humbly prayed, 'God, be merciful to me, a sinner.' Jesus said the humble will be lifted up."},
+ {c:"Parables",q:"What did the rich fool plan to do with his big harvest?",o:["Give to the poor","Build bigger barns","Sell it all"],a:1,r:"Luke 12:18",e:"God called him a fool because that very night his life was required of him. Life is more than possessions."},
+
+ {c:"Miracles",q:"What did Jesus walk on?",o:["Water","Fire","Clouds"],a:0,r:"Matthew 14:25",e:"The disciples thought he was a ghost. Peter stepped out of the boat too, until he looked at the waves and began to sink."},
+ {c:"Miracles",q:"How many baskets of leftovers were gathered after feeding the 5,000?",o:["Seven","Twelve","Three"],a:1,r:"Matthew 14:20",e:"One basket for each of the twelve disciples. There was more left over than they began with."},
+ {c:"Miracles",q:"Who was healed after touching the edge of Jesus' cloak?",o:["A woman who had bled for twelve years","A soldier's servant","A blind beggar"],a:0,r:"Luke 8:44",e:"Jesus said, 'Daughter, your faith has made you well. Go in peace.'"},
+ {c:"Miracles",q:"Which blind man shouted, 'Son of David, have mercy on me!'?",o:["Bartimaeus","Nicodemus","Lazarus"],a:0,r:"Mark 10:47",e:"People told him to be quiet, but he cried out louder. Jesus stopped and healed him."},
+ {c:"Miracles",q:"How did Jesus heal the man born blind in John 9?",o:["With mud made from spit, then washing in a pool","By a word from far away","By touching his ears"],a:0,r:"John 9:6",e:"The man washed in the Pool of Siloam and could see. He told everyone, 'One thing I know: I was blind, and now I see.'"},
+ {c:"Miracles",q:"How long had the man at the pool of Bethesda been sick?",o:["12 years","38 years","7 years"],a:1,r:"John 5:5",e:"Jesus asked, 'Do you want to be healed?' then told him to pick up his mat and walk."},
+ {c:"Miracles",q:"Of the ten lepers Jesus healed, how many came back to say thank you?",o:["One","Three","All ten"],a:0,r:"Luke 17:15",e:"The one who returned was a Samaritan. Jesus asked, 'Where are the other nine?'"},
+ {c:"Miracles",q:"Which prophet made an iron axe head float?",o:["Elisha","Isaiah","Amos"],a:0,r:"2 Kings 6:6",e:"A borrowed axe head fell into the Jordan. Elisha threw in a stick and the iron floated."},
+ {c:"Miracles",q:"What fell from heaven on Mount Carmel when Elijah prayed?",o:["Rain","Fire","Manna"],a:1,r:"1 Kings 18:38",e:"The fire burned up the sacrifice, the wood and even the water. The people cried, 'The Lord, he is God!'"},
+ {c:"Miracles",q:"What did the sun do when Joshua prayed during battle?",o:["It stood still","It turned dark","It moved backward"],a:0,r:"Joshua 10:13",e:"There has never been another day like it, when the Lord listened to the voice of a man."},
+ {c:"Miracles",q:"What did Moses do to bring water from a rock?",o:["Prayed all night","Struck it with his staff","Dug with his hands"],a:1,r:"Exodus 17:6",e:"God stood before him on the rock at Horeb. The people drank and were satisfied."},
+
+ {c:"Psalms and Wisdom",q:"Psalm 23 begins, 'The Lord is my...'",o:["Shepherd","Fortress","King"],a:0,r:"Psalm 23:1",e:"'I shall not want.' It is one of the best loved passages in the Bible."},
+ {c:"Psalms and Wisdom",q:"Who wrote most of the Psalms?",o:["Moses","David","Solomon"],a:1,r:"Psalms",e:"David is credited with about 73 psalms. Others were written by Asaph, the sons of Korah, Solomon and Moses."},
+ {c:"Psalms and Wisdom",q:"Which is the longest chapter in the Bible?",o:["Psalm 23","Psalm 119","Isaiah 53"],a:1,r:"Psalm 119",e:"It has 176 verses and praises God's word."},
+ {c:"Psalms and Wisdom",q:"'Your word is a lamp to my feet and a light to my...'",o:["Path","Eyes","Heart"],a:0,r:"Psalm 119:105",e:"God's word shows us the next step, even when we cannot see far ahead."},
+ {c:"Psalms and Wisdom",q:"Which book says, 'Trust in the Lord with all your heart'?",o:["Proverbs","Psalms","Isaiah"],a:0,r:"Proverbs 3:5",e:"The verse continues, 'and lean not on your own understanding. In all your ways acknowledge him, and he will make straight your paths.'"},
+ {c:"Psalms and Wisdom",q:"Which book says, 'There is a time for everything'?",o:["Job","Ecclesiastes","Song of Songs"],a:1,r:"Ecclesiastes 3:1",e:"It lists a time to be born and to die, to weep and to laugh, to mourn and to dance."},
+ {c:"Psalms and Wisdom",q:"Which man lost everything yet stayed faithful to God?",o:["Job","Jonah","Hosea"],a:0,r:"Job 1:21",e:"Job said, 'The Lord gave and the Lord has taken away; blessed be the name of the Lord.' God later restored him."},
+ {c:"Psalms and Wisdom",q:"According to Proverbs, what does a gentle answer do?",o:["Turns away anger","Starts a debate","Makes people proud"],a:0,r:"Proverbs 15:1",e:"'But a harsh word stirs up anger.' Kind words can calm a hard moment."},
+ {c:"Psalms and Wisdom",q:"Psalm 46:10 says, 'Be still, and know that I am...'",o:["God","near","the way"],a:0,r:"Psalm 46:10",e:"It is an invitation to stop striving and rest in God's power."},
+ {c:"Psalms and Wisdom",q:"Which psalm begins, 'The heavens declare the glory of God'?",o:["Psalm 8","Psalm 19","Psalm 100"],a:1,r:"Psalm 19:1",e:"Creation speaks about its maker day after day without words."},
+
+ {c:"Prophets",q:"Which prophet saw a valley of dry bones come to life?",o:["Ezekiel","Daniel","Hosea"],a:0,r:"Ezekiel 37:1",e:"God showed that he could restore Israel just as he gave breath to the bones."},
+ {c:"Prophets",q:"Which prophet said, 'Here am I. Send me!'?",o:["Isaiah","Micah","Joel"],a:0,r:"Isaiah 6:8",e:"Isaiah saw the Lord high and lifted up and a seraph touched his lips with a coal."},
+ {c:"Prophets",q:"Which prophet is known as the weeping prophet?",o:["Jeremiah","Amos","Nahum"],a:0,r:"Jeremiah 9:1",e:"Jeremiah grieved over his people's sin and warned of Babylon."},
+ {c:"Prophets",q:"Which prophet confronted King David and said, 'You are the man!'?",o:["Nathan","Samuel","Gad"],a:0,r:"2 Samuel 12:7",e:"Nathan used a story about a stolen lamb. David confessed, and wrote Psalm 51."},
+ {c:"Prophets",q:"Which prophet anointed David as king?",o:["Samuel","Elijah","Nathan"],a:0,r:"1 Samuel 16:13",e:"David was the youngest son, out with the sheep. God looks at the heart."},
+ {c:"Prophets",q:"Which prophet was fed by ravens?",o:["Elijah","Elisha","Jonah"],a:0,r:"1 Kings 17:6",e:"God sent ravens with bread and meat each morning and evening by the brook Cherith."},
+ {c:"Prophets",q:"Who became prophet after Elijah?",o:["Elisha","Hosea","Gehazi"],a:0,r:"2 Kings 2:15",e:"Elisha asked for a double portion of Elijah's spirit and received it."},
+ {c:"Prophets",q:"Which prophet said a virgin would conceive and bear a son named Immanuel?",o:["Isaiah","Zechariah","Malachi"],a:0,r:"Isaiah 7:14",e:"Immanuel means 'God with us.' Matthew 1:23 connects it to Jesus."},
+ {c:"Prophets",q:"Which Old Testament book is the last one?",o:["Malachi","Zechariah","Nehemiah"],a:0,r:"Malachi 1:1",e:"Malachi ends the Old Testament and points ahead to the coming messenger."},
+ {c:"Prophets",q:"Which prophet was a shepherd and farmer from Tekoa?",o:["Amos","Micah","Joel"],a:0,r:"Amos 7:14",e:"Amos was not from a family of prophets, but God called him to speak for justice."},
+
+ {c:"Apostles and Paul",q:"Which apostle was a fisherman and Andrew's brother?",o:["Peter","John","Philip"],a:0,r:"Matthew 4:18",e:"Jesus said, 'Follow me, and I will make you fishers of men.' They left their nets at once."},
+ {c:"Apostles and Paul",q:"Which disciple was a tax collector?",o:["Matthew","Thomas","Bartholomew"],a:0,r:"Matthew 9:9",e:"Matthew, also called Levi, got up and followed Jesus. He wrote the first Gospel."},
+ {c:"Apostles and Paul",q:"Who replaced Judas as the twelfth apostle?",o:["Matthias","Barnabas","Silas"],a:0,r:"Acts 1:26",e:"The apostles prayed and cast lots. Matthias had been with Jesus from his baptism."},
+ {c:"Apostles and Paul",q:"On what day did the Holy Spirit come with tongues of fire?",o:["Pentecost","Passover","Tabernacles"],a:0,r:"Acts 2:1",e:"Believers spoke in other languages and about 3,000 people were baptized that day."},
+ {c:"Apostles and Paul",q:"Who traveled with Paul on his first missionary journey?",o:["Barnabas","Timothy","Titus"],a:0,r:"Acts 13:2",e:"Barnabas means 'son of encouragement.' He believed in Paul when others feared him."},
+ {c:"Apostles and Paul",q:"Which disciple is called the one Jesus loved and wrote Revelation?",o:["John","Andrew","James"],a:0,r:"John 13:23",e:"John also wrote the Gospel of John and three letters, and was exiled on the island of Patmos."},
+ {c:"Apostles and Paul",q:"On which island was Paul shipwrecked?",o:["Malta","Crete","Cyprus"],a:0,r:"Acts 28:1",e:"The people showed unusual kindness. Paul was bitten by a snake and was not harmed."},
+ {c:"Apostles and Paul",q:"Which young pastor did Paul mentor?",o:["Timothy","Cornelius","Apollos"],a:0,r:"1 Timothy 1:2",e:"Paul called him 'my true child in the faith' and wrote two letters to him."},
+ {c:"Apostles and Paul",q:"Who sang hymns with Paul in prison at midnight?",o:["Silas","Luke","Mark"],a:0,r:"Acts 16:25",e:"An earthquake opened the doors, and the jailer and his household believed."},
+ {c:"Apostles and Paul",q:"What was Paul's trade?",o:["Tentmaker","Carpenter","Fisherman"],a:0,r:"Acts 18:3",e:"Paul worked with his own hands so he would not burden the churches."},
+ {c:"Apostles and Paul",q:"What did Peter do when Jesus called him from the boat in Matthew 14?",o:["Stepped out onto the water","Stayed in the boat","Swam to shore"],a:0,r:"Matthew 14:29",e:"He began to sink when he saw the wind. Jesus caught him and said, 'You of little faith, why did you doubt?'"},
+
+ {c:"Creation and Genesis",q:"What did God create on the first day?",o:["Light","The sun","Land"],a:0,r:"Genesis 1:3",e:"God said, 'Let there be light,' and there was light. He separated the light from the darkness."},
+ {c:"Creation and Genesis",q:"What did God do on the seventh day?",o:["Rested","Made the stars","Made people"],a:0,r:"Genesis 2:2",e:"God blessed the seventh day and made it holy. It is the pattern for the Sabbath."},
+ {c:"Creation and Genesis",q:"What tree were Adam and Eve told not to eat from?",o:["The tree of the knowledge of good and evil","The olive tree","The fig tree"],a:0,r:"Genesis 2:17",e:"Eating from it brought sin and death into the world."},
+ {c:"Creation and Genesis",q:"What was the sign of God's promise after the flood?",o:["A rainbow","A dove","An olive tree"],a:0,r:"Genesis 9:13",e:"God promised never again to flood the whole earth."},
+ {c:"Creation and Genesis",q:"Who was Cain's brother?",o:["Abel","Seth","Enoch"],a:0,r:"Genesis 4:2",e:"Cain became jealous when God accepted Abel's offering. God warned him that sin was crouching at the door."},
+ {c:"Creation and Genesis",q:"What were people trying to build at Babel?",o:["A tower to the heavens","A great wall","A temple"],a:0,r:"Genesis 11:4",e:"God confused their languages and the people scattered."},
+ {c:"Creation and Genesis",q:"Who was Abraham's wife?",o:["Sarah","Rebekah","Leah"],a:0,r:"Genesis 17:15",e:"God changed her name from Sarai to Sarah. She had Isaac when she was 90."},
+ {c:"Creation and Genesis",q:"Which twin was born first to Isaac and Rebekah?",o:["Esau","Jacob","Levi"],a:0,r:"Genesis 25:25",e:"Jacob came out holding his brother's heel, so his name means 'he grasps the heel'."},
+ {c:"Creation and Genesis",q:"Who wrestled with God and was renamed Israel?",o:["Jacob","Isaac","Joseph"],a:0,r:"Genesis 32:28",e:"Israel means 'he struggles with God'. The twelve tribes came from his sons."},
+ {c:"Creation and Genesis",q:"Who interpreted Pharaoh's dreams about cows and grain?",o:["Joseph","Moses","Aaron"],a:0,r:"Genesis 41:25",e:"Joseph said seven years of plenty would be followed by seven years of famine. Pharaoh put him in charge."},
+ {c:"Creation and Genesis",q:"What did God create on the sixth day?",o:["Land animals and people","Birds and fish","The sun and moon"],a:0,r:"Genesis 1:26",e:"God made people in his own image and called everything very good."},
+
+ {c:"Women of the Bible",q:"Who hid the Israelite spies in Jericho?",o:["Rahab","Deborah","Miriam"],a:0,r:"Joshua 2:4",e:"Rahab put a scarlet cord in her window and was saved when the city fell."},
+ {c:"Women of the Bible",q:"Which prophetess and judge led Israel with Barak?",o:["Deborah","Huldah","Abigail"],a:0,r:"Judges 4:4",e:"Deborah sat under a palm tree and settled disputes. Under her leadership Israel won a great victory."},
+ {c:"Women of the Bible",q:"Who was the mother of Samuel?",o:["Hannah","Ruth","Naomi"],a:0,r:"1 Samuel 1:20",e:"Hannah prayed for a child and gave Samuel back to serve God at the temple."},
+ {c:"Women of the Bible",q:"Which woman poured expensive perfume on Jesus' feet and wiped them with her hair?",o:["Mary of Bethany","Martha","Salome"],a:0,r:"John 12:3",e:"The house was filled with the smell. Jesus said she had done a beautiful thing."},
+ {c:"Women of the Bible",q:"Which sister sat at Jesus' feet to listen while the other worked?",o:["Mary","Martha","Rhoda"],a:0,r:"Luke 10:39",e:"Jesus said Mary had chosen the better part, which would not be taken from her."},
+ {c:"Women of the Bible",q:"Who was the first to see Jesus after the resurrection?",o:["Mary Magdalene","Peter","John"],a:0,r:"John 20:16",e:"She thought he was the gardener until he said her name, 'Mary.'"},
+ {c:"Women of the Bible",q:"Who was a seller of purple cloth whose heart the Lord opened?",o:["Lydia","Priscilla","Phoebe"],a:0,r:"Acts 16:14",e:"Lydia and her household were baptized. Her home became a meeting place for the church."},
+ {c:"Women of the Bible",q:"Who was Timothy's grandmother?",o:["Lois","Eunice","Anna"],a:0,r:"2 Timothy 1:5",e:"Paul praised the sincere faith that lived first in his grandmother Lois and his mother Eunice."},
+ {c:"Women of the Bible",q:"Who was the mother of John the Baptist?",o:["Elizabeth","Mary","Anna"],a:0,r:"Luke 1:57",e:"She was Mary's relative. John leaped in her womb when Mary greeted her."},
+ {c:"Women of the Bible",q:"Whose two small coins did Jesus say were the greatest gift?",o:["A poor widow's","A rich woman's","A priest's"],a:0,r:"Mark 12:42",e:"She gave everything she had, while others gave out of their abundance."},
+
+ {c:"Kings and Kingdoms",q:"Who was the first king of Israel?",o:["Saul","David","Solomon"],a:0,r:"1 Samuel 10:1",e:"Saul was tall and chosen when Israel asked for a king like other nations. Samuel anointed him."},
+ {c:"Kings and Kingdoms",q:"Who built the first temple in Jerusalem?",o:["Solomon","David","Hezekiah"],a:0,r:"1 Kings 6:1",e:"It took seven years. David had planned it but God said his son would build it."},
+ {c:"Kings and Kingdoms",q:"Which young king found the Book of the Law and led a great revival?",o:["Josiah","Ahab","Jehoram"],a:0,r:"2 Kings 22:8",e:"Josiah became king at eight years old. When the Law was read he tore his clothes and led the people back to God."},
+ {c:"Kings and Kingdoms",q:"Which king saw writing appear on the wall at a feast?",o:["Belshazzar","Nebuchadnezzar","Darius"],a:0,r:"Daniel 5:5",e:"Daniel read it: 'Mene, Mene, Tekel, Parsin.' That night the kingdom fell."},
+ {c:"Kings and Kingdoms",q:"Which king dreamed of a giant statue and asked Daniel to interpret it?",o:["Nebuchadnezzar","Cyrus","Xerxes"],a:0,r:"Daniel 2:31",e:"Daniel said God had revealed it and that God's kingdom would never be destroyed."},
+ {c:"Kings and Kingdoms",q:"Which Persian king let the Jews return and rebuild the temple?",o:["Cyrus","Darius","Artaxerxes"],a:0,r:"Ezra 1:1",e:"God stirred the king's heart, fulfilling what Jeremiah and Isaiah had said."},
+ {c:"Kings and Kingdoms",q:"Which king ordered the baby boys of Bethlehem to be killed?",o:["Herod","Pilate","Caesar Augustus"],a:0,r:"Matthew 2:16",e:"Joseph was warned in a dream and took Mary and Jesus safely to Egypt."},
+ {c:"Kings and Kingdoms",q:"Which king prayed and was given fifteen more years of life?",o:["Hezekiah","Josiah","Asa"],a:0,r:"Isaiah 38:5",e:"Isaiah told him he would die. Hezekiah turned to the wall and prayed, and God changed the answer."},
+ {c:"Kings and Kingdoms",q:"Whose harsh words after Solomon divided the kingdom in two?",o:["Rehoboam","Jeroboam","Ahab"],a:0,r:"1 Kings 12:13",e:"He ignored the elders' advice. Ten tribes followed Jeroboam and two followed Rehoboam."},
+ {c:"Kings and Kingdoms",q:"Which king had his throne in Jerusalem and was called a man after God's own heart?",o:["David","Saul","Ahab"],a:0,r:"1 Samuel 13:14",e:"David sinned greatly, but he repented. His line led to Jesus."},
+
+ {c:"Numbers and Facts",q:"How many books are in the New Testament?",o:["27","39","66"],a:0,r:"The New Testament",e:"It begins with Matthew and ends with Revelation. There are four Gospels, Acts, 21 letters and Revelation."},
+ {c:"Numbers and Facts",q:"How many tribes of Israel were there?",o:["10","12","7"],a:1,r:"Genesis 49:28",e:"They came from the twelve sons of Jacob, also called Israel."},
+ {c:"Numbers and Facts",q:"How many years did Israel wander in the wilderness?",o:["7","40","70"],a:1,r:"Numbers 14:33",e:"The people refused to enter the land at first, so a whole generation passed before they did."},
+ {c:"Numbers and Facts",q:"How many commandments did God give Moses on the tablets?",o:["Ten","Twelve","Seven"],a:0,r:"Exodus 20",e:"The first four are about loving God and the other six about loving others."},
+ {c:"Numbers and Facts",q:"How many Gospels are in the New Testament?",o:["Three","Four","Five"],a:1,r:"Matthew to John",e:"Matthew, Mark, Luke and John each tell the story of Jesus in their own way."},
+ {c:"Numbers and Facts",q:"How old was Noah when the flood came?",o:["300","600","120"],a:1,r:"Genesis 7:6",e:"Noah was 600 years old. He had spent years building the ark and warning others."},
+ {c:"Numbers and Facts",q:"How many people were on Noah's ark?",o:["Two","Eight","Twelve"],a:1,r:"1 Peter 3:20",e:"Noah, his wife, his three sons and their wives."},
+ {c:"Numbers and Facts",q:"How many times did Naaman wash in the Jordan to be healed of leprosy?",o:["Three","Seven","Twelve"],a:1,r:"2 Kings 5:14",e:"Naaman was angry at first, but when he obeyed, his skin became like a young boy's."},
+ {c:"Numbers and Facts",q:"Who lived the longest in the Bible, 969 years?",o:["Methuselah","Adam","Noah"],a:0,r:"Genesis 5:27",e:"Methuselah's name may mean 'when he dies, it will be sent'. He died the year of the flood."},
+ {c:"Numbers and Facts",q:"How long was Jesus' ministry before the cross, about?",o:["Three years","One year","Ten years"],a:0,r:"The Gospels",e:"Most scholars say about three years, from his baptism to his crucifixion."}
+);
+const TCATS=[["all","🎲","Mixed","A bit of everything","#e0803a"],["Old Testament","📜","Old Testament","Stories before Jesus","#3d6fb5"],["New Testament","✉️","New Testament","The early church and letters","#2f8f5b"],["Jesus","✝️","Jesus","His life and teaching","#8a4fb5"],["Parables","🌾","Parables","Stories Jesus told","#d19a1f"],["Miracles","✨","Miracles","Signs and wonders","#c2476b"],["Psalms and Wisdom","🎶","Psalms and Wisdom","Songs, proverbs and wisdom","#5f8a84"],["Prophets","📣","Prophets","God's messengers","#e0803a"],["Apostles and Paul","🕊️","Apostles and Paul","The early church leaders","#3d6fb5"],["Creation and Genesis","🌍","Creation and Genesis","The very beginning","#2f8f5b"],["Women of the Bible","👩","Women of the Bible","Brave and faithful women","#8a4fb5"],["Kings and Kingdoms","👑","Kings and Kingdoms","Rulers and empires","#d19a1f"],["Places","🗺️","Places","Rivers, mountains and gardens","#c2476b"],["Books of the Bible","📚","Books of the Bible","Facts about the Bible itself","#5f8a84"],["People","🧑","People","Who is who","#e0803a"],["Numbers and Facts","🔢","Numbers and Facts","How many? How long?","#3d6fb5"]];
 const HELP=[
  ["How do I add something?","Tap a tab at the bottom, then tap the big Add button. Answer the questions and tap Save."],
  ["How do I say hi?","On Home, tap the 💛 Thinking of you button. Everyone else gets a pop up."],
@@ -402,7 +583,7 @@ const HELP=[
  ["Something is not working","Close the app and open it again. Then tap More and Send feedback so Jayden can fix it."]
 ];
 const TOUR=[["Welcome 💛","This is a private space for the three of you to share faith, prayers and adventures."],["Add something","Tap a tab at the bottom, pick a tile, then the big Add button. We ask one question at a time."],["Stay close","Tap 💛 Thinking of you, send a message, or react to anything with ❤️ or 🙏. Want to talk? Tap 👉 Poke at the top of Home."],["Daily verse","Turn on notifications in More to get a verse every day. Tap the ? button any time for help."],["Who sees what","Sign in with your own PIN. Check ins, questions and prayers start out private, and Home has Our space and My journal. You choose who sees anything else."]];
-const NEWS=["✨ A brand new, calmer look in light and dark","📖 Clear lists with a short description for every section","⚙️ More is tidier: tap a heading to open it","💪 Stay strong, 🤍 ask how to pray, 🤝 pray together, 🎙️ voice messages","🎨 Pick a color theme in More > Look and feel","📬 Notifications: missed card, delivery check and auto resend"];
+const NEWS=["🎉 Version 5.0","🧠 Trivia: 15 topics, 146 questions, round length and fun facts options","🕯️ Guided prayer with a timer, and ✅ daily habits tracker (Faith)","ℹ️ Every list section has About and options: sort, only mine, compact","🧩 More > Customize: choose what shows on Home and which sections you see","🔕 Notifications: pick which alerts you want, plus quiet hours","📚 Learn has 10 new studies: Ten Commandments, Beatitudes, Names of Jesus and more"];
 
 let items=[], metas={}, grp="home", subSel={faith:null,together:null,outdoor:null}, filt="all", q="", catFilt="all";
 let me=localStorage.getItem("fh_me"), memoI=0, memoShow=false, db=null, firstItems=true, startTime=Date.now(), offline=!navigator.onLine;
@@ -908,24 +1089,63 @@ function visFromChoice(c){if(!c||c==="all")return null;if(c==="me")return [me];i
 function visOptions(cur){const others=PEOPLE.filter(p=>p!==me);return `<option value="all" ${cur==="all"?"selected":""}>👥 Everyone</option><option value="me" ${cur==="me"?"selected":""}>🔒 Only me</option>`+others.map(o=>`<option value="with:${o}" ${cur==="with:"+o?"selected":""}>🤝 Me and ${esc(o)}</option>`).join("");}
 function visBox(cur,attrs){return `<div class="visbox"><label>Who can see this?</label><select ${attrs}>${visOptions(cur)}</select></div>`;}
 function visBadge(it){if(!(it.priv||it.vis))return "";const o=it.vis?it.vis.filter(n=>n!==it.author):[];if(it.priv||!o.length)return ` <span class="badge">🔒 Only ${it.author===me?"you":esc(it.author)}</span>`;return it.author===me?` <span class="badge">🤝 Shared with ${esc(o.join(", "))}</span>`:` <span class="badge">🤝 Shared with you</span>`;}
+
+const SECINFO={
+ verse:{about:"Your shared bank of favorite verses. Save the reference, the words and what it means to you.",tip:"Add a theme like Peace or Strength so you can find verses fast."},
+ prayer:{about:"Write prayer requests and keep track of them. Mark a prayer answered when God answers it and add how.",tip:"Choose who can see each prayer. Tap 🙏 when you have prayed for someone's request."},
+ sermon:{about:"Notes from church or online sermons: the church, the date, the passage, the takeaways and how you will apply it.",tip:"Write one thing you will do this week. It makes the sermon stick."},
+ thanks:{about:"A daily gratitude page. Writing down what you are thankful for lifts your mood and your faith.",tip:"Try three small things each day."},
+ question:{about:"Questions about God and the Bible that you are wrestling with. These start private.",tip:"Share one with a friend when you want to talk it through."},
+ checkin:{about:"A quick check of how your heart is. Pick a mood and add a note. It starts private.",tip:"A short check in each week shows patterns over time."},
+ goal:{about:"Goals you share, with a progress bar so you can celebrate each step.",tip:"Keep goals small and specific, like reading one chapter a day."},
+ event:{about:"Dates and countdowns for birthdays, trips and church events. The app reminds everyone.",tip:"Set yearly events to repeat on birthdays."},
+ letter:{about:"Write a letter or a time capsule that stays locked until a date you pick.",tip:"Write one for a future birthday."},
+ jar:{about:"An encouragement jar. Save kind words and verses to read on a hard day.",tip:"Add one whenever you hear something encouraging."},
+ memory:{about:"Stories and moments you want to keep, like a trip or a good day with friends.",tip:"Add a photo in the Album and tell the story here."},
+ dream:{about:"Dreams and goals for the future and why they matter to you.",tip:"Pray over each one and check back in a year."},
+ timeline:{about:"The moments in your faith story, like baptisms, answered prayers and first times in church.",tip:"Add the date so it builds a real timeline."},
+ ideas:{about:"Ideas for posts, talks or projects you want to make later.",tip:"Write ideas down right away so they are not lost."},
+ wins:{about:"Wins in your advocacy work, big or small. Good to look back on when you feel discouraged.",tip:"Add the date and who it helped."},
+ todo:{about:"A shared checklist. Tap the circle to mark something done.",tip:"Use the Gear list for packing before a trip."},
+ gear:{about:"Packing and gear lists for hikes and camping.",tip:"Check items off as you pack."},
+ outdoor:{about:"Devotionals written outside. Pick a place and a verse and write what God showed you.",tip:"Look for something in nature that points to a verse."},
+ hike:{about:"A log of your hikes with miles, difficulty and notes.",tip:"Add the trail name so you can find it later."},
+ stars:{about:"A stargazing log: where you were and what you saw.",tip:"Note the moon phase and the weather."},
+ vote:{about:"Decide together. Add two options and everyone votes.",tip:"Great for picking the next trip."},
+ camp:{about:"A camping log: the campsite, the date and the memories.",tip:"Write what you ate and what you would do again."},
+ song:{about:"Songs you share. Add a link so everyone can listen.",tip:"Write why the song matters to you."}
+};
+let optsOpen={};
+function secOpts(sub){try{return JSON.parse(localStorage.getItem("fh_opt_"+sub)||"{}");}catch(e){return{};}}
+function optsPanel(sub){
+  const o=secOpts(sub),I=SECINFO[sub]||{},def=defOf(sub);
+  const all=items.filter(i=>i.type===def.type&&visible(i)&&(!def.where||def.where(i)));
+  const by=PEOPLE.map(p=>p+": "+all.filter(i=>i.author===p).length).join(" · ");
+  let extra="";
+  if(sub==="prayer"){const open=all.filter(i=>!i.answered).length;extra=`<div class="meta">🙏 ${open} open · 🎉 ${all.length-open} answered</div>`;}
+  return `<details class="fold mini" ${optsOpen[sub]?"open":""}><summary>ℹ️ About and options</summary><div class="card">${I.about?`<div>${esc(I.about)}</div>`:""}${I.tip?`<div class="meta" style="margin-top:6px">💡 ${esc(I.tip)}</div>`:""}<div class="meta" style="margin-top:6px">${all.length} entries · ${esc(by)}</div>${extra}
+  <div class="row" style="margin-top:10px"><button class="chip on" data-act="optsort" data-s="${sub}">${o.old?"⬆️ Oldest first":"⬇️ Newest first"}</button><button class="chip ${o.mine?"on":""}" data-act="optmine" data-s="${sub}">${o.mine?"✅":"⭕"} Only mine</button><button class="chip ${o.compact?"on":""}" data-act="optcompact" data-s="${sub}">${o.compact?"✅":"⭕"} Compact</button></div></div></details>`;
+}
 function listItems(sub){
   const def=defOf(sub);
   let l=items.filter(i=>i.type===def.type&&visible(i)&&(!def.where||def.where(i)));
   if(filt!=="all")l=l.filter(i=>i.author===filt);
+  if(secOpts(sub).mine)l=l.filter(i=>i.author===me);
   if(sub==="prayer"&&catFilt!=="all")l=l.filter(i=>(i.cat||"Myself")===catFilt);
   if(q)l=l.filter(i=>JSON.stringify({...i,photo:"",audio:""}).toLowerCase().includes(q.toLowerCase()));
   if(def.type==="event")l.sort((a,b)=>(evDate(a)||"").localeCompare(evDate(b)||""));
   else if(def.type==="milestone"||def.type==="win")l.sort((a,b)=>(b.date||"").localeCompare(a.date||""));
   else l.sort((a,b)=>(b.created||0)-(a.created||0));
+  if(secOpts(sub).old)l.reverse();
   return l.length?l.map(card).join(""):emptyHtml(def);
 }
 function listView(sub,extraTop){
   const def=defOf(sub),S=SECTIONS[def.type];
   const cats=sub==="prayer"?`<div class="chips">${["all","Myself","Us","Family","Friends","World"].map(c=>`<button class="chip ${catFilt===c?"on":""}" data-act="cat" data-c="${c}">${c==="all"?"All groups":c}</button>`).join("")}</div>`:"";
-  return `<h2>${S.icon} ${esc(def.title||S.title)}</h2>${extraTop||""}<button class="btn add" data-act="add" data-t="${def.type}" ${def.preset?`data-pre="${esc(JSON.stringify(def.preset))}"`:""}>+ Add</button>
+  return `<h2>${S.icon} ${esc(def.title||S.title)}</h2>${extraTop||""}${optsPanel(sub)}<button class="btn add" data-act="add" data-t="${def.type}" ${def.preset?`data-pre="${esc(JSON.stringify(def.preset))}"`:""}>+ Add</button>
   <div class="chips">${["all",...PEOPLE].map(p=>`<button class="chip ${filt===p?"on":""}" data-act="filt" data-p="${p}">${p==="all"?"Everyone":p}</button>`).join("")}</div>${cats}
   <input id="q" class="search" placeholder="Search" value="${esc(q)}">
-  <div id="lst">${listItems(sub)}</div>`;
+  <div id="lst" class="${secOpts(sub).compact?"compact":""}">${listItems(sub)}</div>`;
 }
 function homeMore(){
   const pool=items.filter(i=>i.type==="verse"&&i.text&&visible(i)),bv=pool.length?pool[dayNum()%pool.length]:null;
@@ -1038,9 +1258,7 @@ function funView(){
   const both=PEOPLE.every(p=>ans[p]);
   let h=`<h2>🎲 Fun</h2><div class="card"><div class="meta">Would you rather (today)</div><div class="grid2" style="margin-top:8px">${["A","B"].map((k,i)=>`<button class="btn ${ans[me]===k?"":"ghost"}" data-act="wyr" data-k="${k}">${esc(Wq[i])}</button>`).join("")}</div>
   <div class="meta" style="margin-top:8px">${PEOPLE.map(p=>ans[p]?(both||p===me?`${esc(p)} chose ${ans[p]==="A"?esc(Wq[0]):esc(Wq[1])}`:`${esc(p)} answered`):`${esc(p)} has not answered yet`).join("<br>")}</div></div>`;
-  const Q=QUIZ[quizI];
-  if(quizI>=QUIZ.length)h+=`<div class="card"><h3>🏁 Bible trivia done</h3><p>You got ${quizScore} of ${QUIZ.length}.</p><div class="row"><button class="btn" data-act="quizreset">Play again</button></div></div>`;
-  else h+=`<div class="card"><div class="meta">Bible trivia ${quizI+1} of ${QUIZ.length}</div><h3>${esc(Q.q)}</h3>${Q.o.map((o,i)=>`<button class="btn ${quizPick===null?"ghost":(i===Q.a?"":"ghost")} " style="display:block;width:100%;margin:6px 0;${quizPick!==null&&i===quizPick&&i!==Q.a?"opacity:.5":""}" data-act="quizpick" data-i="${i}">${quizPick!==null&&i===Q.a?"✅ ":""}${esc(o)}</button>`).join("")}${quizPick!==null?`<div class="row"><button class="btn" data-act="quiznext">Next</button></div>`:""}</div>`;
+  h+=`<div class="card gentle"><b>🧠 Bible trivia</b><div class="meta">${QUIZ.length} questions with a fun fact after each one.</div><div class="row"><button class="btn" data-act="goto" data-g="together" data-s="trivia">Play trivia</button></div></div>`;
   return h;
 }
 function jarView(){
@@ -1065,6 +1283,7 @@ function moreView(){
   <div class="card"><h3>Make it easier</h3><div class="row"><button class="chip ${simple?"on":""}" data-act="simple">${simple?"✅ Simple mode is on":"Turn on Simple mode"}</button><button class="chip ${localStorage.getItem("fh_calm")==="1"?"on":""}" data-act="calm">Calm mode</button></div>
     <div class="meta">Simple mode shows big buttons and fewer tabs. Calm mode softens colors and stops animations.</div></div>
   <details class="fold"><summary>🔔 Notifications</summary>${healthCard()}${notifCard(pushOn)}</details>
+  <details class="fold"><summary>🧩 Customize</summary>${customizeHtml()}</details>
   <details class="fold"><summary>🎨 Look and feel</summary><div class="card"><div class="row">${["auto","light","dark","night"].map(t=>`<button class="chip ${th===t?"on":""}" data-act="theme" data-t="${t}">${t==="auto"?"Auto":t==="night"?"🌙 Night mode":t[0].toUpperCase()+t.slice(1)}</button>`).join("")}</div><div class="meta">Night mode turns dark from 8 pm to 6 am.</div><div class="row">${[["","Classic"],["sunrise","🌅 Sunrise"],["forest","🌲 Forest"],["ocean","🌊 Ocean"],["lavender","💜 Lavender"],["rose","🌸 Rose"]].map(([k,n])=>`<button class="chip ${(localStorage.getItem("fh_scene")||"")===k?"on":""}" data-act="scene" data-s="${k}">${n}</button>`).join("")}</div>
     <div class="row">${ACC.map(c=>`<button class="react" style="background:${c};width:34px;height:34px;border-radius:50%" data-act="accent" data-c="${c}" aria-label="color"></button>`).join("")}</div>
     <div class="row"><button class="btn small ghost" data-act="fs" data-d="-1">A−</button><button class="btn small ghost" data-act="fs" data-d="1">A+</button><span class="meta">Text size</span></div>
@@ -1090,13 +1309,16 @@ function moreView(){
     <div class="row"><a class="btn small" href="today.html">Open verse of the day page</a></div></div></details>`;
 }
 const NOTIF_DEFS={morning:["🕊️ Daily verse","12:00"],evening:["🙏 Evening prayer","20:00"],reading:["📖 Reading reminder (only if you have not read)","19:00"],recap:["📊 Sunday weekly recap","09:00"],countdown:["📅 Event countdowns","09:00"],followup:["🌿 Prayer follow ups","10:00"],monthly:["📆 Monthly chapter reminders","09:00"],seasonal:["🎄 Holidays","09:00"],hard:["🌙 Late night check-in","22:00"],hard2:["🌅 Second check-in","15:00"],prayernow:["🤝 Pray together time","20:30"]};
-function notifCfg(){const o=((metas.notif||{})[me])||{};const c={tz:o.tz||"America/Denver"};Object.keys(NOTIF_DEFS).forEach(k=>{c[k]=k.startsWith("hard")?o[k]===true:o[k]!==false;c[k+"T"]=o[k+"T"]||NOTIF_DEFS[k][1];});return c;}
+function notifCfg(){const o=((metas.notif||{})[me])||{};const c={tz:o.tz||"America/Denver"};Object.keys(NOTIF_DEFS).forEach(k=>{c[k]=k.startsWith("hard")?o[k]===true:o[k]!==false;c[k+"T"]=o[k+"T"]||NOTIF_DEFS[k][1];});NCATS.forEach(([k])=>{c[k]=o[k]!==false;});c.quiet=o.quiet===true;c.quietS=o.quietS||"22:00";c.quietE=o.quietE||"07:00";return c;}
+const NCATS=[["c_chat","💬 Chat messages"],["c_activity","📝 New posts and entries"],["c_prayer","🙏 Prayer requests"],["c_cheer","🎉 Good news and goodnights"]];
 function notifCard(pushOn){
   const c=notifCfg();
   const rows=Object.entries(NOTIF_DEFS).filter(([k])=>!k.startsWith("hard")||STRONGP.includes(me)).map(([k,[l]])=>`<div class="row" style="justify-content:space-between;margin:8px 0"><button class="chip ${c[k]?"on":""}" data-act="ntog" data-k="${k}">${c[k]?"✅":"⭕"} ${esc(l)}</button><input type="time" style="width:auto" value="${esc(c[k+"T"])}" data-act="ntime" data-k="${k}"></div>`).join("");
   return `<div class="card"><h3>🔔 Notifications</h3><div class="meta">${pushOn?"Notifications are on for this phone.":"Turn them on so they reach this phone."}</div><div class="row"><button class="btn small" data-act="notif">${pushOn?"Refresh notifications":"Turn on notifications"}</b<button class="btn small ghost" data-act="notiftest">Send me a test</button></div>
   <div class="meta">Android tip: if alerts only show when the app is open, tap Refresh notifications, then in Chrome allow notifications for this site and set the app battery to Unrestricted.</div>
   <div class="meta" style="margin-top:12px">Pick what you want and when. Times use your time zone below.</div>${rows}
+  <div class="meta" style="margin-top:14px">Which alerts do you want?</div>${NCATS.map(([k,l])=>`<div class="row"><button class="chip ${c[k]?"on":""}" data-act="ntog2" data-k="${k}">${c[k]?"✅":"⭕"} ${l}</button></div>`).join("")}<div class="meta">Pokes, requests for help and replies always come through.</div>
+  <div class="row" style="align-items:center"><button class="chip ${c.quiet?"on":""}" data-act="ntog2" data-k="quiet">${c.quiet?"✅":"⭕"} 🌙 Quiet hours</button><input type="time" style="width:auto" value="${esc(c.quietS)}" data-act="ntime2" data-k="quietS"> to <input type="time" style="width:auto" value="${esc(c.quietE)}" data-act="ntime2" data-k="quietE"></div><div class="meta">During quiet hours only pokes and urgent things notify you. The rest wait in your missed card.</div>
   <label>Your time zone</label><select data-act="ntz">${[["America/Denver","Mountain"],["America/Chicago","Central"],["America/New_York","Eastern"],["America/Los_Angeles","Pacific"]].map(([v,n])=>`<option value="${v}" ${c.tz===v?"selected":""}>${n}</option>`).join("")}</select></div>`;
 }
 function reviewDialog(){
@@ -1135,6 +1357,9 @@ function viewFor(sub){
     case "learn":return learnView();
     case "calm":return calmView();
     case "chat":return chatView();
+    case "trivia":return triviaView();
+    case "guided":return guidedView();
+    case "habits":return habitsView();
     case "album":return albumView();
     case "voice":return voiceView();
     case "prayfor":return prayforView();
@@ -1200,11 +1425,12 @@ function emptyHtml(def){
   const e=EMPTY[def.type]||["🌱","Nothing here yet."];
   return `<div class="empty"><div class="big">${e[0]}</div><p>${esc(e[1])}</p><button class="btn" data-act="add" data-t="${def.type}" ${def.preset?`data-pre="${esc(JSON.stringify(def.preset))}"`:""}>+ Add the first one</button></div>`;
 }
-const TILEDESC={wall:"Prayer requests everyone can see",song:"Songs we share",trip:"Plan trips with the weather",sky:"Sunrise, sunset and stars",chapter:"Read a chapter and share thoughts",psalm:"A psalm to pray today",verse:"Save the verses you love",prayer:"Write and track your prayers",sermon:"Notes from church",thanks:"What you are thankful for",plan:"Reading plans to follow together",memo:"Learn a verse by heart",topics:"Verses for what you are feeling",learn:"Simple Bible basics",question:"Questions you are wrestling with",calm:"Breathe and slow down",chat:"Message each other",checkin:"How is your heart today?",goal:"Goals we share",event:"Dates and countdowns",letter:"Letters and time capsules",jar:"Encouragement to save",memory:"Memories we keep",dream:"Dreams and hopes",album:"Our photos",voice:"Record a voice note",timeline:"Moments in our faith story",prayfor:"Pray for each other this week",fun:"Games and fun",ideas:"Content ideas",wins:"Advocacy wins",todo:"Our shared to do list",outdoor:"Devotionals outside",hike:"Your hike log",stars:"Stargazing log",gear:"Gear and packing",vote:"Vote on the next trip",camp:"Camping trips and memories"};
+const TILEDESC={wall:"Prayer requests everyone can see",song:"Songs we share",trip:"Plan trips with the weather",sky:"Sunrise, sunset and stars",chapter:"Read a chapter and share thoughts",psalm:"A psalm to pray today",verse:"Save the verses you love",prayer:"Write and track your prayers",sermon:"Notes from church",thanks:"What you are thankful for",plan:"Reading plans to follow together",memo:"Learn a verse by heart",topics:"Verses for what you are feeling",learn:"Simple Bible basics",question:"Questions you are wrestling with",calm:"Breathe and slow down",chat:"Message each other",checkin:"How is your heart today?",goal:"Goals we share",event:"Dates and countdowns",letter:"Letters and time capsules",jar:"Encouragement to save",memory:"Memories we keep",dream:"Dreams and hopes",album:"Our photos",voice:"Record a voice note",timeline:"Moments in our faith story",prayfor:"Pray for each other this week",fun:"Games and fun",ideas:"Content ideas",wins:"Advocacy wins",todo:"Our shared to do list",outdoor:"Devotionals outside",hike:"Your hike log",stars:"Stargazing log",gear:"Gear and packing",vote:"Vote on the next trip",camp:"Camping trips and memories",trivia:"Test what you know about the Bible",guided:"Pray step by step with a timer",habits:"Track daily faith habits"};
 const TCOL=["#e0803a","#3d6fb5","#2f8f5b","#8a4fb5","#c2476b","#d19a1f"];
 function tilesView(subs){
   const g=GROUPS[grp];
-  return `<h2>${g.icon} ${esc(g.label)}</h2><div class="meta">Tap one to open it.</div><div class="tlist">${subs.map((s,n)=>{const l=(LBL[s]||s),i=l.indexOf(" ");return `<button class="trow tile" data-act="sub" data-s="${s}" style="--c:${TCOL[n%TCOL.length]}"><span class="ti">${i>0?l.slice(0,i):"•"}</span><span class="tx"><b>${esc(i>0?l.slice(i+1):l)}</b><small>${esc(TILEDESC[s]||"")}</small></span><span class="ch">›</span></button>`;}).join("")}</div>`;
+  subs=subs.filter(x=>!hiddenSubs().includes(x));
+  return `<h2>${g.icon} ${esc(g.label)}</h2><div class="meta">Tap one to open it. You can hide sections you do not use in More, then Customize.</div><div class="tlist">${subs.map((s,n)=>{const l=(LBL[s]||s),i=l.indexOf(" ");return `<button class="trow tile" data-act="sub" data-s="${s}" style="--c:${TCOL[n%TCOL.length]}"><span class="ti">${i>0?l.slice(0,i):"•"}</span><span class="tx"><b>${esc(i>0?l.slice(i+1):l)}</b><small>${esc(TILEDESC[s]||"")}</small></span><span class="ch">›</span></button>`;}).join("")}</div>`;
 }
 const SCENEKEYS=["dusk","forest","ocean","sunrise","night"];
 function dailyCard(){
@@ -1441,6 +1667,76 @@ setInterval(()=>{
   if(g==="pause"&&STRONGP.includes(me))setTimeout(strongSos,300);
   else if(g==="pray")setTimeout(()=>{const b=document.querySelector("[data-act=wiz][data-t=prayer]");if(b)b.click();},300);
 },800);
+
+let triv={cat:null,set:[],i:0,score:0,pick:null,streak:0,ord:[],best:0};
+const shuf=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+function trivBest(){try{return JSON.parse(localStorage.getItem("fh_trivbest")||"{}");}catch(e){return{};}}
+function trivOpt(){let o={};try{o=JSON.parse(localStorage.getItem("fh_trivopt")||"{}");}catch(e){}return {n:o.n||10,facts:o.facts!==false};}
+function trivStart(cat){
+  const pool=QUIZ.map((q,i)=>i).filter(i=>cat==="all"||QUIZ[i].c===cat);
+  triv={cat,set:shuf(pool).slice(0,trivOpt().n),i:0,score:0,pick:null,streak:0,ord:[],best:0};trivOrd();
+}
+function trivOrd(){const q=QUIZ[triv.set[triv.i]];triv.ord=q?shuf(q.o.map((x,i)=>i)):[];}
+function triviaView(){
+  if(!triv.cat){
+    const b=trivBest();
+    return `<h2>🧠 Bible trivia</h2><div class="tvhero"><div class="tvbig">Test what you know</div><div>Ten questions each round, with a fun fact after every answer.</div></div><div class="card"><b>⚙️ Options</b><div class="meta">Questions per round</div><div class="row">${[5,10,20].map(n=>`<button class="chip ${trivOpt().n===n?"on":""}" data-act="trivn" data-n="${n}">${n}</button>`).join("")}</div><div class="row"><button class="chip ${trivOpt().facts?"on":""}" data-act="trivfacts">${trivOpt().facts?"✅":"⭕"} Show a fun fact after each answer</button></div></div><div class="meta" style="margin:10px 2px">Pick a topic:</div><div class="tlist">${TCATS.map(([k,e,n,d,c])=>{const cnt=k==="all"?QUIZ.length:QUIZ.filter(q=>q.c===k).length;return `<button class="trow" data-act="trivstart" data-c="${esc(k)}" style="--c:${c}"><span class="ti">${e}</span><span class="tx"><b>${esc(n)}</b><small>${esc(d)} · ${cnt} questions${b[k+"|"+trivOpt().n]!==undefined?" · Best "+b[k+"|"+trivOpt().n]+"/"+trivOpt().n:""}</small></span><span class="ch">›</span></button>`;}).join("")}</div>`;
+  }
+  const cat=TCATS.find(x=>x[0]===triv.cat)||TCATS[0];
+  if(triv.i>=triv.set.length){
+    const n=triv.set.length,sc=triv.score,msg=sc===n?"Perfect! You really know your Bible. 🙌":sc>=n*.8?"Great job! Almost perfect.":sc>=n*.5?"Nice work! Keep learning.":"Good start. Every round teaches you something.";
+    return `<h2>🏁 Round complete</h2><div class="tvhero"><div class="tvbig">${sc} / ${n}</div><div>${msg}</div>${triv.best?`<div style="margin-top:6px">🏅 New best score for ${esc(cat[2])}!</div>`:""}</div><div class="row"><button class="btn" data-act="trivstart" data-c="${esc(triv.cat)}">Play again</button><button class="btn ghost" data-act="trivmenu">Choose another topic</button></div>`;
+  }
+  const q=QUIZ[triv.set[triv.i]],letters="ABCD",pct=Math.round(triv.i/triv.set.length*100);
+  return `<div class="row" style="justify-content:space-between;align-items:center"><button class="btn small ghost" data-act="trivmenu">← Topics</button><span class="pill">${cat[1]} ${esc(cat[2])}</span></div>
+  <div class="pbar"><span style="width:${pct}%"></span></div>
+  <div class="meta" style="display:flex;justify-content:space-between"><span>Question ${triv.i+1} of ${triv.set.length}</span><span>⭐ ${triv.score}${triv.streak>1?" · 🔥 "+triv.streak+" in a row":""}</span></div>
+  <div class="card tvq"><h3>${esc(q.q)}</h3>${triv.ord.map((oi,k)=>{const right=oi===q.a,picked=triv.pick===oi;let cl="opt";if(triv.pick!==null){if(right)cl+=" good";else if(picked)cl+=" bad";else cl+=" dim";}return `<button class="${cl}" data-act="trivpick" data-i="${oi}" ${triv.pick!==null?"disabled":""}><span class="ltr">${letters[k]}</span><span>${esc(q.o[oi])}</span>${triv.pick!==null&&right?`<span class="mk">✓</span>`:triv.pick!==null&&picked?`<span class="mk">✗</span>`:""}</button>`;}).join("")}</div>
+  ${triv.pick!==null?`<div class="card gentle"><b>${triv.pick===q.a?"🎉 Correct!":"Not quite."}</b>${trivOpt().facts?`<div style="margin:6px 0"><b>💡 Did you know?</b> ${esc(q.e)}</div>`:""}<div class="meta">📖 ${esc(q.r)} · <a href="https://www.biblegateway.com/passage/?search=${encodeURIComponent(q.r)}&version=WEB" target="_blank" rel="noopener">Read it</a></div><div class="row"><button class="btn" data-act="trivnext">${triv.i+1>=triv.set.length?"See my score":"Next →"}</button></div></div>`:""}`;
+}
+
+const HABITS=[["read","📖","Read the Bible"],["pray","🙏","Pray"],["thanks","🌻","Give thanks"],["worship","🎶","Worship"],["kind","🤲","Do something kind"],["church","⛪","Church or study"],["phone","📵","Phone down time"],["water","💧","Drink water"]];
+function myHabits(){try{const a=JSON.parse(localStorage.getItem("fh_habits")||"null");return Array.isArray(a)?a:["read","pray","thanks"];}catch(e){return["read","pray","thanks"];}}
+function habitDone(day,h,who){return ((((metas.habits||{})[who||me])||{})[day]||[]).includes(h);}
+function habitStreak(h){const d=new Date();if(!habitDone(ymd(d),h))d.setDate(d.getDate()-1);let n=0;while(habitDone(ymd(d),h)){n++;d.setDate(d.getDate()-1);}return n;}
+function habitsCard(){
+  const hs=myHabits(),t=ymd(new Date());
+  if(!hs.length)return `<div class="card"><b>✅ Daily habits</b><div class="meta">Choose habits to track.</div><div class="row"><button class="btn small" data-act="goto" data-g="faith" data-s="habits">Choose habits</button></div></div>`;
+  const done=hs.filter(h=>habitDone(t,h)).length;
+  return `<div class="card"><b>✅ Daily habits</b> <span class="meta">${done} of ${hs.length} today</span><div class="row">${hs.map(h=>{const x=HABITS.find(y=>y[0]===h);return x?`<button class="chip ${habitDone(t,h)?"on":""}" data-act="habit" data-h="${h}">${x[1]} ${esc(x[2])}</button>`:"";}).join("")}</div></div>`;
+}
+function habitsView(){
+  const hs=myHabits(),t=ymd(new Date()),days=[];
+  for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);days.push([ymd(d),["Su","Mo","Tu","We","Th","Fr","Sa"][d.getDay()]]);}
+  const others=PEOPLE.filter(p=>p!==me).map(p=>{const c=HABITS.filter(h=>habitDone(t,h[0],p)).length;return `<div class="meta">${esc(p)}: ${c} habit${c===1?"":"s"} checked today</div>`;}).join("");
+  return `<h2>✅ Habits</h2><div class="card"><div class="meta">Tap to check off today. Friends can see how many you checked, not which ones.</div><div class="row">${hs.map(h=>{const x=HABITS.find(y=>y[0]===h);return x?`<button class="chip ${habitDone(t,h)?"on":""}" data-act="habit" data-h="${h}">${x[1]} ${esc(x[2])}</button>`:"";}).join("")||`<span class="meta">Pick some habits below.</span>`}</div>${others}</div>
+  <div class="card"><b>This week</b><table style="width:100%;border-collapse:collapse;font:15px system-ui;margin-top:8px"><tr><td></td>${days.map(d=>`<td style="text-align:center;color:var(--mute)">${d[1]}</td>`).join("")}<td style="text-align:center;color:var(--mute)">🔥</td></tr>${hs.map(h=>{const x=HABITS.find(y=>y[0]===h);return x?`<tr><td>${x[1]}</td>${days.map(d=>`<td style="text-align:center">${habitDone(d[0],h)?"✅":"▫️"}</td>`).join("")}<td style="text-align:center;font-weight:700">${habitStreak(h)}</td></tr>`:"";}).join("")}</table></div>
+  <div class="card"><b>Choose my habits</b><div class="meta">Turn on the ones you want to track.</div><div class="row">${HABITS.map(x=>`<button class="chip ${hs.includes(x[0])?"on":""}" data-act="habitpick" data-h="${x[0]}">${hs.includes(x[0])?"✅":"⭕"} ${x[1]} ${esc(x[2])}</button>`).join("")}</div></div>`;
+}
+const GPSTEPS=[["🙌","Adoration","Praise God for who he is. Tell him what you love about him.","Psalm 145:3"],["🕊️","Confession","Tell God honestly where you fell short. He forgives.","1 John 1:9"],["🌻","Thanksgiving","Thank him for specific things from today.","1 Thessalonians 5:18"],["🤲","Supplication","Ask for what you and others need.","Philippians 4:6"]];
+let gp={on:false,step:0,end:0,done:false},gpTimer=null;
+const gpSecs=()=>Number(localStorage.getItem("fh_gpsecs")||120);
+function guidedView(){
+  if(gp.done)return `<h2>🕯️ Guided prayer</h2><div class="tvhero"><div class="tvbig">Amen 🙏</div><div>You prayed through all four steps. Well done.</div></div><div class="row"><button class="btn" data-act="gpstart">Pray again</button><button class="btn ghost" data-act="gpreset">Done</button></div>`;
+  if(!gp.on)return `<h2>🕯️ Guided prayer</h2><div class="card"><div>Pray in four simple steps: <b>A</b>doration, <b>C</b>onfession, <b>T</b>hanksgiving, <b>S</b>upplication. A timer moves you along. When you finish, it also checks off Pray together today.</div></div>
+  <div class="card"><b>Time for each step</b><div class="row">${[60,120,180].map(n=>`<button class="chip ${gpSecs()===n?"on":""}" data-act="gpsecs" data-n="${n}">${n/60} min</button>`).join("")}</div></div>
+  <div class="card">${GPSTEPS.map(x=>`<div style="margin:8px 0">${x[0]} <b>${x[1]}</b><div class="meta">${esc(x[2])}</div></div>`).join("")}</div><div class="row"><button class="btn" data-act="gpstart">Start praying</button></div>`;
+  const x=GPSTEPS[gp.step];
+  return `<h2>🕯️ Guided prayer</h2><div class="pbar"><span style="width:${gp.step/GPSTEPS.length*100}%"></span></div><div class="meta">Step ${gp.step+1} of ${GPSTEPS.length}</div><div class="tvhero"><div style="font-size:54px">${x[0]}</div><div class="tvbig">${x[1]}</div><div>${esc(x[2])}</div><div style="margin-top:8px;opacity:.9">📖 ${esc(x[3])}</div><div id="gpt" style="font:800 40px system-ui;margin-top:12px"></div></div><div class="row"><button class="btn" data-act="gpnext">${gp.step+1>=GPSTEPS.length?"Finish":"Next step"}</button><button class="btn ghost" data-act="gpreset">Stop</button></div>`;
+}
+function gpTick(){
+  const el=$("gpt");if(!el||!gp.on){clearInterval(gpTimer);return;}
+  const r=Math.max(0,gp.end-Date.now());
+  el.textContent=Math.floor(r/6e4)+":"+String(Math.floor(r/1e3)%60).padStart(2,"0");
+  if(r<=0)gpNext();
+}
+function gpNext(){
+  gp.step++;
+  try{navigator.vibrate&&navigator.vibrate(200);}catch(e){}
+  if(gp.step>=GPSTEPS.length){gp.on=false;gp.done=true;clearInterval(gpTimer);if(db&&me&&FV)setMeta("praydays",{[me]:FV.arrayUnion(ymd(new Date()))});confetti();}
+  else gp.end=Date.now()+gpSecs()*1000;
+  render();
+}
 let urgeTimer=null;
 function urgeStart(){
   clearInterval(urgeTimer);const end=Date.now()+600000;
@@ -1503,16 +1799,27 @@ function pokeFly(){
     document.body.appendChild(sp);setTimeout(()=>sp.remove(),4500);
   }
 }
+
+const HOMECARDS=[["poke","👉 Poke button"],["strong","💪 Stay strong"],["trio","📖 Read, Pray, Message buttons"],["chips","⚡ Quick buttons (good news, goodnight...)"],["verse","🕊️ Verse of the day"],["pray","🤝 Pray together today"]];
+function lsArr(k){try{return JSON.parse(localStorage.getItem(k)||"[]");}catch(e){return[];}}
+const hiddenHome=()=>lsArr("fh_homeoff"),hiddenSubs=()=>lsArr("fh_hidesub"),hOn=k=>!hiddenHome().includes(k);
+function customizeHtml(){
+  const off=hiddenHome(),hs=hiddenSubs();
+  const hc=HOMECARDS.filter(([k])=>k!=="strong"||STRONGP.includes(me)).map(([k,l])=>`<div class="row"><button class="chip ${off.includes(k)?"":"on"}" data-act="hometog" data-k="${k}">${off.includes(k)?"⭕":"✅"} ${l}</button></div>`).join("");
+  const secs=["faith","together","outdoor"].map(g=>`<div class="meta" style="margin-top:10px">${GROUPS[g].icon} ${GROUPS[g].label}</div><div class="row">${GROUPS[g].subs.map(x=>`<button class="chip ${hs.includes(x)?"":"on"}" data-act="subtog" data-s="${x}">${hs.includes(x)?"⭕":"✅"} ${esc(LBL[x]||x)}</button>`).join("")}</div>`).join("");
+  return `<div class="card"><h3>Home screen</h3><div class="meta">Choose what you see on Home.</div>${hc}</div><div class="card"><h3>Sections</h3><div class="meta">Turn off sections you do not use. They are only hidden, nothing is deleted.</div>${secs}</div>`;
+}
 function ourHome(){
   const today=ymd(new Date()),readToday=(((metas.reads||{})[me])||[]).includes(today);
   const pushOn="Notification" in window&&Notification.permission==="granted"&&localStorage.getItem("fh_push")==="1";
   const hr=new Date().getHours(),gr=hr<12?"Good morning":hr<18?"Good afternoon":"Good evening";
-  let h=`<div class="hello">${gr}, ${esc(me||"friend")} 🌤️</div>`+pokesCard()+askCards()+missedCard()+pokeCard()+strongCard()+weeklyCard();
+  let h=`<div class="hello">${gr}, ${esc(me||"friend")} 🌤️</div>`+pokesCard()+askCards()+missedCard()+(hOn("poke")?pokeCard():"")+(hOn("strong")?strongCard()+weeklyCard():"");
   if(!pushOn&&db&&"Notification" in window&&Notification.permission!=="denied")h+=`<div class="card gentle"><b>🔔 Turn on notifications</b><div class="meta">So pokes and your verse reach this phone.</div><div class="row"><button class="btn" data-act="notif">Turn on</button></div></div>`;
-  h+=`<div class="trio"><button class="bigact" data-act="read" ${readToday?"disabled":""}><span>${readToday?"✅":"📖"}</span>${readToday?"Read today":"I read"}</button><button class="bigact" data-act="wiz" data-t="prayer"><span>🙏</span>Pray</button><button class="bigact" data-act="goto" data-g="together" data-s="chat"><span>💬</span>Message</button></div>`;
-  h+=`<div class="row" style="justify-content:center"><button class="chip" data-act="goodnews">🎉 Share good news</button><button class="chip" data-act="goodnight">🌙 Goodnight</button><button class="chip" data-act="askpraydlg">🤍 Ask how to pray</button><button class="chip" data-act="goto" data-g="faith" data-s="topics">🔎 Verses for...</button></div>`;
-  h+=dailyCard()+prayDayCard();
-  let more=sotwCard()+togetherCard()+answeredCard()+armorCard()+memCard()+readingCard()+skyLine();
+  if(hOn("trio"))h+=`<div class="trio"><button class="bigact" data-act="read" ${readToday?"disabled":""}><span>${readToday?"✅":"📖"}</span>${readToday?"Read today":"I read"}</button><button class="bigact" data-act="wiz" data-t="prayer"><span>🙏</span>Pray</button><button class="bigact" data-act="goto" data-g="together" data-s="chat"><span>💬</span>Message</button></div>`;
+  if(hOn("chips"))h+=`<div class="row" style="justify-content:center"><button class="chip" data-act="goodnews">🎉 Share good news</button><button class="chip" data-act="goodnight">🌙 Goodnight</button><button class="chip" data-act="askpraydlg">🤍 Ask how to pray</button><button class="chip" data-act="goto" data-g="faith" data-s="topics">🔎 Verses for...</button></div>`;
+  if(hOn("verse"))h+=dailyCard();
+  if(hOn("pray"))h+=prayDayCard();
+  let more=habitsCard()+sotwCard()+togetherCard()+answeredCard()+armorCard()+memCard()+readingCard()+skyLine();
   if(Date.now()-Number(localStorage.getItem("fh_lastbackup")||0)>30*864e5)more+=`<div class="card"><b>💾 Monthly backup</b><div class="meta">Save a copy of everything you can see. It takes a second.</div><div class="row"><button class="btn small" data-act="backup">Download backup</button><button class="btn small ghost" data-act="backuplater">Remind me later</button></div></div>`;
   more+=weekCard()+`<div class="row"><button class="chip" data-act="add" data-t="event" data-pre='{"repeat":"Every year","title":"Birthday: "}'>🎂 Add a birthday</button></div>`+healthCard();
   if(!simple)more+=homeMore();
@@ -1700,6 +2007,7 @@ document.addEventListener("change",e=>{
   if(a==="ntime"&&e.target.value&&me)setMeta("notif",{[me]:{[e.target.dataset.k+"T"]:e.target.value}});
   if(a==="defvis"){if(e.target.value)localStorage.setItem("fh_defvis",e.target.value);else localStorage.removeItem("fh_defvis");toast("Saved");}
   if(a==="linkpick"){localStorage.setItem("fh_linkver",e.target.value);}
+  if(a==="ntime2"&&e.target.value&&me)setMeta("notif",{[me]:{[e.target.dataset.k]:e.target.value}});
   if(a==="ntz"&&me)setMeta("notif",{[me]:{tz:e.target.value}});
   if(a==="verpick"){ver=e.target.value;localStorage.setItem("fh_ver",ver);daily=null;loadDaily();}
 });
@@ -1789,9 +2097,22 @@ document.addEventListener("click",async e=>{
   else if(a==="vdiscard"){voiceDraft=null;render();}
   else if(a==="prayed"){const wk=Math.floor(dayNum()/7);const l=((metas.prayed||{})["w"+wk])||[];setMeta("prayed",{["w"+wk]:l.includes(me)?FV.arrayRemove(me):FV.arrayUnion(me)});}
   else if(a==="wyr"){setMeta("wyr",{a:{["d"+dayNum()]:{[me]:d.k}}});}
-  else if(a==="quizpick"){if(quizPick===null){quizPick=Number(d.i);if(quizPick===QUIZ[quizI].a)quizScore++;render();}}
-  else if(a==="quiznext"){quizI++;quizPick=null;render();}
-  else if(a==="quizreset"){quizI=0;quizScore=0;quizPick=null;render();}
+  else if(a==="trivstart"){trivStart(d.c);render();scrollTo(0,0);}
+  else if(a==="optsort"||a==="optmine"||a==="optcompact"){const o=secOpts(d.s);if(a==="optsort")o.old=!o.old;else if(a==="optmine")o.mine=!o.mine;else o.compact=!o.compact;localStorage.setItem("fh_opt_"+d.s,JSON.stringify(o));optsOpen[d.s]=true;render();}
+  else if(a==="hometog"){const o=hiddenHome(),i=o.indexOf(d.k);if(i>=0)o.splice(i,1);else o.push(d.k);localStorage.setItem("fh_homeoff",JSON.stringify(o));render();}
+  else if(a==="subtog"){const o=hiddenSubs(),i=o.indexOf(d.s);if(i>=0)o.splice(i,1);else o.push(d.s);localStorage.setItem("fh_hidesub",JSON.stringify(o));render();}
+  else if(a==="habit"){if(!db||!FV){toast("Sharing is not set up yet");return;}const day=ymd(new Date()),on=habitDone(day,d.h);setMeta("habits",{[me]:{[day]:on?FV.arrayRemove(d.h):FV.arrayUnion(d.h)}});}
+  else if(a==="habitpick"){const o=myHabits(),i=o.indexOf(d.h);if(i>=0)o.splice(i,1);else o.push(d.h);localStorage.setItem("fh_habits",JSON.stringify(o));render();}
+  else if(a==="gpsecs"){localStorage.setItem("fh_gpsecs",d.n);render();}
+  else if(a==="gpstart"){gp={on:true,step:0,end:Date.now()+gpSecs()*1000,done:false};clearInterval(gpTimer);render();gpTick();gpTimer=setInterval(gpTick,1000);}
+  else if(a==="gpnext")gpNext();
+  else if(a==="gpreset"){gp={on:false,step:0,end:0,done:false};clearInterval(gpTimer);render();}
+  else if(a==="ntog2"&&me){const c=notifCfg();setMeta("notif",{[me]:{[d.k]:!c[d.k]}});}
+  else if(a==="trivn"){const o=trivOpt();o.n=Number(d.n);localStorage.setItem("fh_trivopt",JSON.stringify(o));render();}
+  else if(a==="trivfacts"){const o=trivOpt();o.facts=!o.facts;localStorage.setItem("fh_trivopt",JSON.stringify(o));render();}
+  else if(a==="trivmenu"){triv.cat=null;render();}
+  else if(a==="trivpick"){if(triv.pick===null){triv.pick=Number(d.i);const q=QUIZ[triv.set[triv.i]];if(triv.pick===q.a){triv.score++;triv.streak++;}else triv.streak=0;render();}}
+  else if(a==="trivnext"){triv.i++;triv.pick=null;if(triv.i>=triv.set.length){const b=trivBest(),key=triv.cat+"|"+triv.set.length;if(b[key]===undefined||triv.score>b[key]){b[key]=triv.score;triv.best=triv.score>=1?1:0;try{localStorage.setItem("fh_trivbest",JSON.stringify(b));}catch(e){}}if(triv.score>=Math.ceil(triv.set.length*.8))confetti();}else trivOrd();render();scrollTo(0,0);}
   else if(a==="who")loginStep(d.p,"in");
   else if(a==="chto"){chatTo=d.p;render();}
   else if(a==="askwho"){if(auth)auth.signOut().catch(()=>{});}
