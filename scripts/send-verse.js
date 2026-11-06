@@ -7,9 +7,9 @@ const REFS = ["Psalm 46:10","Joshua 1:9","Philippians 4:13","Isaiah 41:10","Prov
 const DEFAULTS = {
   morning: true, morningT: "12:00", evening: true, eveningT: "20:00", reading: true, readingT: "19:00",
   recap: true, recapT: "09:00", countdown: true, countdownT: "09:00", followup: true, followupT: "10:00",
-  monthly: true, monthlyT: "09:00", seasonal: true, seasonalT: "09:00", hard: false, hardT: "22:00", hard2: false, hard2T: "15:00", prayernow: true, prayernowT: "20:30", tz: "America/Denver"
+  monthly: true, monthlyT: "09:00", seasonal: true, seasonalT: "09:00", hard: false, hardT: "22:00", hard2: false, hard2T: "15:00", prayernow: true, prayernowT: "20:30", hard3: false, hard3T: "21:00", dailyq: true, dailyqT: "08:00", tz: "America/Denver"
 };
-const TYPES = ["morning", "evening", "reading", "recap", "countdown", "followup", "monthly", "seasonal", "hard", "hard2", "prayernow"];
+const TYPES = ["morning", "evening", "reading", "recap", "countdown", "followup", "monthly", "seasonal", "hard", "hard2", "hard3", "prayernow", "dailyq"];
 const WINDOW = 540; // GitHub timers run late (sometimes 6+ hours), so a run up to 9 hours after the chosen time (same day) may still send; each type sends once per day
 
 function localTime(tz, d = new Date()) {
@@ -72,6 +72,12 @@ async function main() {
     },
     async morning() { return { title: "Your verse for today", body: clip(await verseFor(), 200) + "\nTap to open Faith Hub" }; },
     async hard2() { return builders.hard(); },
+    async hard3() { return { title: "🛡️ Tough time of day?", body: "You are not alone. Open Faith Hub for a verse, or poke your friend. Tap to open." }; },
+    async dailyq(u, L) {
+      const s = await db.collection("meta").doc("dq").get();
+      if ((((s.data() || {})[u]) || {})[L.date] !== undefined) return null;
+      return { title: "🧠 Today's Bible question", body: "Answer it to keep your streak going. Tap to open." };
+    },
     async prayernow(u, L) {
       const s = await db.collection("meta").doc("praydays").get();
       if ((((s.data() || {})[u]) || []).includes(L.date)) return null;
@@ -154,6 +160,7 @@ async function main() {
     if (res.successCount > 0) await db.collection("meta").doc("delivery").set({ [user]: { ts: Date.now(), title: String(title).slice(0, 40), devices: tokens.length - dead.length } }, { merge: true }).catch(() => {});
   }
 
+  await db.collection("meta").doc("heartbeat").set({ verse: Date.now() }, { merge: true }).catch(() => {});
   for (const user of USERS) {
     const s = { ...DEFAULTS, ...(notif[user] || {}) };
     const L = localTime(s.tz);

@@ -14,12 +14,13 @@ async function main() {
   const tokensBy = {};
   tokSnap.docs.forEach(d => { const u = d.data().user; if (USERS.includes(u)) (tokensBy[u] = tokensBy[u] || []).push(d.id); });
 
+  function vibFor(u) { const v = ((typeof ncfg !== "undefined" && ncfg[u]) || {}).vib || "gentle"; return v === "off" ? { silent: true } : v === "strong" ? { vibrate: [500, 200, 500, 200, 500] } : { vibrate: [200, 100, 200] }; }
   async function pushTo(u, title, body) {
     const tokens = tokensBy[u] || [];
     if (!tokens.length) { console.log(`[${u}] no devices, skipped`); return 0; }
     const res = await admin.messaging().sendEachForMulticast({
       tokens, notification: { title, body },
-      webpush: { headers: { Urgency: "high", TTL: "86400" }, fcmOptions: { link: SITE }, notification: { icon: SITE + "icon-192.png", requireInteraction: true } },
+      webpush: { headers: { Urgency: "high", TTL: "86400" }, fcmOptions: { link: SITE }, notification: Object.assign({ icon: SITE + "icon-192.png", requireInteraction: true }, vibFor(u)) },
       android: { priority: "high" }
     });
     console.log(`[${u}] "${title}": ${res.successCount} sent, ${res.failureCount} failed`);
@@ -49,6 +50,7 @@ async function main() {
     return true;
   }
 
+  await db.collection("meta").doc("heartbeat").set({ pings: Date.now() }, { merge: true }).catch(() => {});
   // 1) New pings
   const snap = await db.collection("pings").where("push", "==", true).where("pushed", "==", false).get();
   for (const doc of snap.docs) {
