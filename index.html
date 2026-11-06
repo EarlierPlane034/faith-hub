@@ -281,6 +281,8 @@ main>h2::after{content:"";display:block;width:46px;height:4px;border-radius:4px;
 .opt.dim{opacity:.55}
 .opt[disabled]{cursor:default}
 .card a:not(.btn){color:var(--acc);font-weight:600}
+.fabadd{bottom:calc(140px + env(safe-area-inset-bottom));font-size:26px}
+@media print{body>*:not(dialog){display:none!important}dialog{position:static!important;box-shadow:none!important;border:0!important;width:auto!important;max-width:none!important}.row{display:none!important}}
 .compact .card{padding:10px 14px;margin:8px 0}
 .compact .card .row:has(.react){display:none}
 details.fold.mini{margin:8px 0}
@@ -295,14 +297,14 @@ details.fold.mini>summary{font:700 16px system-ui,sans-serif;padding:12px 12px}
   <button class="hbtn" data-act="gsearch" aria-label="Search">🔍</button>
 </header>
 <main id="main"></main>
-<button class="help" data-act="help" aria-label="Help">?</button>
+<button class="help" data-act="help" aria-label="Help">?</button><button class="help fabadd" data-act="quickadd" aria-label="Quick add">+</button>
 <nav id="nav"></nav>
 <dialog id="dlg"></dialog>
 <div id="toastbox"></div>
 
 <script>
 /* ============ SETUP (Jayden only) ============ */
-const APP_VER="5.0";
+const APP_VER="5.4";
 const FIREBASE_CONFIG = {
   apiKey:"AIzaSyDhwY77B-wZL7f4077kEC_tn0K2AgJ6bIs",
   authDomain:"faith-hub-71ae2.firebaseapp.com",
@@ -329,7 +331,7 @@ const SECTIONS={
  thanks:{label:"Gratitude",icon:"🌻",title:"Gratitude",f:[["text","I am thankful for...","area"]],p:{text:"What are you thankful for today?"}},
  checkin:{label:"Check in",icon:"💛",title:"Check in",f:[["mood","How is your heart?","mood"],["day","Kind of week","select",["Good week","Mixed week","Hard week"]],["text","Anything you want to share","area"]],p:{mood:"How is your heart today?",day:"What kind of week has it been?",text:"Anything you want to share?"}},
  goal:{label:"Goals",icon:"🎯",title:"Shared goal",f:[["title","Goal"],["progress","Progress (percent)","select",["0","25","50","75","100"]],["text","Notes","area"]]},
- event:{label:"Events",icon:"📅",title:"Event",f:[["title","What is it?"],["date","Date","date"],["time","Time","time"],["repeat","Repeats","select",["Once","Every year"]],["text","Notes","area"]]},
+ event:{label:"Events",icon:"📅",title:"Event",f:[["title","What is it?"],["date","Date","date"],["time","Time","time"],["place","Place or address (shows a map link)"],["repeat","Repeats","select",["Once","Every year"]],["text","Notes","area"]]},
  outdoor:{label:"Outdoors",icon:"🌲",title:"Outdoor devotional",f:[["place","Place (example: Enchanted Rock)"],["ref","Verse"],["text","Reflection","area"]],p:{place:"Where were you?",ref:"Which verse fits this place?",text:"What did you feel or learn?"}},
  hike:{label:"Hikes",icon:"🥾",title:"Hike log",f:[["place","Trail or place"],["miles","Miles","number"],["difficulty","Difficulty","select",["Easy","Moderate","Hard"]],["text","Notes","area"]]},
  stars:{label:"Stars",icon:"🔭",title:"Stargazing log",f:[["place","Where?"],["date","Date","date"],["text","What did you see?","area"]]},
@@ -349,6 +351,7 @@ const SECTIONS={
  replace:{label:"Replace list",icon:"🌿",title:"Replace it list",f:[["text","List","area"]]},
  why:{label:"My reason",icon:"❤️",title:"Why I am fighting",f:[["text","My reason","area"]]},
  weekly:{label:"Weekly check-in",icon:"📝",title:"Weekly check-in",f:[["week","How was the week?"],["weak","Where I was weakest","area"],["win","A win this week","area"]]},
+ joke:{label:"Inside jokes",icon:"😂",title:"Inside joke or fun moment",f:[["title","What is it called?"],["text","The story","area"],["date","When","date"]]},
  camp:{label:"Camping",icon:"🏕️",title:"Camping log",f:[["place","Campsite or park"],["date","Date","date"],["text","Notes and memories","area"]]},
  voice:{label:"Voice",icon:"🎙️",title:"Voice note",f:[["title","Title"]]},
  journal:{label:"Journal",icon:"📓",title:"Journal entry",f:[["title","Title (optional)"],["text","What is on your heart","area"]]},
@@ -358,13 +361,13 @@ const SECTIONS={
 const SIMPLE_WIZ=["verse","prayer","thanks","checkin","outdoor","reading","question","jar","sermon"];
 const GROUPS={
  home:{label:"Home",icon:"🏠"},
- faith:{label:"Faith",icon:"📖",subs:["chapter","psalm","verse","prayer","guided","habits","sermon","thanks","plan","memo","topics","learn","question","wall","calm"]},
- together:{label:"Together",icon:"💬",subs:["chat","checkin","goal","event","letter","jar","memory","dream","album","voice","timeline","prayfor","fun","trivia","ideas","wins","song","todo"]},
+ faith:{label:"Faith",icon:"📖",subs:["chapter","psalm","verse","prayer","ans","moment","packs","memorize","art","srev","guided","habits","sermon","thanks","plan","memo","topics","learn","question","wall","calm"]},
+ together:{label:"Together",icon:"💬",subs:["chat","checkin","goal","event","letter","jar","memory","dream","album","voice","timeline","prayfor","fun","trivia","games","board","joke","fast","cal","ideas","wins","song","todo"]},
  outdoor:{label:"Outdoors",icon:"🌲",subs:["outdoor","hike","stars","gear","vote","trip","sky","camp"]},
  more:{label:"More",icon:"⚙️"}
 };
 const SIMPLE_SUBS={faith:["chapter","verse","prayer","thanks"],together:["chat","checkin","album"],outdoor:["outdoor"]};
-const LBL={wall:"🙏 Prayer wall",song:"🎵 Playlist",trip:"🧭 Trips",sky:"🌅 Sky",chapter:"📖 Reading",psalm:"🎶 Psalm",verse:"🕊️ Verses",prayer:"🙏 Prayer",sermon:"⛪ Sermons",thanks:"🌻 Thanks",plan:"📆 Plans",memo:"🧠 Memorize",topics:"🔎 Topics",learn:"📚 Learn",question:"❓ Questions",calm:"🌿 Calm",chat:"💬 Chat",checkin:"💛 Check in",goal:"🎯 Goals",event:"📅 Events",letter:"💌 Letters",jar:"🫙 Jar",memory:"🎞️ Memories",dream:"✨ Dreams",album:"📸 Album",voice:"🎙️ Voice",timeline:"🌱 Timeline",prayfor:"🤝 Pray together",fun:"🎲 Fun",ideas:"💡 Ideas",wins:"🏆 Wins",todo:"✅ To do",outdoor:"🌲 Devotionals",hike:"🥾 Hikes",stars:"🔭 Stars",gear:"🎒 Gear",vote:"🗳️ Next trip",camp:"🏕️ Camping",trivia:"🧠 Trivia",guided:"🕯️ Guided prayer",habits:"✅ Habits"};
+const LBL={wall:"🙏 Prayer wall",song:"🎵 Playlist",trip:"🧭 Trips",sky:"🌅 Sky",chapter:"📖 Reading",psalm:"🎶 Psalm",verse:"🕊️ Verses",prayer:"🙏 Prayer",sermon:"⛪ Sermons",thanks:"🌻 Thanks",plan:"📆 Plans",memo:"🧠 Memorize",topics:"🔎 Topics",learn:"📚 Learn",question:"❓ Questions",calm:"🌿 Calm",chat:"💬 Chat",checkin:"💛 Check in",goal:"🎯 Goals",event:"📅 Events",letter:"💌 Letters",jar:"🫙 Jar",memory:"🎞️ Memories",dream:"✨ Dreams",album:"📸 Album",voice:"🎙️ Voice",timeline:"🌱 Timeline",prayfor:"🤝 Pray together",fun:"🎲 Fun",ideas:"💡 Ideas",wins:"🏆 Wins",todo:"✅ To do",outdoor:"🌲 Devotionals",hike:"🥾 Hikes",stars:"🔭 Stars",gear:"🎒 Gear",vote:"🗳️ Next trip",camp:"🏕️ Camping",trivia:"🧠 Trivia",board:"🏆 Leaderboard",moment:"📖 Scripture for the moment",packs:"📘 7 day studies",fast:"🍞 Shared fast",cal:"🗓️ Calendar",ans:"🎉 Answered prayers",memorize:"🧩 Verse practice",art:"🖼️ Verse art",srev:"🧾 Sermon review",games:"🎮 Bible games",joke:"😂 Inside jokes",guided:"🕯️ Guided prayer",habits:"✅ Habits"};
 const SUBDEFS={
  song:{type:"song",title:"Our playlist"},trip:{type:"trip",title:"Trip planner"},
  gear:{type:"todo",where:i=>i.list==="Gear",preset:{list:"Gear"},title:"Gear and packing"},
@@ -583,7 +586,7 @@ const HELP=[
  ["Something is not working","Close the app and open it again. Then tap More and Send feedback so Jayden can fix it."]
 ];
 const TOUR=[["Welcome 💛","This is a private space for the three of you to share faith, prayers and adventures."],["Add something","Tap a tab at the bottom, pick a tile, then the big Add button. We ask one question at a time."],["Stay close","Tap 💛 Thinking of you, send a message, or react to anything with ❤️ or 🙏. Want to talk? Tap 👉 Poke at the top of Home."],["Daily verse","Turn on notifications in More to get a verse every day. Tap the ? button any time for help."],["Who sees what","Sign in with your own PIN. Check ins, questions and prayers start out private, and Home has Our space and My journal. You choose who sees anything else."]];
-const NEWS=["🎉 Version 5.0","🧠 Trivia: 15 topics, 146 questions, round length and fun facts options","🕯️ Guided prayer with a timer, and ✅ daily habits tracker (Faith)","ℹ️ Every list section has About and options: sort, only mine, compact","🧩 More > Customize: choose what shows on Home and which sections you see","🔕 Notifications: pick which alerts you want, plus quiet hours","📚 Learn has 10 new studies: Ten Commandments, Beatitudes, Names of Jesus and more"];
+const NEWS=["🎉 Version 5.4","🙏 Prayer partner of the week, 📌 memory verse of the week, 📖 who read today","📘 7 day studies, 📚 word of the day, 🍞 shared fast, 🗓️ calendar","⏱️ Trivia modes: timed, true or false, finish the verse, and team rounds","🎯 Weekly goals, 💪 I made it through, 📅 event maps and RSVP","🔍 Search filters, 📳 vibration choice, 🖨️ year in review as PDF"];
 
 let items=[], metas={}, grp="home", subSel={faith:null,together:null,outdoor:null}, filt="all", q="", catFilt="all";
 let me=localStorage.getItem("fh_me"), memoI=0, memoShow=false, db=null, firstItems=true, startTime=Date.now(), offline=!navigator.onLine;
@@ -699,6 +702,7 @@ function start(){
 function afterWho(){
   markSeen();
   if(db&&"Notification" in window&&Notification.permission==="granted")ensureToken(false);
+  setTimeout(()=>{if(!isStandalone()&&!localStorage.getItem("fh_installseen")&&localStorage.getItem("fh_tour")==="1"&&!$("dlg").open)installDlg();},6000);
   if(!localStorage.getItem("fh_tour")){openTour(0);}
   else if(localStorage.getItem("fh_ver_seen")!==APP_VER){showNews();}
   render();
@@ -1112,6 +1116,7 @@ const SECINFO={
  hike:{about:"A log of your hikes with miles, difficulty and notes.",tip:"Add the trail name so you can find it later."},
  stars:{about:"A stargazing log: where you were and what you saw.",tip:"Note the moon phase and the weather."},
  vote:{about:"Decide together. Add two options and everyone votes.",tip:"Great for picking the next trip."},
+ joke:{about:"Funny moments, nicknames and stories only we get.",tip:"Write it down while you still remember it."},
  camp:{about:"A camping log: the campsite, the date and the memories.",tip:"Write what you ate and what you would do again."},
  song:{about:"Songs you share. Add a link so everyone can listen.",tip:"Write why the song matters to you."}
 };
@@ -1124,14 +1129,14 @@ function optsPanel(sub){
   let extra="";
   if(sub==="prayer"){const open=all.filter(i=>!i.answered).length;extra=`<div class="meta">🙏 ${open} open · 🎉 ${all.length-open} answered</div>`;}
   return `<details class="fold mini" ${optsOpen[sub]?"open":""}><summary>ℹ️ About and options</summary><div class="card">${I.about?`<div>${esc(I.about)}</div>`:""}${I.tip?`<div class="meta" style="margin-top:6px">💡 ${esc(I.tip)}</div>`:""}<div class="meta" style="margin-top:6px">${all.length} entries · ${esc(by)}</div>${extra}
-  <div class="row" style="margin-top:10px"><button class="chip on" data-act="optsort" data-s="${sub}">${o.old?"⬆️ Oldest first":"⬇️ Newest first"}</button><button class="chip ${o.mine?"on":""}" data-act="optmine" data-s="${sub}">${o.mine?"✅":"⭕"} Only mine</button><button class="chip ${o.compact?"on":""}" data-act="optcompact" data-s="${sub}">${o.compact?"✅":"⭕"} Compact</button></div></div></details>`;
+  <div class="row" style="margin-top:10px"><button class="chip on" data-act="optsort" data-s="${sub}">${o.old?"⬆️ Oldest first":"⬇️ Newest first"}</button><button class="chip ${o.mine?"on":""}" data-act="optmine" data-s="${sub}">${o.mine?"✅":"⭕"} Only mine</button><button class="chip ${o.compact?"on":""}" data-act="optcompact" data-s="${sub}">${o.compact?"✅":"⭕"} Compact</button><button class="chip ${favs().includes(sub)?"on":""}" data-act="favtog" data-s="${sub}">${favs().includes(sub)?"⭐ Pinned":"☆ Pin to Home"}</button></div></div></details>`;
 }
 function listItems(sub){
   const def=defOf(sub);
   let l=items.filter(i=>i.type===def.type&&visible(i)&&(!def.where||def.where(i)));
   if(filt!=="all")l=l.filter(i=>i.author===filt);
   if(secOpts(sub).mine)l=l.filter(i=>i.author===me);
-  if(sub==="prayer"&&catFilt!=="all")l=l.filter(i=>(i.cat||"Myself")===catFilt);
+  if(sub==="prayer"&&catFilt==="need")l=l.filter(i=>!i.answered&&((i.reactions||{}).amen||[]).length===0);else if(sub==="prayer"&&catFilt!=="all")l=l.filter(i=>(i.cat||"Myself")===catFilt);
   if(q)l=l.filter(i=>JSON.stringify({...i,photo:"",audio:""}).toLowerCase().includes(q.toLowerCase()));
   if(def.type==="event")l.sort((a,b)=>(evDate(a)||"").localeCompare(evDate(b)||""));
   else if(def.type==="milestone"||def.type==="win")l.sort((a,b)=>(b.date||"").localeCompare(a.date||""));
@@ -1141,7 +1146,7 @@ function listItems(sub){
 }
 function listView(sub,extraTop){
   const def=defOf(sub),S=SECTIONS[def.type];
-  const cats=sub==="prayer"?`<div class="chips">${["all","Myself","Us","Family","Friends","World"].map(c=>`<button class="chip ${catFilt===c?"on":""}" data-act="cat" data-c="${c}">${c==="all"?"All groups":c}</button>`).join("")}</div>`:"";
+  const cats=sub==="prayer"?`<div class="chips">${["all","need","Myself","Us","Family","Friends","World"].map(c=>`<button class="chip ${catFilt===c?"on":""}" data-act="cat" data-c="${c}">${c==="all"?"All groups":c==="need"?"🙏 Needs prayer":c}</button>`).join("")}</div>`:"";
   return `<h2>${S.icon} ${esc(def.title||S.title)}</h2>${extraTop||""}${optsPanel(sub)}<button class="btn add" data-act="add" data-t="${def.type}" ${def.preset?`data-pre="${esc(JSON.stringify(def.preset))}"`:""}>+ Add</button>
   <div class="chips">${["all",...PEOPLE].map(p=>`<button class="chip ${filt===p?"on":""}" data-act="filt" data-p="${p}">${p==="all"?"Everyone":p}</button>`).join("")}</div>${cats}
   <input id="q" class="search" placeholder="Search" value="${esc(q)}">
@@ -1282,7 +1287,7 @@ function moreView(){
     <div class="meta" style="margin-top:10px">Pick your picture</div><div class="row">${AV.map(a=>`<button class="react" style="font-size:22px" data-act="avatar" data-a="${a}">${a}</button>`).join("")}</div></div>
   <div class="card"><h3>Make it easier</h3><div class="row"><button class="chip ${simple?"on":""}" data-act="simple">${simple?"✅ Simple mode is on":"Turn on Simple mode"}</button><button class="chip ${localStorage.getItem("fh_calm")==="1"?"on":""}" data-act="calm">Calm mode</button></div>
     <div class="meta">Simple mode shows big buttons and fewer tabs. Calm mode softens colors and stops animations.</div></div>
-  <details class="fold"><summary>🔔 Notifications</summary>${healthCard()}${notifCard(pushOn)}</details>
+  <details class="fold"><summary>🔔 Notifications</summary>${healthCard()}${sysStatus()}${notifCard(pushOn)}</details>
   <details class="fold"><summary>🧩 Customize</summary>${customizeHtml()}</details>
   <details class="fold"><summary>🎨 Look and feel</summary><div class="card"><div class="row">${["auto","light","dark","night"].map(t=>`<button class="chip ${th===t?"on":""}" data-act="theme" data-t="${t}">${t==="auto"?"Auto":t==="night"?"🌙 Night mode":t[0].toUpperCase()+t.slice(1)}</button>`).join("")}</div><div class="meta">Night mode turns dark from 8 pm to 6 am.</div><div class="row">${[["","Classic"],["sunrise","🌅 Sunrise"],["forest","🌲 Forest"],["ocean","🌊 Ocean"],["lavender","💜 Lavender"],["rose","🌸 Rose"]].map(([k,n])=>`<button class="chip ${(localStorage.getItem("fh_scene")||"")===k?"on":""}" data-act="scene" data-s="${k}">${n}</button>`).join("")}</div>
     <div class="row">${ACC.map(c=>`<button class="react" style="background:${c};width:34px;height:34px;border-radius:50%" data-act="accent" data-c="${c}" aria-label="color"></button>`).join("")}</div>
@@ -1293,7 +1298,7 @@ function moreView(){
   </details>
   <details class="fold"><summary>📊 My progress</summary><div class="card"><h3>This week</h3>${weekSummary()}</div>
   <div class="card"><h3>Badges</h3>${badges().map(([i,t,o])=>`<div style="opacity:${o?1:.35}">${i} ${esc(t)}${o?" ✅":""}</div>`).join("")}</div>
-  <div class="card"><h3>Keepsakes</h3><div class="row"><button class="btn small ghost" data-act="review">🎉 Year in review</button><button class="btn small ghost" data-act="journal">📄 Download journal</button><button class="btn small ghost" data-act="backup">💾 Backup file</button></div></div>
+  <div class="card"><h3>Keepsakes</h3><div class="row"><button class="btn small ghost" data-act="review">🎉 Year in review</button><button class="btn small ghost" data-act="journal">📄 Download journal</button><button class="btn small ghost" data-act="backup">💾 Backup file</button><label class="btn small ghost" style="cursor:pointer">♻️ Restore my entries<input type="file" accept=".json,application/json" data-act="restorefile" style="display:none"></label></div></div>
   </details>
   <details class="fold"><summary>🔒 Privacy and lock</summary>${bioCard()}<div class="card"><h3>🔒 Privacy and PIN</h3>
     <div class="meta">Each entry has a "Who can see this?" choice: everyone, only you, or you and one friend. Chat can be private one on one too.</div>
@@ -1304,12 +1309,12 @@ function moreView(){
     <div class="meta" style="margin-top:10px">How it works: other people cannot read entries that are not shared with them, once the strict database rules are on. Reading streaks, mood emojis and who prayed are visible to all three of you. Jayden runs the database, so he can technically see raw data in the Firebase console. Keep anything truly secret out of any app.</div></div>
   </details>
   <details class="fold"><summary>ℹ️ Help and about</summary><div class="card"><h3>Resources</h3><div class="meta"><a href="https://tourette.org" target="_blank" rel="noopener">Tourette Association of America</a></div></div>
-  <div class="card"><h3>Help and updates</h3><div class="row"><button class="btn small ghost" data-act="help">❓ Help</button><button class="btn small ghost" data-act="feedback">✉️ Send feedback</button><button class="btn small ghost" data-act="news">✨ What's new</button><button class="btn small ghost" data-act="tourreplay">Replay tour</button></div>
+  <div class="card"><h3>Help and updates</h3><div class="row"><button class="btn small ghost" data-act="install">📲 Install guide</button><button class="btn small ghost" data-act="help">❓ Help</button><button class="btn small ghost" data-act="feedback">✉️ Send feedback</button><button class="btn small ghost" data-act="news">✨ What's new</button><button class="btn small ghost" data-act="tourreplay">Replay tour</button></div>
     <div class="meta" style="margin-top:8px">Version ${APP_VER}. Android: Chrome menu, then Add to Home screen. iPhone: Share, then Add to Home Screen.</div>
     <div class="row"><a class="btn small" href="today.html">Open verse of the day page</a></div></div></details>`;
 }
-const NOTIF_DEFS={morning:["🕊️ Daily verse","12:00"],evening:["🙏 Evening prayer","20:00"],reading:["📖 Reading reminder (only if you have not read)","19:00"],recap:["📊 Sunday weekly recap","09:00"],countdown:["📅 Event countdowns","09:00"],followup:["🌿 Prayer follow ups","10:00"],monthly:["📆 Monthly chapter reminders","09:00"],seasonal:["🎄 Holidays","09:00"],hard:["🌙 Late night check-in","22:00"],hard2:["🌅 Second check-in","15:00"],prayernow:["🤝 Pray together time","20:30"]};
-function notifCfg(){const o=((metas.notif||{})[me])||{};const c={tz:o.tz||"America/Denver"};Object.keys(NOTIF_DEFS).forEach(k=>{c[k]=k.startsWith("hard")?o[k]===true:o[k]!==false;c[k+"T"]=o[k+"T"]||NOTIF_DEFS[k][1];});NCATS.forEach(([k])=>{c[k]=o[k]!==false;});c.quiet=o.quiet===true;c.quietS=o.quietS||"22:00";c.quietE=o.quietE||"07:00";return c;}
+const NOTIF_DEFS={morning:["🕊️ Daily verse","12:00"],evening:["🙏 Evening prayer","20:00"],reading:["📖 Reading reminder (only if you have not read)","19:00"],recap:["📊 Sunday weekly recap","09:00"],countdown:["📅 Event countdowns","09:00"],followup:["🌿 Prayer follow ups","10:00"],monthly:["📆 Monthly chapter reminders","09:00"],seasonal:["🎄 Holidays","09:00"],hard:["🌙 Late night check-in","22:00"],hard2:["🌅 Second check-in","15:00"],prayernow:["🤝 Pray together time","20:30"],hard3:["🛡️ Tough time reminder","21:00"],dailyq:["🧠 Daily Bible question","08:00"]};
+function notifCfg(){const o=((metas.notif||{})[me])||{};const c={tz:o.tz||"America/Denver"};Object.keys(NOTIF_DEFS).forEach(k=>{c[k]=k.startsWith("hard")?o[k]===true:o[k]!==false;c[k+"T"]=o[k+"T"]||NOTIF_DEFS[k][1];});NCATS.forEach(([k])=>{c[k]=o[k]!==false;});c.vib=o.vib||"gentle";c.quiet=o.quiet===true;c.quietS=o.quietS||"22:00";c.quietE=o.quietE||"07:00";return c;}
 const NCATS=[["c_chat","💬 Chat messages"],["c_activity","📝 New posts and entries"],["c_prayer","🙏 Prayer requests"],["c_cheer","🎉 Good news and goodnights"]];
 function notifCard(pushOn){
   const c=notifCfg();
@@ -1319,6 +1324,7 @@ function notifCard(pushOn){
   <div class="meta" style="margin-top:12px">Pick what you want and when. Times use your time zone below.</div>${rows}
   <div class="meta" style="margin-top:14px">Which alerts do you want?</div>${NCATS.map(([k,l])=>`<div class="row"><button class="chip ${c[k]?"on":""}" data-act="ntog2" data-k="${k}">${c[k]?"✅":"⭕"} ${l}</button></div>`).join("")}<div class="meta">Pokes, requests for help and replies always come through.</div>
   <div class="row" style="align-items:center"><button class="chip ${c.quiet?"on":""}" data-act="ntog2" data-k="quiet">${c.quiet?"✅":"⭕"} 🌙 Quiet hours</button><input type="time" style="width:auto" value="${esc(c.quietS)}" data-act="ntime2" data-k="quietS"> to <input type="time" style="width:auto" value="${esc(c.quietE)}" data-act="ntime2" data-k="quietE"></div><div class="meta">During quiet hours only pokes and urgent things notify you. The rest wait in your missed card.</div>
+  <div class="meta" style="margin-top:10px">Vibration</div><div class="row">${[["off","Silent"],["gentle","Gentle"],["strong","Strong"]].map(([k,l])=>`<button class="chip ${c.vib===k?"on":""}" data-act="ntog3" data-v="${k}">${l}</button>`).join("")}</div>
   <label>Your time zone</label><select data-act="ntz">${[["America/Denver","Mountain"],["America/Chicago","Central"],["America/New_York","Eastern"],["America/Los_Angeles","Pacific"]].map(([v,n])=>`<option value="${v}" ${c.tz===v?"selected":""}>${n}</option>`).join("")}</select></div>`;
 }
 function reviewDialog(){
@@ -1331,7 +1337,7 @@ function reviewDialog(){
   const reads=PEOPLE.map(p=>`${p}: ${(((metas.reads||{})[p])||[]).length} days`).join(", ");
   openDlg(`<h3>🎉 Year in review</h3><p>🕊️ Verses saved: <b>${c("verse")}</b></p><p>🙏 Prayers: <b>${c("prayer")}</b> (answered: <b>${items.filter(i=>i.answered).length}</b>)</p>
    <p>⛪ Sermons: <b>${c("sermon")}</b></p><p>🌻 Thankful: <b>${c("thanks")}</b></p><p>🌲 Places: <b>${places}</b></p><p>💛 Average check in mood: <b>${avg}</b> of 5</p>
-   <p>🕊️ Favorite verse theme: <b>${top?esc(top[0]):"n/a"}</b></p><p>📖 Reading days: ${esc(reads)}</p><div class="row"><button class="btn" data-act="close">Close</button></div>`);
+   <p>🕊️ Favorite verse theme: <b>${top?esc(top[0]):"n/a"}</b></p><p>📖 Reading days: ${esc(reads)}</p><div class="row"><button class="btn" data-act="print">🖨️ Save as PDF</button><button class="btn ghost" data-act="close">Close</button></div>`);
 }
 function hardDay(){
   const good=items.filter(i=>i.type==="verse"&&i.text&&visible(i)&&["Hard days","Peace","Strength","Encouragement","Trust"].includes(i.tag));
@@ -1360,6 +1366,20 @@ function viewFor(sub){
     case "trivia":return triviaView();
     case "guided":return guidedView();
     case "habits":return habitsView();
+    case "board":return boardView();
+    case "moment":return momentView();
+    case "ans":return ansView();
+    case "memorize":return vmView();
+    case "art":return artView();
+    case "srev":return sermView();
+    case "games":return gamesView();
+    case "song":return listView("song",songVotes());
+    case "packs":return packsView();
+    case "fast":return fastView();
+    case "cal":return calView();
+    case "event":return listView("event",eventsTop());
+    case "thanks":return listView("thanks",thanksJar());
+    case "letter":return listView("letter",`<div class="card"><b>💌 Ask a friend to write you a letter</b><div class="row">${PEOPLE.filter(p=>p!==me).map(p=>`<button class="chip" data-act="askletter" data-p="${esc(p)}">${esc(p)}</button>`).join("")}</div></div>`);
     case "album":return albumView();
     case "voice":return voiceView();
     case "prayfor":return prayforView();
@@ -1387,7 +1407,20 @@ async function afterRender(){
       <div class="row"><button class="btn small" data-act="savetv" data-i="${i}">Save to our verse bank</button><button class="btn small ghost" data-act="sharetv" data-i="${i}">📤</button><button class="btn small ghost" data-act="speaktv" data-i="${i}">🔊</button></div></div>`).join(""):`<p class="empty">Could not load verses. Check your connection.</p>`;
   }
 }
+let curKey=null;
+function navKey(){return [grp,subSel[grp]||"",homeTab].join("|");}
+function navSync(){try{const k=navKey();if(curKey===null){history.replaceState({k},"");curKey=k;return;}if(k!==curKey){history.pushState({k},"");curKey=k;}}catch(e){}}
+window.addEventListener("popstate",e=>{
+  const dl=$("dlg");
+  if(dl&&dl.open){dl.close();try{history.pushState({k:curKey},"");}catch(x){}return;}
+  const k=e.state&&e.state.k;
+  if(!k){try{history.pushState({k:curKey},"");}catch(x){}toast("You are on the first screen");return;}
+  const [g,sb,t]=k.split("|");
+  grp=g;if(g in subSel)subSel[g]=sb||null;homeTab=t||"us";filt="all";q="";curKey=k;
+  render();scrollTo(0,0);
+});
 function render(){
+  navSync();
   const ae=document.activeElement;
   if(ae&&ae.id==="q"&&$("lst")){$("lst").innerHTML=listItems(curSub());return;}
   if(ae&&ae.id==="cin"&&$("chatlist")){
@@ -1414,6 +1447,8 @@ function render(){
   m.innerHTML=html;
   afterRender();
   if($("chatlist")){window.scrollTo(0,document.body.scrollHeight);}
+  if($("artc"))drawArt();
+  trivTimerSync();
 }
 
 /* ---------- v4 features ---------- */
@@ -1425,7 +1460,7 @@ function emptyHtml(def){
   const e=EMPTY[def.type]||["🌱","Nothing here yet."];
   return `<div class="empty"><div class="big">${e[0]}</div><p>${esc(e[1])}</p><button class="btn" data-act="add" data-t="${def.type}" ${def.preset?`data-pre="${esc(JSON.stringify(def.preset))}"`:""}>+ Add the first one</button></div>`;
 }
-const TILEDESC={wall:"Prayer requests everyone can see",song:"Songs we share",trip:"Plan trips with the weather",sky:"Sunrise, sunset and stars",chapter:"Read a chapter and share thoughts",psalm:"A psalm to pray today",verse:"Save the verses you love",prayer:"Write and track your prayers",sermon:"Notes from church",thanks:"What you are thankful for",plan:"Reading plans to follow together",memo:"Learn a verse by heart",topics:"Verses for what you are feeling",learn:"Simple Bible basics",question:"Questions you are wrestling with",calm:"Breathe and slow down",chat:"Message each other",checkin:"How is your heart today?",goal:"Goals we share",event:"Dates and countdowns",letter:"Letters and time capsules",jar:"Encouragement to save",memory:"Memories we keep",dream:"Dreams and hopes",album:"Our photos",voice:"Record a voice note",timeline:"Moments in our faith story",prayfor:"Pray for each other this week",fun:"Games and fun",ideas:"Content ideas",wins:"Advocacy wins",todo:"Our shared to do list",outdoor:"Devotionals outside",hike:"Your hike log",stars:"Stargazing log",gear:"Gear and packing",vote:"Vote on the next trip",camp:"Camping trips and memories",trivia:"Test what you know about the Bible",guided:"Pray step by step with a timer",habits:"Track daily faith habits"};
+const TILEDESC={wall:"Prayer requests everyone can see",song:"Songs we share",trip:"Plan trips with the weather",sky:"Sunrise, sunset and stars",chapter:"Read a chapter and share thoughts",psalm:"A psalm to pray today",verse:"Save the verses you love",prayer:"Write and track your prayers",sermon:"Notes from church",thanks:"What you are thankful for",plan:"Reading plans to follow together",memo:"Learn a verse by heart",topics:"Verses for what you are feeling",learn:"Simple Bible basics",question:"Questions you are wrestling with",calm:"Breathe and slow down",chat:"Message each other",checkin:"How is your heart today?",goal:"Goals we share",event:"Dates and countdowns",letter:"Letters and time capsules",jar:"Encouragement to save",memory:"Memories we keep",dream:"Dreams and hopes",album:"Our photos",voice:"Record a voice note",timeline:"Moments in our faith story",prayfor:"Pray for each other this week",fun:"Games and fun",ideas:"Content ideas",wins:"Advocacy wins",todo:"Our shared to do list",outdoor:"Devotionals outside",hike:"Your hike log",stars:"Stargazing log",gear:"Gear and packing",vote:"Vote on the next trip",camp:"Camping trips and memories",trivia:"Test what you know about the Bible",board:"See who is leading in trivia, habits and prayer",moment:"Verses and a prayer for how you feel",packs:"One short reading a day on a topic",fast:"Fast together and check in daily",cal:"Events, trips and sermons by date",ans:"Everything God has answered",memorize:"Fill in the blanks and learn verses",art:"Turn a verse into a picture",srev:"Review your sermon notes",games:"Who am I and Scripture scramble",joke:"Funny moments and stories we share",guided:"Pray step by step with a timer",habits:"Track daily faith habits"};
 const TCOL=["#e0803a","#3d6fb5","#2f8f5b","#8a4fb5","#c2476b","#d19a1f"];
 function tilesView(subs){
   const g=GROUPS[grp];
@@ -1499,11 +1534,11 @@ function pokesCard(){
 function replaceItem(){return items.find(i=>i.type==="replace"&&i.author===me);}
 function replaceDlg(){
   const r=replaceItem();
-  openDlg(`<h3>🌿 My replace it list</h3><p>When you feel tempted, what is one good thing you can do instead? Write 3 to 5, one per line. Only you see this.</p><textarea id="rpl" rows="6" placeholder="Pray out loud&#10;Go for a walk&#10;Text a friend&#10;Listen to a worship song">${esc((r&&r.text)||"")}</textarea><div class="row"><button class="btn" data-act="replacesave">Save</button><button class="btn ghost" data-act="close">Cancel</button></div>`);
+  openDlg(`<h3>🌿 My replace it list</h3><p>When you feel tempted, what is one good thing you can do instead? Write 3 to 5, one per line. Only you see this.</p><textarea id="rpl" rows="6" placeholder="Pray out loud&#10;Go for a walk&#10;Text a friend&#10;Listen to a worship song">${esc((r&&r.text)||"")}</textarea><p>Places, apps or times to stay away from. Only you see this.</p><textarea id="rsafe" rows="3" placeholder="Late night scrolling&#10;That one app">${esc((r&&r.safe)||"")}</textarea><div class="row"><button class="btn" data-act="replacesave">Save</button><button class="btn ghost" data-act="close">Cancel</button></div>`);
 }
 function replaceSave(){
   const t=($("rpl").value||"").trim(),r=replaceItem();
-  save({...(r||{}),type:"replace",text:t,priv:me,author:me,created:(r&&r.created)||Date.now()},true);closeDlg();toast("Saved 🌿");
+  save({...(r||{}),type:"replace",text:t,safe:(($("rsafe")||{}).value||"").trim(),priv:me,author:me,created:(r&&r.created)||Date.now()},true);closeDlg();toast("Saved 🌿");
 }
 function healthCard(){
   const ok=[],bad=[];
@@ -1512,9 +1547,12 @@ function healthCard(){
   (localStorage.getItem("fh_push")==="1"?ok:bad).push(localStorage.getItem("fh_push")==="1"?"This phone is registered":"This phone is not registered yet. Tap Fix.");
   const sa=window.matchMedia&&matchMedia("(display-mode: standalone)").matches;
   (sa?ok:bad).push(sa?"Installed as an app":"Not installed. In Chrome tap the menu, then Add to Home screen.");
+  (navigator.onLine?ok:bad).push(navigator.onLine?"Online":"No internet right now");
+  const swOk=!!(navigator.serviceWorker&&navigator.serviceWorker.controller);
+  (swOk?ok:bad).push(swOk?"Background helper is running":"Background helper is not running yet. Close the app fully and open it again.");
   const all=!bad.length;
   return `<div class="card"><h3>${all?"✅":"⚠️"} Notification check</h3>${ok.map(x=>`<div class="meta">✅ ${esc(x)}</div>`).join("")}${bad.map(x=>`<div>⚠️ ${esc(x)}</div>`).join("")}
-  ${deliveryLines()}<div class="meta" style="margin-top:8px">Also check in phone Settings: Chrome battery set to Unrestricted, and Do Not Disturb off.</div>
+  ${deliveryLines()}<details style="margin-top:8px"><summary class="meta">📱 Samsung steps if alerts still do not come</summary><ol class="meta" style="padding-left:20px"><li>Settings, Apps, Chrome, Notifications: on.</li><li>Settings, Apps, Chrome, Battery: Unrestricted.</li><li>Settings, Battery, Background usage limits: remove Chrome from Sleeping apps and Deep sleeping apps.</li><li>Turn off Do Not Disturb.</li><li>Open Faith Hub from the home screen icon, then tap Fix notifications.</li></ol></details>
   <div class="row"><button class="btn small" data-act="notif">Fix notifications</button><button class="btn small ghost" data-act="notiftest">Send me a test</button></div></div>`;
 }
 
@@ -1671,26 +1709,31 @@ setInterval(()=>{
 let triv={cat:null,set:[],i:0,score:0,pick:null,streak:0,ord:[],best:0};
 const shuf=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
 function trivBest(){try{return JSON.parse(localStorage.getItem("fh_trivbest")||"{}");}catch(e){return{};}}
-function trivOpt(){let o={};try{o=JSON.parse(localStorage.getItem("fh_trivopt")||"{}");}catch(e){}return {n:o.n||10,facts:o.facts!==false};}
+function trivOpt(){let o={};try{o=JSON.parse(localStorage.getItem("fh_trivopt")||"{}");}catch(e){}return {n:o.n||10,facts:o.facts!==false,mode:o.mode||"classic"};}
+const TQ=()=>triv.qs?triv.qs[triv.i]:QUIZ[triv.set[triv.i]];
+function mkTF(i){const q=QUIZ[i],truth=Math.random()<.5,idx=truth?q.a:shuf(q.o.map((x,k)=>k).filter(k=>k!==q.a))[0];return {c:q.c,q:q.q+" Is the answer: "+q.o[idx]+"?",o:["True","False"],a:truth?0:1,r:q.r,e:q.e};}
+function mkFin(v,all){const w=v[1].split(/\s+/),cut=w.length-4,tail=x=>x[1].split(/\s+/).slice(-4).join(" "),others=shuf(all.filter(x=>x[0]!==v[0])).slice(0,2),o=shuf([tail(v),...others.map(tail)]);return {c:"Verses",q:"Finish the verse ("+v[0]+"): "+w.slice(0,cut).join(" ")+" ...",o,a:o.indexOf(tail(v)),r:v[0],e:"Say it out loud: "+v[1]};}
 function trivStart(cat){
   const pool=QUIZ.map((q,i)=>i).filter(i=>cat==="all"||QUIZ[i].c===cat);
-  triv={cat,set:shuf(pool).slice(0,trivOpt().n),i:0,score:0,pick:null,streak:0,ord:[],best:0};trivOrd();
+  triv={cat,set:shuf(pool).slice(0,trivOpt().n),i:0,score:0,pick:null,streak:0,ord:[],best:0,mode:trivOpt().mode};
+  if(triv.mode==="tf"){triv.qs=triv.set.map(mkTF);}else if(triv.mode==="verse"){const al=MEMV.filter(x=>x[1].split(/\s+/).length>=8);triv.qs=shuf(al).slice(0,Math.min(triv.set.length,al.length)).map(v=>mkFin(v,al));triv.set=triv.qs.map((x,i)=>i);}
+  trivOrd();
 }
-function trivOrd(){const q=QUIZ[triv.set[triv.i]];triv.ord=q?shuf(q.o.map((x,i)=>i)):[];}
+function trivOrd(){const q=TQ();triv.ord=q?shuf(q.o.map((x,i)=>i)):[];}
 function triviaView(){
   if(!triv.cat){
     const b=trivBest();
-    return `<h2>🧠 Bible trivia</h2><div class="tvhero"><div class="tvbig">Test what you know</div><div>Ten questions each round, with a fun fact after every answer.</div></div><div class="card"><b>⚙️ Options</b><div class="meta">Questions per round</div><div class="row">${[5,10,20].map(n=>`<button class="chip ${trivOpt().n===n?"on":""}" data-act="trivn" data-n="${n}">${n}</button>`).join("")}</div><div class="row"><button class="chip ${trivOpt().facts?"on":""}" data-act="trivfacts">${trivOpt().facts?"✅":"⭕"} Show a fun fact after each answer</button></div></div><div class="meta" style="margin:10px 2px">Pick a topic:</div><div class="tlist">${TCATS.map(([k,e,n,d,c])=>{const cnt=k==="all"?QUIZ.length:QUIZ.filter(q=>q.c===k).length;return `<button class="trow" data-act="trivstart" data-c="${esc(k)}" style="--c:${c}"><span class="ti">${e}</span><span class="tx"><b>${esc(n)}</b><small>${esc(d)} · ${cnt} questions${b[k+"|"+trivOpt().n]!==undefined?" · Best "+b[k+"|"+trivOpt().n]+"/"+trivOpt().n:""}</small></span><span class="ch">›</span></button>`;}).join("")}</div>`;
+    return `<h2>🧠 Bible trivia</h2><div class="tvhero"><div class="tvbig">Test what you know</div><div>Ten questions each round, with a fun fact after every answer.</div></div><div class="card"><b>⚙️ Options</b><div class="meta">Questions per round</div><div class="row">${[5,10,20].map(n=>`<button class="chip ${trivOpt().n===n?"on":""}" data-act="trivn" data-n="${n}">${n}</button>`).join("")}</div><div class="meta">Mode</div><div class="row">${[["classic","Classic"],["timed","⏱️ Timed"],["tf","True or false"],["verse","Finish the verse"]].map(([k,l])=>`<button class="chip ${trivOpt().mode===k?"on":""}" data-act="trivmode" data-m="${k}">${l}</button>`).join("")}</div><div class="row"><button class="chip ${trivOpt().facts?"on":""}" data-act="trivfacts">${trivOpt().facts?"✅":"⭕"} Show a fun fact after each answer</button></div></div>${duelsCard()}<div class="meta" style="margin:10px 2px">Pick a topic:</div><div class="tlist">${TCATS.map(([k,e,n,d,c])=>{const cnt=k==="all"?QUIZ.length:QUIZ.filter(q=>q.c===k).length;return `<button class="trow" data-act="trivstart" data-c="${esc(k)}" style="--c:${c}"><span class="ti">${e}</span><span class="tx"><b>${esc(n)}</b><small>${esc(d)} · ${cnt} questions${b[k+"|"+trivOpt().n]!==undefined?" · Best "+b[k+"|"+trivOpt().n]+"/"+trivOpt().n:""}</small></span><span class="ch">›</span></button>`;}).join("")}</div>`;
   }
   const cat=TCATS.find(x=>x[0]===triv.cat)||TCATS[0];
   if(triv.i>=triv.set.length){
     const n=triv.set.length,sc=triv.score,msg=sc===n?"Perfect! You really know your Bible. 🙌":sc>=n*.8?"Great job! Almost perfect.":sc>=n*.5?"Nice work! Keep learning.":"Good start. Every round teaches you something.";
     return `<h2>🏁 Round complete</h2><div class="tvhero"><div class="tvbig">${sc} / ${n}</div><div>${msg}</div>${triv.best?`<div style="margin-top:6px">🏅 New best score for ${esc(cat[2])}!</div>`:""}</div><div class="row"><button class="btn" data-act="trivstart" data-c="${esc(triv.cat)}">Play again</button><button class="btn ghost" data-act="trivmenu">Choose another topic</button></div>`;
   }
-  const q=QUIZ[triv.set[triv.i]],letters="ABCD",pct=Math.round(triv.i/triv.set.length*100);
+  const q=TQ(),letters="ABCD",pct=Math.round(triv.i/triv.set.length*100);
   return `<div class="row" style="justify-content:space-between;align-items:center"><button class="btn small ghost" data-act="trivmenu">← Topics</button><span class="pill">${cat[1]} ${esc(cat[2])}</span></div>
   <div class="pbar"><span style="width:${pct}%"></span></div>
-  <div class="meta" style="display:flex;justify-content:space-between"><span>Question ${triv.i+1} of ${triv.set.length}</span><span>⭐ ${triv.score}${triv.streak>1?" · 🔥 "+triv.streak+" in a row":""}</span></div>
+  <div class="meta" style="display:flex;justify-content:space-between"><span>Question ${triv.i+1} of ${triv.set.length}${triv.mode==="timed"?` · <b id="tvt"></b>`:""}</span><span>⭐ ${triv.score}${triv.streak>1?" · 🔥 "+triv.streak+" in a row":""}</span></div>
   <div class="card tvq"><h3>${esc(q.q)}</h3>${triv.ord.map((oi,k)=>{const right=oi===q.a,picked=triv.pick===oi;let cl="opt";if(triv.pick!==null){if(right)cl+=" good";else if(picked)cl+=" bad";else cl+=" dim";}return `<button class="${cl}" data-act="trivpick" data-i="${oi}" ${triv.pick!==null?"disabled":""}><span class="ltr">${letters[k]}</span><span>${esc(q.o[oi])}</span>${triv.pick!==null&&right?`<span class="mk">✓</span>`:triv.pick!==null&&picked?`<span class="mk">✗</span>`:""}</button>`;}).join("")}</div>
   ${triv.pick!==null?`<div class="card gentle"><b>${triv.pick===q.a?"🎉 Correct!":"Not quite."}</b>${trivOpt().facts?`<div style="margin:6px 0"><b>💡 Did you know?</b> ${esc(q.e)}</div>`:""}<div class="meta">📖 ${esc(q.r)} · <a href="https://www.biblegateway.com/passage/?search=${encodeURIComponent(q.r)}&version=WEB" target="_blank" rel="noopener">Read it</a></div><div class="row"><button class="btn" data-act="trivnext">${triv.i+1>=triv.set.length?"See my score":"Next →"}</button></div></div>`:""}`;
 }
@@ -1705,10 +1748,25 @@ function habitsCard(){
   const done=hs.filter(h=>habitDone(t,h)).length;
   return `<div class="card"><b>✅ Daily habits</b> <span class="meta">${done} of ${hs.length} today</span><div class="row">${hs.map(h=>{const x=HABITS.find(y=>y[0]===h);return x?`<button class="chip ${habitDone(t,h)?"on":""}" data-act="habit" data-h="${h}">${x[1]} ${esc(x[2])}</button>`:"";}).join("")}</div></div>`;
 }
+
+function boardOf(u){const b=((metas.board||{})[u])||{};const hb=((metas.habits||{})[u])||{};let hc=0;Object.keys(hb).forEach(k=>{hc+=(hb[k]||[]).length;});const pd=((((metas.praydays||{})[u])||[])).length;
+  const o={triv:b.triv||0,perfect:b.perfect||0,rounds:b.rounds||0,streak:b.streak||0,habits:hc,prayed:pd};
+  Object.assign(o,boardExtra(u));o.pts=o.triv+o.perfect*5+o.rounds*2+o.habits*2+o.prayed*5+o.games*2+o.verses*3+o.dq*2;return o;}
+let lbTab="pts";
+function boardView(){
+  const T=[["pts","🏆 Total points"],["week","📅 This week"],["triv","🧠 Trivia"],["habits","✅ Habits"],["prayed","🙏 Prayer days"]];
+  const rows=PEOPLE.map(u=>({u,...boardOf(u),week:wpts(u,weekKey())})).sort((a,b)=>b[lbTab]-a[lbTab]||a.u.localeCompare(b.u));
+  const top=rows[0][lbTab],med=["🥇","🥈","🥉"];
+  const unit={pts:"points",week:"points this week",triv:"correct answers",habits:"habits checked",prayed:"days prayed"}[lbTab];
+  return `<h2>🏆 Leaderboard</h2><div class="meta">A friendly race. Everyone cheers everyone on.</div>${(()=>{const w=weekWinner(prevWeeks(1)[0]);return w?`<div class="card gentle">👑 Last week's winner: <b>${esc(w[0])}</b> with ${w[1]} points</div>`:"";})()}${wchalCard()}${badgesCard()}
+  <div class="row">${T.map(t=>`<button class="chip ${lbTab===t[0]?"on":""}" data-act="lbtab" data-t="${t[0]}">${t[1]}</button>`).join("")}</div>
+  ${rows.map((r,i)=>`<div class="card ${r.u===me?"gentle":""}" style="border-left:6px solid ${avc(r.u)}"><div style="display:flex;align-items:center;gap:12px"><div style="font-size:34px">${top>0?med[i]||"🎖️":"🎖️"}</div><div style="flex:1"><b style="font-size:19px">${esc(r.u)}${r.u===me?" (you)":""}</b> <span>${badgeList(r.u).filter(x=>x[3]).map(x=>x[0]).join("")}${"👑".repeat(Math.min(3,champs(r.u)))}</span><div class="pbar" style="margin:6px 0"><span style="width:${top>0?Math.round(r[lbTab]/top*100):0}%"></span></div><div class="meta">${r.triv} correct · best streak ${r.streak} · ${r.perfect} perfect rounds · ${r.habits} habits · ${r.prayed} prayer days</div></div><div style="text-align:right"><div style="font:800 28px system-ui">${r[lbTab]}</div><div class="meta">${unit}</div></div></div></div>`).join("")}
+  <div class="card"><b>How points work</b><div class="meta">Each correct trivia answer is 1 point. A finished round is 2 points. A perfect round is 5 more. Each habit you check is 2 points. Each day you finish Guided prayer or tap Pray together is 5 points. A Bible game win is 2, a finished verse practice is 3, and a daily question is 2.</div></div>`;
+}
 function habitsView(){
   const hs=myHabits(),t=ymd(new Date()),days=[];
   for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);days.push([ymd(d),["Su","Mo","Tu","We","Th","Fr","Sa"][d.getDay()]]);}
-  const others=PEOPLE.filter(p=>p!==me).map(p=>{const c=HABITS.filter(h=>habitDone(t,h[0],p)).length;return `<div class="meta">${esc(p)}: ${c} habit${c===1?"":"s"} checked today</div>`;}).join("");
+  const others=PEOPLE.filter(p=>p!==me).map(p=>{const c=HABITS.filter(h=>habitDone(t,h[0],p)).length;return `<div class="meta">${esc(p)}: ${c} habit${c===1?"":"s"} checked today ${c===0?`<button class="chip" data-act="cheer" data-p="${esc(p)}">👏 Cheer</button>`:""}</div>`;}).join("");
   return `<h2>✅ Habits</h2><div class="card"><div class="meta">Tap to check off today. Friends can see how many you checked, not which ones.</div><div class="row">${hs.map(h=>{const x=HABITS.find(y=>y[0]===h);return x?`<button class="chip ${habitDone(t,h)?"on":""}" data-act="habit" data-h="${h}">${x[1]} ${esc(x[2])}</button>`:"";}).join("")||`<span class="meta">Pick some habits below.</span>`}</div>${others}</div>
   <div class="card"><b>This week</b><table style="width:100%;border-collapse:collapse;font:15px system-ui;margin-top:8px"><tr><td></td>${days.map(d=>`<td style="text-align:center;color:var(--mute)">${d[1]}</td>`).join("")}<td style="text-align:center;color:var(--mute)">🔥</td></tr>${hs.map(h=>{const x=HABITS.find(y=>y[0]===h);return x?`<tr><td>${x[1]}</td>${days.map(d=>`<td style="text-align:center">${habitDone(d[0],h)?"✅":"▫️"}</td>`).join("")}<td style="text-align:center;font-weight:700">${habitStreak(h)}</td></tr>`:"";}).join("")}</table></div>
   <div class="card"><b>Choose my habits</b><div class="meta">Turn on the ones you want to track.</div><div class="row">${HABITS.map(x=>`<button class="chip ${hs.includes(x[0])?"on":""}" data-act="habitpick" data-h="${x[0]}">${hs.includes(x[0])?"✅":"⭕"} ${x[1]} ${esc(x[2])}</button>`).join("")}</div></div>`;
@@ -1800,30 +1858,379 @@ function pokeFly(){
   }
 }
 
-const HOMECARDS=[["poke","👉 Poke button"],["strong","💪 Stay strong"],["trio","📖 Read, Pray, Message buttons"],["chips","⚡ Quick buttons (good news, goodnight...)"],["verse","🕊️ Verse of the day"],["pray","🤝 Pray together today"]];
+
+/* ===== v5.2 ===== */
+const partnerOf=()=>STRONGP.find(x=>x!==me);
+function ciLog(){return ((metas.ci||{})[me])||{};}
+function checkinCard(){
+  if(!STRONGP.includes(me))return "";
+  const t=ymd(new Date()),v=ciLog()[t],O=[["great","😊 Great"],["ok","🙂 Okay"],["rough","😔 Rough"]];
+  return `<div class="card gentle"><b>🤝 How was today?</b><div class="meta">${v?"Saved. Tap to change it.":"One tap. If it was rough, your friend gets a gentle nudge."}</div><div class="row">${O.map(([k,l])=>`<button class="chip ${v===k?"on":""}" data-act="ci" data-v="${k}">${l}</button>`).join("")}</div></div>`;
+}
+const WIND=[["Psalm 4:8","In peace I will both lay myself down and sleep, for you alone, Yahweh, make me live in safety.","Thank God for one thing from today."],["Proverbs 3:24","When you lie down, you will not be afraid. Yes, you will lie down, and your sleep will be sweet.","Hand over what is still on your mind."],["Matthew 11:28","Come to me, all you who labor and are heavily burdened, and I will give you rest.","Pray for one person by name."],["Psalm 23:2","He makes me lie down in green pastures. He leads me beside still waters.","Tell God what you need for tomorrow."]];
+function windCard(){
+  const h=new Date().getHours();if(h<21&&h>=4)return "";
+  const v=WIND[new Date().getDate()%WIND.length];
+  return `<div class="card gentle"><b>🌙 Wind down</b><div style="margin:6px 0">“${esc(v[1])}” <span class="meta">${esc(v[0])}</span></div><div class="meta">${esc(v[2])}</div><div class="row"><button class="chip" data-act="goodnight">🌙 Say goodnight</button><button class="chip" data-act="dimtog">${localStorage.getItem("fh_theme")==="night"?"☀️ Normal colors":"🌑 Dim the app"}</button></div></div>`;
+}
+function rescueCard(){
+  if(new Date().getHours()<17)return "";
+  const t=ymd(new Date()),r=myHabits().filter(h=>!habitDone(t,h)&&habitStreak(h)>=2);
+  if(!r.length)return "";
+  const h=r[0],x=HABITS.find(y=>y[0]===h);if(!x)return "";
+  return `<div class="card gentle"><b>🔥 Save your streak</b><div style="margin:6px 0">${x[1]} ${esc(x[2])} is at ${habitStreak(h)} days. Check it today to keep it going.</div><div class="row"><button class="btn small" data-act="habit" data-h="${h}">Check it now</button></div></div>`;
+}
+const MOM=[
+ ["tempted","🛡️","Tempted","I need strength right now",[["1 Corinthians 10:13","No temptation has taken you except what is common to man. God is faithful, who will not allow you to be tempted above what you are able, but will with the temptation also make the way of escape, that you may be able to endure it."],["James 4:7","Be subject therefore to God. Resist the devil, and he will flee from you."],["Matthew 26:41","Watch and pray, that you don't enter into temptation. The spirit indeed is willing, but the flesh is weak."]],"Lord, I need you right now. Help me turn away and find the way out. Give me strength, and help me reach out to my friend."],
+ ["guilty","🕊️","Guilty","I messed up",[["1 John 1:9","If we confess our sins, he is faithful and righteous to forgive us the sins and to cleanse us from all unrighteousness."],["Romans 8:1","There is therefore now no condemnation to those who are in Christ Jesus."]],"Father, I am sorry. Thank you that you forgive me. Help me get back up and walk with you again."],
+ ["anxious","🌧️","Anxious","My mind will not slow down",[["Philippians 4:6-7","In nothing be anxious, but in everything, by prayer and petition with thanksgiving, let your requests be made known to God. And the peace of God, which surpasses all understanding, will guard your hearts and your thoughts in Christ Jesus."],["1 Peter 5:7","casting all your worries on him, because he cares for you."]],"God, I give you my worries one by one. Give me your peace, which I cannot explain."],
+ ["lonely","🫂","Lonely","I feel alone",[["Deuteronomy 31:6","Be strong and courageous. Don't be afraid or scared of them, for Yahweh your God himself is who goes with you. He will not fail you nor forsake you."],["Psalm 34:18","Yahweh is near to those who have a broken heart, and saves those who have a crushed spirit."],["Matthew 28:20","Behold, I am with you always, even to the end of the age."]],"Jesus, thank you that you are with me. Help me feel it, and send someone my way today."],
+ ["angry","🔥","Angry","I am about to lose it",[["Ephesians 4:26","Be angry, and don't sin. Don't let the sun go down on your wrath."],["James 1:19","let everyone be swift to hear, slow to speak, and slow to anger."],["Proverbs 15:1","A gentle answer turns away wrath, but a harsh word stirs up anger."]],"Lord, slow me down. Help me breathe, listen, and answer with gentleness."],
+ ["discouraged","🌫️","Discouraged","I want to give up",[["Isaiah 41:10","Don't you be afraid, for I am with you. Don't be dismayed, for I am your God. I will strengthen you. Yes, I will help you."],["Joshua 1:9","Haven't I commanded you? Be strong and courageous. Don't be afraid. Don't be dismayed, for Yahweh your God is with you wherever you go."]],"God, I am tired of trying. Hold me up today and show me the next small step."],
+ ["tired","😮‍💨","Tired","I am worn out",[["Matthew 11:28","Come to me, all you who labor and are heavily burdened, and I will give you rest."],["Isaiah 40:31","but those who wait for Yahweh will renew their strength. They will mount up with wings like eagles. They will run, and not be weary. They will walk, and not faint."],["Galatians 6:9","Let us not be weary in doing good, for we will reap in due season if we don't give up."]],"Jesus, I am worn out. Give me rest and renew my strength."]
+];
+let momSel=null;
+function momentView(){
+  const L=MOM.filter(m=>STRONGP.includes(me)||!["tempted","guilty"].includes(m[0]));
+  if(!momSel||!L.find(m=>m[0]===momSel))return `<h2>📖 Scripture for the moment</h2><div class="meta">How are you feeling right now? Tap one for verses and a short prayer.</div><div class="tlist">${L.map(m=>`<button class="trow" data-act="mom" data-k="${m[0]}"><span class="ti">${m[1]}</span><span class="tt"><b>${m[2]}</b><span class="meta">${m[3]}</span></span></button>`).join("")}</div>`;
+  const m=L.find(x=>x[0]===momSel);
+  const po=PEOPLE.filter(p=>p!==me&&STRONGP.includes(p));
+  return `<h2>${m[1]} ${m[2]}</h2><div class="tvhero"><div>${esc(m[3])}. You are not alone in this.</div></div>${m[4].map(v=>`<div class="card vcard"><div>${esc(v[1])}</div><b>${esc(v[0])}</b> <span class="meta">WEB</span></div>`).join("")}<div class="card gentle"><b>🙏 A short prayer</b><div style="margin-top:6px">${esc(m[5])}</div></div>${m[0]==="tempted"&&po.length&&STRONGP.includes(me)?`<div class="row">${po.map(p=>`<button class="btn" data-act="poke" data-p="${esc(p)}">👉 Poke ${esc(p)}</button>`).join("")}</div>`:""}<div class="row">${m[0]==="tempted"?madeBtn():""}<button class="btn ghost" data-act="mom" data-k="">Pick another</button></div>`;
+}
+const favs=()=>lsArr("fh_favs");
+function favCard(){
+  const f=favs();if(!f.length)return "";
+  return `<div class="card"><b>⭐ My shortcuts</b><div class="row">${f.map(x=>{const g=["faith","together","outdoor"].find(g=>GROUPS[g].subs.includes(x));return g?`<button class="chip" data-act="goto" data-g="${g}" data-s="${x}">${esc(LBL[x]||x)}</button>`:"";}).join("")}</div></div>`;
+}
+function applyFs(){try{document.documentElement.style.zoom=localStorage.getItem("fh_fs")||1;}catch(e){}}
+applyFs();
+function setOffline(){let b=$("offb");if(!b){b=document.createElement("div");b.id="offb";b.style.cssText="position:fixed;top:0;left:0;right:0;z-index:50;background:#8a4b00;color:#fff;text-align:center;padding:6px;font:600 14px system-ui";b.textContent="📴 You are offline. You can still read. New things will send when you reconnect.";document.body.appendChild(b);}b.style.display=navigator.onLine?"none":"block";}
+window.addEventListener("online",setOffline);window.addEventListener("offline",setOffline);setTimeout(setOffline,500);
+/* duels */
+const duels=()=>metas.duels||{};
+function myDuels(){return Object.entries(duels()).map(([id,d])=>({id,...d})).filter(d=>d.from===me||d.to===me||d.to==="all").sort((a,b)=>(b.ts||0)-(a.ts||0));}
+function duelNewAll(){duelNew("all");}
+function duelNew(p){
+  const id="d"+Date.now(),set=shuf(QUIZ.map((q,i)=>i)).slice(0,10);
+  setMeta("duels",{[id]:{from:me,to:p,set,ts:Date.now(),scores:{}}});
+  sendPing(p==="all"?PEOPLE.filter(x=>x!==me):[p],p==="all"?"started a team trivia round ⚔️ Everyone plays the same questions":"challenged you to Bible trivia ⚔️","activity");
+  metas.duels=Object.assign({},metas.duels,{[id]:{from:me,to:p,set,ts:Date.now(),scores:{}}});
+  duelPlay(id);
+}
+function duelPlay(id){const d=duels()[id];if(!d)return;triv={cat:"duel",set:d.set.slice(),i:0,score:0,pick:null,streak:0,ord:[],best:0,duel:id};trivOrd();grp="together";subSel.together="trivia";render();scrollTo(0,0);}
+function duelLine(d){
+  if(d.to==="all"){const sc=d.scores||{};return `<div>👥 Team round by ${esc(d.from)}: ${PEOPLE.map(u=>esc(u)+" "+(sc[u]===undefined?"…":sc[u])).join(" · ")}</div>${sc[me]===undefined?`<div class="row"><button class="btn small" data-act="duelplay" data-id="${d.id}">Play</button></div>`:""}`;}
+  const o=d.from===me?d.to:d.from,sc=d.scores||{},m=sc[me],t=sc[o];
+  if(m===undefined)return `<div class="row"><span>⚔️ ${esc(o)} ${d.from===o?"challenged you":"was challenged"}</span><button class="btn small" data-act="duelplay" data-id="${d.id}">Play</button></div>`;
+  if(t===undefined)return `<div class="meta">⚔️ You scored ${m}/10. Waiting for ${esc(o)} to play.</div>`;
+  return `<div>⚔️ You ${m} · ${esc(o)} ${t} <b>${m>t?"🏆 You won":m<t?esc(o)+" won":"🤝 Tie"}</b></div>`;
+}
+function duelsCard(){
+  const l=myDuels().slice(0,4);
+  const o=PEOPLE.filter(p=>p!==me);
+  return `<div class="card"><b>⚔️ Challenge a friend</b><div class="meta">Same 10 questions for both. Higher score wins.</div><div class="row">${o.map(p=>`<button class="chip" data-act="duelnew" data-p="${esc(p)}">⚔️ ${esc(p)}</button>`).join("")}<button class="chip" data-act="duelnew" data-p="all">👥 Everyone</button></div>${l.map(d=>`<div style="margin-top:8px">${duelLine(d)}</div>`).join("")}</div>`;
+}
+function duelHomeCard(){
+  const d=myDuels().find(x=>(x.to===me||x.to==="all")&&x.from!==me&&(x.scores||{})[me]===undefined&&Date.now()-(x.ts||0)<7*864e5);
+  return d?`<div class="card gentle"><b>⚔️ ${esc(d.from)} challenged you</b><div class="meta">Bible trivia, 10 questions.</div><div class="row"><button class="btn small" data-act="duelplay" data-id="${d.id}">Play now</button></div></div>`:"";
+}
+function duelWins(u){let n=0;Object.values(duels()).forEach(d=>{const sc=d.scores||{},o=d.from===u?d.to:d.from;if((d.from===u||d.to===u)&&sc[u]!==undefined&&sc[o]!==undefined&&sc[u]>sc[o])n++;});return n;}
+/* weekly challenge and badges */
+function weekDays(){const a=[],d=new Date(weekKey()+"T12:00:00");for(let i=0;i<7;i++){a.push(ymd(d));d.setDate(d.getDate()+1);}return a;}
+const WCH={read:["📖","Read the Bible",5,"days"],pray:["🙏","Pray together",5,"days"],habit:["✅","Check habits",15,"checks"]};
+function wcount(u,k){const w=weekDays();if(k==="read")return ((metas.reads||{})[u]||[]).filter(x=>w.includes(x)).length;if(k==="pray")return (((metas.praydays||{})[u])||[]).filter(x=>w.includes(x)).length;const hb=((metas.habits||{})[u])||{};return w.reduce((n,d)=>n+((hb[d]||[]).length),0);}
+function wchalCard(){
+  const c=metas.wchal;
+  if(!c||c.wk!==weekKey())return `<div class="card"><b>🎯 Weekly challenge</b><div class="meta">Pick a goal for all of us this week. Each person tries to hit it.</div><div class="row">${Object.entries(WCH).map(([k,v])=>`<button class="chip" data-act="wset" data-k="${k}">${v[0]} ${v[1]} ${v[2]} ${v[3]}</button>`).join("")}</div></div>`;
+  const v=WCH[c.kind]||WCH.read,tg=c.target||v[2];
+  const rows=PEOPLE.map(u=>{const n=wcount(u,c.kind);return `<div style="margin:6px 0">${esc(u)}: ${Math.min(n,99)} of ${tg} ${n>=tg?"🎉":""}<div class="pbar" style="margin:4px 0"><span style="width:${Math.min(100,Math.round(n/tg*100))}%"></span></div></div>`;}).join("");
+  const all=PEOPLE.every(u=>wcount(u,c.kind)>=tg);
+  return `<div class="card ${all?"gentle":""}"><b>🎯 This week: ${v[0]} ${v[1]} ${tg} ${v[3]}</b>${rows}${all?`<div><b>🎉 Everyone did it!</b></div>`:""}<div class="row"><button class="chip" data-act="wset" data-k="">Change</button></div></div>`;
+}
+function badgeList(u){
+  const b=boardOf(u),w=duelWins(u);
+  return [["🧠","First round","Finish 1 trivia round",b.rounds>=1],["💯","Perfect round","Get every question right",b.perfect>=1],["📚","Scholar","100 correct answers",b.triv>=100],["🔥","On fire","10 correct in a row",b.streak>=10],["✅","Habit builder","Check 30 habits",b.habits>=30],["🙏","Prayer warrior","Pray together 7 days",b.prayed>=7],["🌟","Faithful","Pray together 30 days",b.prayed>=30],["⚔️","Duelist","Win a trivia duel",w>=1],["🧩","Memorizer","Finish 5 verse practices",b.verses>=5],["🎮","Gamer","Win 5 Bible games",b.games>=5],["🗓️","Daily learner","Answer 10 daily questions",b.dq>=10]];
+}
+function badgesCard(){
+  const l=badgeList(me);
+  return `<div class="card"><b>🏅 My badges</b> <span class="meta">${l.filter(x=>x[3]).length} of ${l.length}</span><div class="row">${l.map(x=>`<span class="chip ${x[3]?"on":""}" style="${x[3]?"":"opacity:.45"}" title="${esc(x[2])}">${x[0]} ${esc(x[1])}</span>`).join("")}</div><div class="meta">${l.filter(x=>!x[3]).map(x=>x[1]+": "+x[2]).join(" · ")}</div></div>`;
+}
+function recapCard(){
+  const w=weekDays(),hide=["msg","strong","replace","why","journal"];
+  const rows=PEOPLE.map(u=>{const n=items.filter(i=>i.author===u&&!hide.includes(i.type)&&visible(i)&&(i.created||0)>Date.now()-7*864e5).length;return `<div>${esc(u)}: ${wcount(u,"habit")} habits, ${wcount(u,"pray")} prayer days, ${wcount(u,"read")} reading days, ${n} new entries</div>`;}).join("");
+  return `<div class="card"><b>📊 This week</b><div style="margin-top:6px">${rows}</div></div>`;
+}
+function quickAddDlg(){
+  const T=[["prayer","🙏 Prayer"],["thanks","🌻 Thanks"],["verse","🕊️ Verse"],["sermon","⛪ Sermon note"],["goal","🎯 Goal"],["event","📅 Event"],["journal","🔒 Journal"]];
+  openDlg(`<h3>➕ Quick add</h3><div class="row">${T.map(t=>`<button class="chip" data-act="qadd" data-t="${t[0]}">${t[1]}</button>`).join("")}</div><div class="row"><button class="btn ghost" data-act="close">Close</button></div>`);
+}
+
+/* ===== v5.3 ===== */
+const avc=u=>((metas.accent||{})[u])||"var(--acc)";
+function boardExtra(u){const b=((metas.board||{})[u])||{};return {games:b.games||0,verses:b.verses||0,dq:b.dq||0};}
+function wkDaysOf(wk){const a=[],d=new Date(wk+"T12:00:00");for(let i=0;i<7;i++){a.push(ymd(d));d.setDate(d.getDate()+1);}return a;}
+function wpts(u,wk){const w=wkDaysOf(wk),hb=((metas.habits||{})[u])||{};const h=w.reduce((n,d)=>n+(hb[d]||[]).length,0);const pr=(((metas.praydays||{})[u])||[]).filter(x=>w.includes(x)).length;const t=(((metas.bw||{})[wk])||{})[u]||0;return t+h*2+pr*5;}
+function prevWeeks(n){const o=[];const d=new Date(weekKey()+"T12:00:00");for(let i=0;i<n;i++){d.setDate(d.getDate()-7);o.push(ymd(d));}return o;}
+function weekWinner(wk){const r=PEOPLE.map(u=>[u,wpts(u,wk)]).sort((a,b)=>b[1]-a[1]);return r[0][1]>0&&r[0][1]>r[1][1]?r[0]:null;}
+function champs(u){return prevWeeks(12).filter(w=>{const x=weekWinner(w);return x&&x[0]===u;}).length;}
+/* daily question */
+const dqIdx=()=>(Math.floor(Date.now()/864e5)*7+13)%QUIZ.length;
+function dqLog(){return ((metas.dq||{})[me])||{};}
+function dqStreak(){const l=dqLog(),d=new Date();if(l[ymd(d)]===undefined)d.setDate(d.getDate()-1);let n=0;while(l[ymd(d)]!==undefined){n++;d.setDate(d.getDate()-1);}return n;}
+function dqCard(){
+  const q=QUIZ[dqIdx()],t=ymd(new Date()),done=dqLog()[t]!==undefined,pick=Number(localStorage.getItem("fh_dq_"+t));
+  const opts=q.o.map((o,i)=>{let c="chip";if(done&&i===q.a)c+=" on";return `<button class="${c}" ${done?"disabled":""} data-act="dq" data-i="${i}">${done&&i===pick&&i!==q.a?"❌ ":""}${esc(o)}</button>`;}).join("");
+  return `<div class="card"><b>🧠 Daily question</b> <span class="meta">🔥 ${dqStreak()} day streak</span><div style="margin:6px 0">${esc(q.q)}</div><div class="row">${opts}</div>${done?`<div class="meta">${pick===q.a?"🎉 Correct!":"Not this time."} ${esc(q.r)}. ${esc(q.e)}</div>`:""}</div>`;
+}
+/* follow ups and answered wall */
+function followCard(){
+  const now=Date.now(),p=items.find(i=>i.type==="prayer"&&i.author===me&&!i.answered&&!i.update&&(i.created||0)<now-7*864e5&&(i.fu||0)<now-7*864e5&&visible(i));
+  if(!p)return "";
+  return `<div class="card gentle"><b>🌿 Any update?</b><div style="margin:6px 0">${esc(String(p.text||p.for||"").slice(0,100))}</div><div class="row"><button class="chip" data-act="fu" data-id="${p.id}">🙏 Still praying</button><button class="chip" data-act="answered" data-id="${p.id}">🎉 It was answered</button></div></div>`;
+}
+function ansView(){
+  const l=items.filter(i=>i.type==="prayer"&&i.answered&&visible(i)&&!onlyMe(i)).sort((a,b)=>(b.created||0)-(a.created||0));
+  return `<h2>🎉 Answered prayers</h2><div class="meta">${l.length} answered. Look at what God has done.</div>${l.length?l.map(i=>`<div class="card gentle"><div class="meta">${esc(i.author||"")} · ${i.created?new Date(i.created).toLocaleDateString():""}</div><div>🙏 ${esc(i.text||i.for||"")}</div>${i.answer?`<div style="margin-top:6px"><b>How God answered:</b> ${esc(i.answer)}</div>`:""}</div>`).join(""):`<p class="empty">No answered prayers yet. When God answers one, tap Mark answered on it.</p>`}`;
+}
+/* status dot, weekly review */
+function friendStatus(){
+  if(!STRONGP.includes(me))return "";
+  const o=partnerOf(),st=(metas.status||{})[o],mine=(metas.status||{})[me]||{},D={good:"🟢 Doing good",hard:"🟡 Struggling",need:"🔴 Need you"};
+  return `<div class="card"><div class="meta">${esc(o)}: <b>${st&&D[st.v]?D[st.v]:"no status yet"}</b></div><div class="row">${Object.entries(D).map(([k,l])=>`<button class="chip ${mine.v===k?"on":""}" data-act="mystat" data-v="${k}">${l}</button>`).join("")}</div></div>`;
+}
+function strongWeek(){
+  if(!STRONGP.includes(me))return "";
+  const w=wkDaysOf(weekKey()),c=(metas.ci||{})[me]||{},n=k=>w.filter(d=>c[d]===k).length,m=strongLog();
+  return `<div class="card"><b>💪 My week (only you see this)</b><div class="meta" style="margin-top:6px">💪 Hard moments you made it through: ${(metas.wins||{})[me]||0}<br>Check ins: ${n("great")} great, ${n("ok")} okay, ${n("rough")} rough. Strong days: ${w.filter(d=>m[d]==="strong").length} of 7.</div></div>`;
+}
+function afterPokeDlg(p){
+  const r=replaceItem(),L=((r&&r.text)||"").split("\n").map(x=>x.trim()).filter(Boolean);
+  const l=L.length?L:["Pray out loud","Go for a walk","Drink some water","Listen to a worship song"];
+  const sf=((r&&r.safe)||"").split("\n").map(x=>x.trim()).filter(Boolean);
+  openDlg(`<h3>👉 Poked ${esc(p)}</h3><p>While you wait for a reply, do one of these:</p><div class="row">${l.slice(0,6).map(x=>`<span class="chip">🌿 ${esc(x)}</span>`).join("")}</div>${sf.length?`<div class="meta">Stay away from: ${sf.slice(0,4).map(esc).join(", ")}</div>`:""}<div class="row">${madeBtn()}<button class="btn" data-act="goto" data-g="faith" data-s="moment">📖 Verses for right now</button><button class="btn ghost" data-act="close">Close</button></div>`);
+}
+/* group prayer room */
+function roomOn(){const r=metas.room;return r&&r.end&&Date.now()<r.end?r:null;}
+function roomJoined(u,r){r=r||metas.room||{};return (r["j_"+u]||0)>=(r.start||1);}
+function roomCard(sm){
+  const r=roomOn();
+  if(!r){if(!sm)return "";return `<div class="card"><b>🤝 Pray together now</b><div class="meta">Start a timer. Everyone who joins gets credit for the day.</div><div class="row">${[3,5,10].map(n=>`<button class="chip" data-act="roomstart" data-n="${n}">${n} min</button>`).join("")}</div></div>`;}
+  return `<div class="card gentle"><b>🙏 ${esc(r.by)} is praying with us</b><div id="roomt" style="font:800 34px system-ui;margin:6px 0"></div><div class="meta">Joined: ${PEOPLE.filter(u=>roomJoined(u,r)).map(esc).join(", ")||"nobody yet"}</div><div class="row">${roomJoined(me,r)?`<span class="chip on">✅ You joined</span>`:`<button class="btn small" data-act="roomjoin">Join now</button>`}</div></div>`;
+}
+function roomTick(){
+  const r=metas.room,el=$("roomt");
+  if(el&&roomOn()){const t=Math.max(0,roomOn().end-Date.now());el.textContent=Math.floor(t/6e4)+":"+String(Math.floor(t/1e3)%60).padStart(2,"0");}
+  if(r&&r.end&&Date.now()>=r.end&&me&&roomJoined(me,r)&&localStorage.getItem("fh_roomdone")!==String(r.start)){
+    localStorage.setItem("fh_roomdone",String(r.start));
+    if(db&&FV)setMeta("praydays",{[me]:FV.arrayUnion(ymd(new Date()))});
+    confetti();toast("Amen 🙏 Prayer day counted");render();
+  }
+}
+setInterval(roomTick,1000);
+/* photo of the day, song votes */
+function potdCard(){
+  const t=ymd(new Date()),l=items.filter(i=>i.type==="photo"&&i.photo&&String(i.text||"").startsWith("📷 Photo of the day")&&ymd(new Date(i.created||0))===t&&visible(i));
+  return `<div class="card"><b>📷 Photo of the day</b><div class="agrid" style="margin:8px 0">${l.map(i=>`<figure><img src="${i.photo}" alt="photo" data-act="bigphoto" data-id="${i.id}"><figcaption>${esc(i.author)}</figcaption></figure>`).join("")||`<div class="meta">No photos yet today.</div>`}</div><div class="row"><button class="chip" data-act="add" data-t="photo" data-pre='{"text":"📷 Photo of the day"}'>📷 Add mine</button></div></div>`;
+}
+function songVotes(){
+  const l=items.filter(i=>i.type==="song"&&visible(i)).map(i=>({i,sc:Object.values(i.votes||{}).reduce((a,b)=>a+b,0)})).sort((a,b)=>b.sc-a.sc).slice(0,6);
+  if(!l.length)return "";
+  return `<div class="card"><b>🗳️ Vote on songs</b>${l.map(({i,sc})=>{const m=(i.votes||{})[me]||0;return `<div class="row" style="margin:6px 0;justify-content:space-between"><span>${esc(String(i.title||i.text||i.ref||"Song").slice(0,40))} <b>${sc}</b></span><span><button class="chip ${m===1?"on":""}" data-act="svote" data-id="${i.id}" data-v="1">👍</button><button class="chip ${m===-1?"on":""}" data-act="svote" data-id="${i.id}" data-v="-1">👎</button></span></div>`;}).join("")}</div>`;
+}
+/* verse memory (fill the blanks) */
+function vmSources(){
+  const mine=items.filter(i=>i.type==="verse"&&i.ref&&i.text&&visible(i)).map(i=>[i.ref,i.text]);
+  return [...MEMV,...mine].filter(v=>v[1].split(/\s+/).length>=5&&v[1].split(/\s+/).length<=45);
+}
+const vml=()=>{try{return JSON.parse(localStorage.getItem("fh_vml")||"{}");}catch(e){return{};}};
+let vm=null,tvI=null,tvLeft=15,tvKey="";
+function trivTimerSync(){
+  const on=triv.cat&&triv.mode==="timed"&&triv.pick===null&&triv.i<triv.set.length&&grp==="together"&&subSel.together==="trivia";
+  if(!on){clearInterval(tvI);tvI=null;return;}
+  const k=triv.i+"|"+triv.cat+"|"+triv.set[0];if(k!==tvKey){tvKey=k;tvLeft=15;}
+  const el=$("tvt");if(el)el.textContent="⏱️ "+tvLeft+"s";
+  if(!tvI)tvI=setInterval(()=>{if(!(triv.cat&&triv.mode==="timed"&&triv.pick===null&&grp==="together")){clearInterval(tvI);tvI=null;return;}tvLeft--;const e=$("tvt");if(e)e.textContent="⏱️ "+tvLeft+"s";if(tvLeft<=0){triv.pick=-1;triv.streak=0;clearInterval(tvI);tvI=null;render();}},1000);
+}
+function vmStart(ref){
+  const src=vmSources(),v=ref?src.find(x=>x[0]===ref):src[Math.floor(Math.random()*src.length)];if(!v)return;
+  const words=v[1].split(/\s+/),lvl=Math.min(4,(vml()[v[0]]||0)+1),cnt=Math.max(1,Math.round(words.length*lvl*0.2));
+  const cand=words.map((w,i)=>i).filter(i=>words[i].replace(/[^A-Za-z']/g,"").length>=3);
+  const blanks=shuf(cand).slice(0,cnt).sort((a,b)=>a-b);
+  vm={ref:v[0],words,lvl,blanks,filled:[],bank:shuf(blanks.map(i=>i)),done:false};
+}
+const wclean=w=>w.replace(/[^A-Za-z']/g,"").toLowerCase();
+function vmView(){
+  if(!vm)return `<h2>🧩 Verse practice</h2><div class="meta">Fill in the missing words. Each time you finish a verse, it gets a little harder.</div><button class="btn" data-act="vmstart" data-r="">🎲 Random verse</button><div class="tlist">${vmSources().slice(0,30).map(v=>`<button class="trow" data-act="vmstart" data-r="${esc(v[0])}"><span class="ti">📖</span><span class="tt"><b>${esc(v[0])}</b><span class="meta">Level ${Math.min(4,(vml()[v[0]]||0)+1)} of 4</span></span></button>`).join("")}</div>`;
+  const txt=vm.words.map((w,i)=>vm.blanks.includes(i)?(vm.filled.includes(i)?`<b style="color:var(--acc)">${esc(w)}</b>`:`<span style="display:inline-block;min-width:${Math.max(40,w.length*9)}px;border-bottom:3px solid var(--acc)">&nbsp;</span>`):esc(w)).join(" ");
+  const left=vm.bank.filter(i=>!vm.filled.includes(i));
+  return `<h2>🧩 ${esc(vm.ref)}</h2><div class="meta">Level ${vm.lvl} of 4</div><div class="card vcard" style="font-size:19px;line-height:1.7">${txt}</div>${vm.done?`<div class="tvhero"><div class="tvbig">Well done! 🎉</div><div>You filled every blank.</div></div><div class="row"><button class="btn" data-act="vmstart" data-r="${esc(vm.ref)}">${vm.lvl>=4?"Again":"Next level"}</button><button class="btn ghost" data-act="vmstart" data-r="">New verse</button></div>`:`<div class="meta">Tap the missing words.</div><div class="row">${left.map(i=>`<button class="chip" data-act="vmpick" data-i="${i}">${esc(vm.words[i].replace(/[^A-Za-z']/g,""))}</button>`).join("")}</div>`}<div class="row"><button class="btn ghost" data-act="vmexit">Back to list</button></div>`;
+}
+/* games: who am I, scrambles */
+const WHO=[["Moses",["I was found in a basket in a river.","I led people out of Egypt.","I received the Ten Commandments."],["Moses","Aaron","Noah"]],["David",["I was a shepherd boy.","I beat a giant with a sling.","I wrote many psalms."],["David","Saul","Samuel"]],["Esther",["I became queen of Persia.","I risked my life for my people.","Maybe I am here for such a time as this."],["Esther","Ruth","Deborah"]],["Noah",["I built a huge boat.","I gathered animals two by two.","God gave me a rainbow promise."],["Noah","Abraham","Jonah"]],["Daniel",["I was thrown to the lions.","I could explain dreams.","I prayed three times a day."],["Daniel","Joseph","Elijah"]],["Peter",["I was a fisherman.","I denied Jesus three times.","I preached at Pentecost."],["Peter","Paul","John"]],["Paul",["I used to hunt Christians.","I met Jesus on the road to Damascus.","I wrote many letters in the New Testament."],["Paul","Timothy","Barnabas"]],["Ruth",["I came from Moab.","I said, where you go I will go.","I was King David's great grandmother."],["Ruth","Naomi","Rahab"]],["Jonah",["I ran away from God's call.","I was swallowed by a big fish.","I preached to Nineveh."],["Jonah","Micah","Elijah"]],["Joseph",["My brothers sold me.","I had a coat of many colors.","I became second in command in Egypt."],["Joseph","Benjamin","Reuben"]],["Elijah",["Ravens fed me.","I called fire down on Mount Carmel.","I was taken up in a whirlwind."],["Elijah","Elisha","Isaiah"]],["Zacchaeus",["I was a tax collector.","I climbed a sycamore tree.","Jesus stayed at my house."],["Zacchaeus","Matthew","Nicodemus"]]];
+let gm={mode:null,who:null,sc:null,msg:""};
+function gamesView(){
+  if(!gm.mode)return `<h2>🎮 Bible games</h2><div class="meta">Quick games. Each win is 2 points on the Leaderboard.</div><div class="tlist"><button class="trow" data-act="gstart" data-m="who"><span class="ti">🕵️</span><span class="tt"><b>Who am I?</b><span class="meta">Guess the Bible person from clues</span></span></button><button class="trow" data-act="gstart" data-m="scr"><span class="ti">🔀</span><span class="tt"><b>Scripture scramble</b><span class="meta">Put the verse words in order</span></span></button></div>`;
+  if(gm.mode==="who"){
+    const w=gm.who,c=w.clue;
+    return `<h2>🕵️ Who am I?</h2><div class="card">${w.d[1].slice(0,c+1).map((x,i)=>`<div style="margin:4px 0">${i+1}. ${esc(x)}</div>`).join("")}</div>${w.done?`<div class="tvhero"><div class="tvbig">${w.right?"Yes! "+esc(w.d[0])+" 🎉":"It was "+esc(w.d[0])}</div></div><div class="row"><button class="btn" data-act="gstart" data-m="who">Next</button><button class="btn ghost" data-act="gstart" data-m="">Games</button></div>`:`<div class="row">${w.opts.map(o=>`<button class="chip" data-act="gwho" data-o="${esc(o)}">${esc(o)}</button>`).join("")}</div>${c<2?`<div class="row"><button class="btn small ghost" data-act="gclue">Another clue</button></div>`:""}`}`;
+  }
+  const s=gm.sc,left=s.bank.filter(i=>!s.picked.includes(i));
+  return `<h2>🔀 Scripture scramble</h2><div class="meta">${esc(s.ref)}. Tap the words in order.</div><div class="card vcard" style="min-height:70px">${s.picked.map(i=>esc(s.words[i])).join(" ")||"<span class='meta'>Tap the first word...</span>"}</div>${s.done?`<div class="tvhero"><div class="tvbig">Perfect! 🎉</div></div><div class="row"><button class="btn" data-act="gstart" data-m="scr">Next verse</button><button class="btn ghost" data-act="gstart" data-m="">Games</button></div>`:`<div class="row">${left.map(i=>`<button class="chip" data-act="gscr" data-i="${i}">${esc(s.words[i])}</button>`).join("")}</div><div class="row"><button class="btn small ghost" data-act="gundo">↩️ Undo</button></div>`}`;
+}
+function gWin(){if(db&&FV&&me)setMeta("board",{[me]:{games:FV.increment(1)}});confetti();}
+/* sermon review */
+let sr={i:0,show:false};
+function sermView(){
+  const l=items.filter(i=>i.type==="sermon"&&visible(i)).sort((a,b)=>(b.created||0)-(a.created||0));
+  if(!l.length)return `<h2>🧾 Sermon review</h2><p class="empty">Add a sermon note first. Then come back here to review it like flashcards.</p><button class="btn" data-act="add" data-t="sermon">+ Add a sermon note</button>`;
+  const x=l[sr.i%l.length];
+  return `<h2>🧾 Sermon review</h2><div class="meta">${sr.i%l.length+1} of ${l.length}. Try to remember before you peek.</div><div class="card"><b>${esc(x.church||"Sermon")}</b> <span class="meta">${esc(x.date||"")}</span><div class="meta">Scripture: ${esc(x.ref||"?")}</div>${sr.show?`<div style="margin-top:8px"><b>Takeaways</b><div>${esc(x.text||"")}</div>${x.apply?`<b>How I will apply it</b><div>${esc(x.apply)}</div>`:""}</div>`:`<div class="row"><button class="btn" data-act="srshow">👀 Show my notes</button></div>`}</div><div class="row"><button class="btn" data-act="srnext">${sr.show?"Next sermon":"Skip"}</button></div>`;
+}
+/* verse art */
+let art={ref:"",text:"",th:0};
+const ARTTH=[["#6a4c93","#f08a5d"],["#0f4c5c","#5fa8a0"],["#1f1f2e","#c9a227"],["#b5446e","#f4a261"],["#2d6a4f","#95d5b2"]];
+function artView(){
+  const src=[...MEMV,...items.filter(i=>i.type==="verse"&&i.ref&&i.text&&visible(i)).map(i=>[i.ref,i.text])].filter(v=>v[1].length<260);
+  if(!art.ref&&src[0]){art.ref=src[0][0];art.text=src[0][1];}
+  return `<h2>🖼️ Verse art</h2><div class="meta">Make a pretty picture of a verse. Save it or share it.</div><canvas id="artc" width="1080" height="1080" style="width:100%;border-radius:18px"></canvas><div class="row">${ARTTH.map((c,i)=>`<button class="react ${art.th===i?"on":""}" style="background:linear-gradient(135deg,${c[0]},${c[1]});width:38px;height:38px;border-radius:50%" data-act="arttheme" data-i="${i}" aria-label="color"></button>`).join("")}</div><div class="row"><button class="btn" data-act="artsave">💾 Save picture</button><button class="btn ghost" data-act="artshare">📤 Share</button></div><div class="meta">Pick a verse:</div><div class="tlist">${src.slice(0,25).map(v=>`<button class="trow" data-act="artpick" data-r="${esc(v[0])}"><span class="ti">📖</span><span class="tt"><b>${esc(v[0])}</b></span></button>`).join("")}</div>`;
+}
+function drawArt(){
+  const c=$("artc");if(!c||!art.text)return;const x=c.getContext("2d");if(!x)return;const T=ARTTH[art.th]||ARTTH[0];
+  const g=x.createLinearGradient(0,0,1080,1080);g.addColorStop(0,T[0]);g.addColorStop(1,T[1]);x.fillStyle=g;x.fillRect(0,0,1080,1080);
+  x.fillStyle="rgba(255,255,255,.08)";x.beginPath();x.arc(900,180,260,0,7);x.fill();x.beginPath();x.arc(120,940,200,0,7);x.fill();
+  x.fillStyle="#fff";x.textAlign="center";
+  let fs=76,lines;
+  for(;fs>30;fs-=4){x.font=`700 ${fs}px Georgia, serif`;const words=art.text.split(/\s+/);lines=[];let ln="";words.forEach(w=>{const t=ln?ln+" "+w:w;if(x.measureText(t).width>880&&ln){lines.push(ln);ln=w;}else ln=t;});lines.push(ln);if(lines.length*fs*1.35<680)break;}
+  const h=lines.length*fs*1.35;let y=540-h/2+fs*0.9-40;
+  lines.forEach(l=>{x.fillText(l,540,y);y+=fs*1.35;});
+  x.font="600 44px Georgia, serif";x.globalAlpha=.9;x.fillText("— "+art.ref,540,Math.min(980,y+50));x.globalAlpha=1;
+  x.font="500 28px system-ui, sans-serif";x.globalAlpha=.6;x.fillText("Faith Hub",540,1040);x.globalAlpha=1;
+}
+/* install guide */
+let dip=null;
+window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();dip=e;});
+function isStandalone(){return window.matchMedia&&matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;}
+function installDlg(){
+  const ios=/iphone|ipad/i.test(navigator.userAgent);
+  localStorage.setItem("fh_installseen","1");
+  openDlg(`<h3>📲 Put Faith Hub on your home screen</h3><p>It opens like a real app, and alerts come through better.</p>${ios?`<ol><li>Tap the Share button at the bottom of Safari.</li><li>Scroll down and tap <b>Add to Home Screen</b>.</li><li>Tap <b>Add</b>.</li></ol>`:`<ol><li>Tap the three dots at the top right of Chrome.</li><li>Tap <b>Install app</b> or <b>Add to Home screen</b>.</li><li>Tap <b>Install</b>.</li></ol>${dip?`<div class="row"><button class="btn" data-act="doinstall">📲 Install now</button></div>`:""}`}<div class="row"><button class="btn ghost" data-act="close">Close</button></div>`);
+}
+function sysStatus(){
+  const hb=metas.heartbeat||{},ago=t=>t?Math.round((Date.now()-t)/60000):null,a=ago(hb.pings),v=ago(hb.verse);
+  const stuck=pingsAll.filter(x=>x.push&&x.pushed===false&&Date.now()-x.ts>3*60000).length;
+  const fmt=m=>m===null?"never":m<60?m+" min ago":Math.round(m/60)+" hours ago";
+  const d=metas.delivery||{};
+  return `<div class="card"><h3>🩺 App status</h3><div>${a!==null&&a<=10?"✅":"⚠️"} Alert sender last ran: <b>${fmt(a)}</b></div>${a===null||a>10?`<div class="meta">If this is old, check cron-job.org (it should run every minute) and the Actions tab on GitHub.</div>`:""}<div>${v!==null&&v<=180?"✅":"⚠️"} Daily messages last ran: <b>${fmt(v)}</b></div><div>${stuck?"⚠️ "+stuck+" alert(s) are waiting to send":"✅ No alerts waiting"}</div>${PEOPLE.map(u=>d[u]?`<div class="meta">📬 ${esc(u)}: last alert reached a phone ${fmt(ago(d[u].ts))}</div>`:"").join("")}</div>`;
+}
+
+/* ===== v5.4 ===== */
+const wkNum=()=>Math.floor(new Date(weekKey()+"T12:00:00").getTime()/6048e5);
+function ppOf(u){const i=PEOPLE.indexOf(u);return PEOPLE[(i+1+(wkNum()%2))%3];}
+function ppCard(){
+  const o=ppOf(me),w=weekKey(),n=(((metas.ppd||{})[w+"_"+me])||0);
+  const pr=items.filter(i=>i.type==="prayer"&&i.author===o&&!i.answered&&visible(i)).slice(0,2);
+  return `<div class="card"><b>🙏 This week you pray for ${esc(o)}</b>${pr.map(i=>`<div class="meta" style="margin-top:4px">• ${esc(String(i.text||i.for||"").slice(0,80))}</div>`).join("")}<div class="row"><button class="chip" data-act="ppdone">🙏 I prayed ${n?"("+n+")":""}</button><button class="chip" data-act="pptell" data-p="${esc(o)}">💌 Tell ${esc(o)}</button></div></div>`;
+}
+function mvCard(){
+  const v=memVerse(),w=weekKey(),k=PEOPLE.filter(u=>(metas.mvk||{})[w+"_"+u]);
+  return `<div class="card"><b>📌 Memory verse of the week</b><div style="margin:6px 0"><b>${esc(v[0])}</b></div><div class="meta">Knows it: ${k.map(esc).join(", ")||"nobody yet"}</div><div class="row"><button class="chip" data-act="mvknow">${(metas.mvk||{})[w+"_"+me]?"✅ I know it":"⭕ I know it"}</button><button class="chip" data-act="vmgo" data-r="${esc(v[0])}">🧩 Practice</button></div></div>`;
+}
+function readBar(){
+  const t=ymd(new Date()),rd=metas.reads||{},late=new Date().getHours()>=17;
+  return `<div class="card"><b>📖 Who read today</b><div class="row">${PEOPLE.map(u=>{const d=(rd[u]||[]).includes(t);return `<span class="chip ${d?"on":""}">${d?"✅":"⭕"} ${esc(u)}</span>${!d&&late&&u!==me?`<button class="chip" data-act="nudge" data-p="${esc(u)}">👋 Nudge</button>`:""}`;}).join("")}</div></div>`;
+}
+function todayStrip(){
+  const hs=myHabits(),t=ymd(new Date()),dn=hs.filter(h=>habitDone(t,h)).length,dq=dqLog()[t]!==undefined;
+  return `<div class="row" style="margin:6px 0">${myReadStreak?`<span class="chip">🔥 ${myReadStreak()} read</span>`:""}<span class="chip">✅ ${dn}/${hs.length}</span><span class="chip ${dq?"on":""}">🧠 ${dq?"done":"daily?"}</span></div>`;
+}
+const WORDS=[["Grace","Undeserved kindness from God.","Ephesians 2:8-9"],["Mercy","God not giving us the punishment we deserve.","Lamentations 3:22-23"],["Covenant","A promise relationship that God keeps.","Genesis 17:7"],["Redemption","Being bought back and set free.","Ephesians 1:7"],["Righteousness","Being made right with God.","Romans 3:22"],["Faith","Trusting God even when you cannot see.","Hebrews 11:1"],["Hope","Confident waiting for what God promised.","Romans 15:13"],["Agape","Love that gives without asking for anything back.","1 Corinthians 13:4-7"],["Shalom","Peace and wholeness, everything as it should be.","Numbers 6:24-26"],["Repentance","Turning around from sin toward God.","Acts 3:19"],["Forgiveness","Letting go of a debt someone owes you.","Colossians 3:13"],["Sanctification","Being made more like Jesus over time.","1 Thessalonians 5:23"],["Salvation","Being rescued by Jesus.","Romans 10:9"],["Gospel","The good news that Jesus died and rose for us.","1 Corinthians 15:3-4"],["Glory","The weight and beauty of who God is.","Psalm 19:1"],["Worship","Showing God that he is worth everything.","John 4:24"],["Humility","Not thinking too highly of yourself.","Philippians 2:3-4"],["Patience","Waiting well without losing heart.","Galatians 5:22-23"],["Wisdom","Knowing how to live God's way.","James 1:5"],["Joy","Deep gladness that does not depend on how things go.","Nehemiah 8:10"]];
+function wordCard(){const w=WORDS[Math.floor(Date.now()/864e5)%WORDS.length];return `<div class="card"><b>📚 Word of the day: ${esc(w[0])}</b><div style="margin:6px 0">${esc(w[1])}</div><div class="meta">Read: ${esc(w[2])}</div></div>`;}
+const PACKS={anxiety:["🌧️","When I feel anxious",[["Philippians 4:6-7","Turn each worry into a prayer."],["Matthew 6:25-27","Worry cannot add a single hour. God feeds the birds."],["1 Peter 5:7","You are allowed to hand it all over."],["Psalm 94:19","When worries multiply, his comfort brings joy."],["Isaiah 26:3","Peace comes from fixing your mind on God."],["John 14:27","Jesus gives a peace the world cannot."],["Psalm 55:22","Throw your burden on the Lord."]]],
+ purity:["🛡️","Pure heart (Jayden and Summer)",[["Psalm 119:9-11","Guard your life with God's word."],["Job 31:1","Make a promise with your eyes."],["Matthew 5:8","The pure in heart will see God."],["2 Timothy 2:22","Run from youthful desires. Chase right things with friends who pray."],["1 Corinthians 6:18-20","Your body is a temple of the Holy Spirit."],["Romans 12:1-2","Let God renew your mind."],["Galatians 5:16","Walk by the Spirit."]]],
+ forgive:["🕊️","Forgiveness",[["Colossians 3:13","Forgive as the Lord forgave you."],["Matthew 6:14-15","Forgiving others is part of being forgiven."],["Ephesians 4:31-32","Drop bitterness. Choose kindness."],["Luke 23:34","Even on the cross, Jesus forgave."],["Matthew 18:21-22","Forgiveness is not a number."],["Psalm 103:10-12","God removes our sins as far as east is from west."],["1 John 1:9","Confess, and he is faithful to forgive."]]],
+ purpose:["🧭","Purpose",[["Jeremiah 29:11","God has plans for you."],["Ephesians 2:10","You were made for good works."],["Proverbs 19:21","Many plans, but his purpose stands."],["Romans 8:28","God works all things for good."],["Matthew 5:14-16","Let your light shine."],["Colossians 3:23","Work as if it is for the Lord."],["Micah 6:8","Do justice, love mercy, walk humbly."]]]};
+const pkProg=()=>{try{return JSON.parse(localStorage.getItem("fh_pk")||"{}");}catch(e){return{};}};
+let pkSel=null;
+function packsView(){
+  const L=Object.entries(PACKS).filter(([k])=>k!=="purity"||STRONGP.includes(me)),pr=pkProg();
+  if(!pkSel||!PACKS[pkSel])return `<h2>📘 7 day studies</h2><div class="meta">One short reading a day.</div><div class="tlist">${L.map(([k,v])=>`<button class="trow" data-act="pksel" data-k="${k}"><span class="ti">${v[0]}</span><span class="tt"><b>${esc(v[1])}</b><span class="meta">${(pr[k]||[]).length} of 7 days done</span></span></button>`).join("")}</div>`;
+  const P=PACKS[pkSel],done=pr[pkSel]||[];
+  return `<h2>${P[0]} ${esc(P[1])}</h2><div class="pbar"><span style="width:${done.length/7*100}%"></span></div>${P[2].map((d,i)=>`<div class="card ${done.includes(i)?"done":""}"><b>Day ${i+1}: ${esc(d[0])}</b><div>${esc(d[1])}</div><div class="row"><button class="chip ${done.includes(i)?"on":""}" data-act="pkday" data-i="${i}">${done.includes(i)?"✅ Done":"⭕ Mark done"}</button></div></div>`).join("")}<div class="row"><button class="btn ghost" data-act="pksel" data-k="">All studies</button></div>`;
+}
+/* fasting */
+function fastCur(){const f=(metas.fast||{}).cur;return f&&f.start?f:null;}
+function fastView(){
+  const f=fastCur(),t=ymd(new Date());
+  if(!f||Date.now()>f.start+(f.days+1)*864e5)return `<h2>🍞 Shared fast</h2><div class="meta">Start a fast together and check in each day.</div><div class="card"><input id="ftitle" placeholder="What are we fasting for? (optional)"><div class="row">${[1,3,7].map(n=>`<button class="chip" data-act="faststart" data-n="${n}">${n} day${n>1?"s":""}</button>`).join("")}</div></div>`;
+  const key=u=>"d"+f.start+"_"+u,dn=u=>((metas.fast||{})[key(u)]||[]).length;
+  return `<h2>🍞 Shared fast</h2><div class="card gentle"><b>${esc(f.title||"Our fast")}</b><div class="meta">Started by ${esc(f.by)}, ${f.days} day${f.days>1?"s":""}</div></div>${PEOPLE.map(u=>`<div class="card"><b>${esc(u)}</b> ${dn(u)} of ${f.days}<div class="pbar" style="margin:6px 0"><span style="width:${Math.min(100,dn(u)/f.days*100)}%"></span></div></div>`).join("")}<div class="row"><button class="btn" data-act="fastcheck">✅ I fasted today</button><button class="btn ghost" data-act="fastend">End fast</button></div>`;
+}
+/* shared calendar */
+let cal={y:new Date().getFullYear(),m:new Date().getMonth(),sel:null};
+function calEvents(y,m){
+  const o={};
+  items.filter(i=>visible(i)&&/^\d{4}-\d{2}-\d{2}$/.test(String(i.date||""))&&["event","sermon","camp","hike","stars","trip"].includes(i.type)).forEach(i=>{
+    const [yy,mm,dd]=i.date.split("-").map(Number);
+    if((yy===y&&mm-1===m)||(i.repeat==="Every year"&&mm-1===m)){(o[dd]=o[dd]||[]).push(i);}
+  });
+  return o;
+}
+function calView(){
+  const ev=calEvents(cal.y,cal.m),first=new Date(cal.y,cal.m,1).getDay(),dim=new Date(cal.y,cal.m+1,0).getDate(),tn=new Date();
+  let cells="";for(let i=0;i<first;i++)cells+=`<div></div>`;
+  for(let d=1;d<=dim;d++){const today=tn.getFullYear()===cal.y&&tn.getMonth()===cal.m&&tn.getDate()===d;cells+=`<button class="chip ${cal.sel===d?"on":""}" style="border-radius:10px;min-height:44px;flex-direction:column;${today?"outline:2px solid var(--acc)":""}" data-act="calsel" data-d="${d}">${d}${ev[d]?`<span style="font-size:9px">●</span>`:""}</button>`;}
+  const sel=cal.sel&&ev[cal.sel]||[];
+  return `<h2>🗓️ Our calendar</h2><div class="row" style="justify-content:space-between;align-items:center"><button class="btn small ghost" data-act="calmv" data-n="-1">←</button><b>${new Date(cal.y,cal.m,1).toLocaleDateString(undefined,{month:"long",year:"numeric"})}</b><button class="btn small ghost" data-act="calmv" data-n="1">→</button></div><div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin:8px 0">${["S","M","T","W","T","F","S"].map(x=>`<div class="meta" style="text-align:center">${x}</div>`).join("")}${cells}</div>${cal.sel?`<div class="card"><b>${new Date(cal.y,cal.m,cal.sel).toLocaleDateString(undefined,{weekday:"long",month:"long",day:"numeric"})}</b>${sel.length?sel.map(i=>`<div style="margin-top:6px">${(SECTIONS[i.type]||{}).icon||""} ${esc(i.title||i.church||i.place||i.text||"")} ${i.time?`<span class="meta">${esc(i.time)}</span>`:""}</div>`).join(""):`<div class="meta">Nothing planned.</div>`}<div class="row"><button class="chip" data-act="add" data-t="event" data-pre='${esc(JSON.stringify({date:cal.y+"-"+String(cal.m+1).padStart(2,"0")+"-"+String(cal.sel).padStart(2,"0")}))}'>+ Add event</button></div></div>`:`<div class="meta">Tap a day. A dot means something is planned.</div>`}`;
+}
+function eventsTop(){
+  const t=ymd(new Date()),l=items.filter(i=>i.type==="event"&&visible(i)&&String(i.date||"")>=t).sort((a,b)=>String(a.date).localeCompare(String(b.date))).slice(0,4);
+  if(!l.length)return "";
+  return `<div class="card"><b>📅 Coming up</b>${l.map(i=>{const g=Object.keys(i.going||{}).filter(u=>i.going[u]);return `<div style="margin:8px 0"><b>${esc(i.title||"")}</b> <span class="meta">${esc(i.date)} ${esc(i.time||"")}</span>${i.place?` <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(i.place)}" target="_blank" rel="noopener">📍 Map</a>`:""}<div class="row"><button class="chip ${(i.going||{})[me]?"on":""}" data-act="going" data-id="${i.id}">${(i.going||{})[me]?"✅ I am going":"I am going"}</button><span class="meta">${g.length?"Going: "+g.map(esc).join(", "):""}</span></div></div>`;}).join("")}</div>`;
+}
+function thanksJar(){
+  const n=items.filter(i=>i.type==="thanks"&&visible(i)).length;
+  return `<div class="card gentle"><b>🫙 Our thankful jar: ${n}</b><div style="font-size:22px;line-height:1.3;word-break:break-all;margin-top:6px">${n?"🌻".repeat(Math.min(n,70)):"Empty for now. Add the first one!"}</div></div>`;
+}
+function streakCal(){
+  if(!STRONGP.includes(me))return "";
+  const m=strongLog(),tn=new Date(),y=tn.getFullYear(),mo=tn.getMonth(),dim=new Date(y,mo+1,0).getDate();let c="";
+  for(let d=1;d<=dim;d++){const k=ymd(new Date(y,mo,d)),v=m[k];c+=`<span title="${k}" style="display:inline-block;width:30px;height:30px;line-height:30px;text-align:center;border-radius:8px;margin:2px;font:600 13px system-ui;background:${v==="strong"?"#3a9d5d":v==="fell"?"#c4584a":"color-mix(in srgb,var(--ink) 10%,transparent)"};color:${v?"#fff":"var(--mute)"}">${d}</span>`;}
+  return `<div class="card"><b>🗓️ My strong days this month (only you see this)</b><div style="margin-top:6px">${c}</div><div class="meta">Green is a strong day. Red is a day that was hard. Grey is not logged yet.</div></div>`;
+}
+function wgCard(){
+  const w=weekKey(),g=u=>(metas.wg||{})["g_"+w+"_"+u],x=u=>(metas.wg||{})["x_"+w+"_"+u];
+  return `<div class="card"><b>🎯 My goal this week</b>${PEOPLE.map(u=>`<div style="margin:6px 0">${esc(u)}: ${g(u)?`${x(u)?"✅ ":""}${esc(g(u))}`:`<span class="meta">no goal yet</span>`}</div>`).join("")}<div class="row"><button class="chip" data-act="wgset">✏️ Set mine</button>${g(me)&&!x(me)?`<button class="chip" data-act="wgdone">✅ I did it</button>`:""}</div></div>`;
+}
+function madeBtn(){return STRONGP.includes(me)?`<button class="btn" data-act="madeit">💪 I made it through</button>`:"";}
+const HOMECARDS=[["poke","👉 Poke button"],["favs","⭐ My shortcuts"],["strong","💪 Stay strong"],["trio","📖 Read, Pray, Message buttons"],["chips","⚡ Quick buttons (good news, goodnight...)"],["verse","🕊️ Verse of the day"],["pray","🤝 Pray together today"]];
 function lsArr(k){try{return JSON.parse(localStorage.getItem(k)||"[]");}catch(e){return[];}}
 const hiddenHome=()=>lsArr("fh_homeoff"),hiddenSubs=()=>lsArr("fh_hidesub"),hOn=k=>!hiddenHome().includes(k);
 function customizeHtml(){
   const off=hiddenHome(),hs=hiddenSubs();
   const hc=HOMECARDS.filter(([k])=>k!=="strong"||STRONGP.includes(me)).map(([k,l])=>`<div class="row"><button class="chip ${off.includes(k)?"":"on"}" data-act="hometog" data-k="${k}">${off.includes(k)?"⭕":"✅"} ${l}</button></div>`).join("");
   const secs=["faith","together","outdoor"].map(g=>`<div class="meta" style="margin-top:10px">${GROUPS[g].icon} ${GROUPS[g].label}</div><div class="row">${GROUPS[g].subs.map(x=>`<button class="chip ${hs.includes(x)?"":"on"}" data-act="subtog" data-s="${x}">${hs.includes(x)?"⭕":"✅"} ${esc(LBL[x]||x)}</button>`).join("")}</div>`).join("");
-  return `<div class="card"><h3>Home screen</h3><div class="meta">Choose what you see on Home.</div>${hc}</div><div class="card"><h3>Sections</h3><div class="meta">Turn off sections you do not use. They are only hidden, nothing is deleted.</div>${secs}</div>`;
+  const fv=favs(),fsz=localStorage.getItem("fh_fs")||"1";
+  const favh=`<div class="card"><h3>Pin to Home</h3><div class="meta">Tap to add a shortcut on Home.</div>${["faith","together","outdoor"].map(g=>`<div class="row">${GROUPS[g].subs.map(x=>`<button class="chip ${fv.includes(x)?"on":""}" data-act="favtog" data-s="${x}">${fv.includes(x)?"⭐":"☆"} ${esc(LBL[x]||x)}</button>`).join("")}</div>`).join("")}</div><div class="card"><h3>Text size</h3><div class="row">${[["1","Normal"],["1.12","Large"],["1.25","Extra large"]].map(([v,l])=>`<button class="chip ${fsz===v?"on":""}" data-act="fs" data-v="${v}">${l}</button>`).join("")}</div></div>`;
+  const lay=localStorage.getItem("fh_lay")||"std";
+  return favh+`<div class="card"><h3>Home layout</h3><div class="row">${[["min","Simple"],["std","Standard"],["full","Full"]].map(([k,l])=>`<button class="chip ${lay===k?"on":""}" data-act="layout" data-l="${k}">${l}</button>`).join("")}</div><div class="meta">Simple hides extras. Full opens everything.</div></div><div class="card"><h3>Home screen</h3><div class="meta">Choose what you see on Home.</div>${hc}</div><div class="card"><h3>Sections</h3><div class="meta">Turn off sections you do not use. They are only hidden, nothing is deleted.</div>${secs}</div>`;
 }
 function ourHome(){
   const today=ymd(new Date()),readToday=(((metas.reads||{})[me])||[]).includes(today);
   const pushOn="Notification" in window&&Notification.permission==="granted"&&localStorage.getItem("fh_push")==="1";
   const hr=new Date().getHours(),gr=hr<12?"Good morning":hr<18?"Good afternoon":"Good evening";
-  let h=`<div class="hello">${gr}, ${esc(me||"friend")} 🌤️</div>`+pokesCard()+askCards()+missedCard()+(hOn("poke")?pokeCard():"")+(hOn("strong")?strongCard()+weeklyCard():"");
+  let h=`<div class="hello">${gr}, ${esc(me||"friend")} 🌤️</div>`+pokesCard()+askCards()+missedCard()+todayStrip()+(hOn("poke")?pokeCard():"")+(hOn("strong")?strongCard()+checkinCard()+weeklyCard():"")+duelHomeCard()+rescueCard()+followCard()+roomCard(false)+friendStatus()+ppCard()+readBar()+(new Date().getDay()===0?recapCard():"")+(hOn("favs")?favCard():"");
   if(!pushOn&&db&&"Notification" in window&&Notification.permission!=="denied")h+=`<div class="card gentle"><b>🔔 Turn on notifications</b><div class="meta">So pokes and your verse reach this phone.</div><div class="row"><button class="btn" data-act="notif">Turn on</button></div></div>`;
   if(hOn("trio"))h+=`<div class="trio"><button class="bigact" data-act="read" ${readToday?"disabled":""}><span>${readToday?"✅":"📖"}</span>${readToday?"Read today":"I read"}</button><button class="bigact" data-act="wiz" data-t="prayer"><span>🙏</span>Pray</button><button class="bigact" data-act="goto" data-g="together" data-s="chat"><span>💬</span>Message</button></div>`;
   if(hOn("chips"))h+=`<div class="row" style="justify-content:center"><button class="chip" data-act="goodnews">🎉 Share good news</button><button class="chip" data-act="goodnight">🌙 Goodnight</button><button class="chip" data-act="askpraydlg">🤍 Ask how to pray</button><button class="chip" data-act="goto" data-g="faith" data-s="topics">🔎 Verses for...</button></div>`;
+  h+=windCard();
   if(hOn("verse"))h+=dailyCard();
   if(hOn("pray"))h+=prayDayCard();
-  let more=habitsCard()+sotwCard()+togetherCard()+answeredCard()+armorCard()+memCard()+readingCard()+skyLine();
+  let more=mvCard()+wordCard()+wgCard()+streakCal()+(roomOn()?"":roomCard(true))+dqCard()+potdCard()+(STRONGP.includes(me)?strongWeek():"")+wchalCard()+habitsCard()+sotwCard()+togetherCard()+answeredCard()+armorCard()+memCard()+readingCard()+skyLine();
   if(Date.now()-Number(localStorage.getItem("fh_lastbackup")||0)>30*864e5)more+=`<div class="card"><b>💾 Monthly backup</b><div class="meta">Save a copy of everything you can see. It takes a second.</div><div class="row"><button class="btn small" data-act="backup">Download backup</button><button class="btn small ghost" data-act="backuplater">Remind me later</button></div></div>`;
-  more+=weekCard()+`<div class="row"><button class="chip" data-act="add" data-t="event" data-pre='{"repeat":"Every year","title":"Birthday: "}'>🎂 Add a birthday</button></div>`+healthCard();
+  more+=sysStatus()+(new Date().getDay()===0?"":recapCard())+weekCard()+`<div class="row"><button class="chip" data-act="add" data-t="event" data-pre='{"repeat":"Every year","title":"Birthday: "}'>🎂 Add a birthday</button></div>`+healthCard();
   if(!simple)more+=homeMore();
-  return h+`<details class="more"><summary>More for today</summary>${more}</details>`;
+  const lay=localStorage.getItem("fh_lay")||"std";
+  return h+`<details class="more" ${lay==="full"?"open":""}><summary>More for today</summary>${more}</details>`;
 }
 function journalHome(){
   const l=items.filter(i=>i.author===me&&!["msg","strong","replace","why"].includes(i.type)&&(i.type==="journal"||onlyMe(i))).sort((a,b)=>(b.created||0)-(a.created||0));
@@ -1982,7 +2389,7 @@ function confetti(){
 }
 /* search */
 function searchDlg(){
-  openDlg(`<h3>🔍 Search</h3><input id="gq" placeholder="Search everything you can see" autocomplete="off"><div id="gres"></div><div class="row"><button class="btn ghost" data-act="close">Close</button></div>`);
+  openDlg(`<h3>🔍 Search</h3><input id="gq" placeholder="Search everything you can see" autocomplete="off"><div class="row"><select data-act="sf" data-k="p" style="width:auto"><option value="all">Everyone</option>${PEOPLE.map(p=>`<option value="${p}">${p}</option>`).join("")}</select><select data-act="sf" data-k="t" style="width:auto"><option value="all">Any type</option>${["prayer","verse","sermon","thanks","goal","event","memory","song"].map(t=>`<option value="${t}">${(SECTIONS[t]||{}).label||t}</option>`).join("")}</select><select data-act="sf" data-k="d" style="width:auto"><option value="0">Any time</option><option value="7">Past week</option><option value="30">Past month</option></select></div><div id="gres"></div><div class="row"><button class="btn ghost" data-act="close">Close</button></div>`);
   setTimeout(()=>{if($("gq"))$("gq").focus();},50);
 }
 function typeLoc(it){
@@ -1992,11 +2399,14 @@ function typeLoc(it){
   for(const g of ["faith","together","outdoor"])for(const s of GROUPS[g].subs){if(defOf(s).type===it.type)return [g,s];}
   return null;
 }
+let sf={p:"all",t:"all",d:0};
 function runSearch(v){
   v=lc(v).trim();const box=$("gres");if(!box)return;
   if(v.length<2){box.innerHTML="";return;}
-  const r=items.filter(i=>visible(i)&&!["strong","replace","why"].includes(i.type)&&lc(JSON.stringify({...i,photo:"",audio:"",audience:"",reactions:"",type:""})).includes(v)).sort((a,b)=>(b.created||0)-(a.created||0)).slice(0,25);
-  box.innerHTML=r.length?r.map(i=>{const S=SECTIONS[i.type]||{icon:"",label:""};return `<div class="card" style="padding:10px 14px"><div class="meta">${S.icon} ${esc(S.label)} · ${esc(i.author)}</div><div>${esc(String(i.title||i.text||i.ref||i.place||i.for||"").slice(0,90))}</div><div class="row"><button class="btn small ghost" data-act="gopen" data-id="${i.id}">Open</button></div></div>`;}).join(""):`<p class="empty">Nothing found.</p>`;
+  const r=items.filter(i=>visible(i)&&!["strong","replace","why"].includes(i.type)&&(sf.p==="all"||i.author===sf.p)&&(sf.t==="all"||i.type===sf.t)&&(!sf.d||(i.created||0)>Date.now()-sf.d*864e5)&&lc(JSON.stringify({...i,photo:"",audio:"",audience:"",reactions:"",type:""})).includes(v)).sort((a,b)=>(b.created||0)-(a.created||0)).slice(0,25);
+  const jump=["faith","together","outdoor"].flatMap(g=>GROUPS[g].subs.filter(x=>lc(LBL[x]||x).includes(v)).map(x=>[g,x])).slice(0,6);
+  const jh=jump.length?`<div class="meta">Go to a section</div><div class="row">${jump.map(([g,x])=>`<button class="chip" data-act="goto" data-g="${g}" data-s="${x}">${esc(LBL[x]||x)}</button>`).join("")}</div>`:"";
+  box.innerHTML=jh+(r.length?r.map(i=>{const S=SECTIONS[i.type]||{icon:"",label:""};return `<div class="card" style="padding:10px 14px"><div class="meta">${S.icon} ${esc(S.label)} · ${esc(i.author)}</div><div>${esc(String(i.title||i.text||i.ref||i.place||i.for||"").slice(0,90))}</div><div class="row"><button class="btn small ghost" data-act="gopen" data-id="${i.id}">Open</button></div></div>`;}).join(""):`<p class="empty">Nothing found.</p>`);
 }
 
 /* ---------- actions ---------- */
@@ -2007,6 +2417,13 @@ document.addEventListener("change",e=>{
   if(a==="ntime"&&e.target.value&&me)setMeta("notif",{[me]:{[e.target.dataset.k+"T"]:e.target.value}});
   if(a==="defvis"){if(e.target.value)localStorage.setItem("fh_defvis",e.target.value);else localStorage.removeItem("fh_defvis");toast("Saved");}
   if(a==="linkpick"){localStorage.setItem("fh_linkver",e.target.value);}
+  if(a==="sf"){sf[e.target.dataset.k]=e.target.dataset.k==="d"?Number(e.target.value):e.target.value;if($("gq"))runSearch($("gq").value);return;}
+  if(a==="restorefile"&&e.target.files&&e.target.files[0]){
+    const f=e.target.files[0],r=new FileReader();
+    r.onload=async()=>{try{const j=JSON.parse(r.result);const have=new Set(items.map(x=>x.id));let n=0;
+      for(const it of (j.items||[])){if(!it||!it.id||it.author!==me||have.has(it.id)||!Array.isArray(it.audience))continue;const {id,...rest}=it;await db.collection("items").doc(id).set(rest);n++;}
+      toast(n?"Restored "+n+" of your entries ♻️":"Nothing to restore. You already have everything.");}catch(x){toast("That file could not be read");}};
+    r.readAsText(f);e.target.value="";return;}
   if(a==="ntime2"&&e.target.value&&me)setMeta("notif",{[me]:{[e.target.dataset.k]:e.target.value}});
   if(a==="ntz"&&me)setMeta("notif",{[me]:{tz:e.target.value}});
   if(a==="verpick"){ver=e.target.value;localStorage.setItem("fh_ver",ver);daily=null;loadDaily();}
@@ -2025,7 +2442,7 @@ document.addEventListener("click",async e=>{
   const it=d.id?items.find(x=>x.id===d.id):null;
   if(a==="nav"){if(d.g in subSel)subSel[d.g]=null;grp=d.g;filt="all";q="";render();scrollTo(0,0);}
   else if(a==="goto"){closeDlg();grp=d.g;subSel[d.g]=d.s;filt="all";q="";render();scrollTo(0,0);}
-  else if(a==="sub"){subSel[grp]=d.s;filt="all";q="";render();}
+  else if(a==="sub"){subSel[grp]=d.s;filt="all";q="";render();scrollTo(0,0);}
   else if(a==="filt"){filt=d.p;render();}
   else if(a==="cat"){catFilt=d.c;render();}
   else if(a==="add"){let pre=null;try{pre=d.pre?JSON.parse(d.pre):null;}catch(x){}addAction(d.t,pre);}
@@ -2108,11 +2525,66 @@ document.addEventListener("click",async e=>{
   else if(a==="gpnext")gpNext();
   else if(a==="gpreset"){gp={on:false,step:0,end:0,done:false};clearInterval(gpTimer);render();}
   else if(a==="ntog2"&&me){const c=notifCfg();setMeta("notif",{[me]:{[d.k]:!c[d.k]}});}
+  else if(a==="ci"){const t=ymd(new Date()),was=ciLog()[t];setMeta("ci",{[me]:{[t]:d.v}});if(d.v==="rough"&&was!=="rough"){const pp=partnerOf();if(pp)sendPing([pp],"had a rough day. A quick message would mean a lot.","support").then(()=>toast("Your friend was nudged 💛"));}else toast("Saved");}
+  else if(a==="dimtog"){localStorage.setItem("fh_theme",localStorage.getItem("fh_theme")==="night"?"auto":"night");applyTheme();render();}
+  else if(a==="mom"){momSel=d.k||null;render();scrollTo(0,0);}
+  else if(a==="cheer"){sendPing([d.p],"is cheering you on. You can do it! 👏","reply").then(()=>toast("Cheer sent 👏"));}
+  else if(a==="favtog"){const o=favs(),i=o.indexOf(d.s);if(i>=0)o.splice(i,1);else if(o.length<6)o.push(d.s);else toast("Up to 6 shortcuts");localStorage.setItem("fh_favs",JSON.stringify(o));render();}
+  else if(a==="fs"){localStorage.setItem("fh_fs",d.v);applyFs();render();}
+  else if(a==="quickadd")quickAddDlg();
+  else if(a==="qadd"){closeDlg();addAction(d.t,null);}
+  else if(a==="duelnew")duelNew(d.p);
+  else if(a==="duelplay")duelPlay(d.id);
+  else if(a==="wset"){if(!d.k){setMeta("wchal",{wk:"",kind:"",target:0});}else setMeta("wchal",{wk:weekKey(),kind:d.k,target:WCH[d.k][2]});}
+  else if(a==="dq"){const t=ymd(new Date());if(dqLog()[t]!==undefined)return;const q=QUIZ[dqIdx()],ok=Number(d.i)===q.a;localStorage.setItem("fh_dq_"+t,d.i);setMeta("dq",{[me]:{[t]:ok?1:0}});if(db&&FV)setMeta("board",{[me]:{dq:FV.increment(1)}});if(ok)confetti();}
+  else if(a==="fu"&&it){patch(it.id,{fu:Date.now()});toast("Keep praying 🙏");}
+  else if(a==="mystat"){const was=((metas.status||{})[me]||{}).v;setMeta("status",{[me]:{v:d.v,ts:Date.now()}});if(d.v==="need"&&was!=="need"){const pp=partnerOf();if(pp)sendPing([pp],"needs you right now. Please check in with them.","support").then(()=>toast("Your friend was notified 💛"));}}
+  else if(a==="roomstart"){const n=Number(d.n),now=Date.now();setMeta("room",{by:me,start:now,end:now+n*60000,["j_"+me]:now});localStorage.setItem("fh_roomdone","");sendPing(PEOPLE.filter(p=>p!==me),"started praying together for "+n+" minutes. Join now 🙏","activity");}
+  else if(a==="roomjoin"){const r=metas.room;if(r)setMeta("room",{["j_"+me]:Date.now()});}
+  else if(a==="svote"&&it){const cur=(it.votes||{})[me]||0,v=cur===Number(d.v)?0:Number(d.v);patch(it.id,{["votes."+me]:v});}
+  else if(a==="vmstart"){vmStart(d.r||"");render();scrollTo(0,0);}
+  else if(a==="vmexit"){vm=null;render();}
+  else if(a==="vmpick"&&vm&&!vm.done){const i=Number(d.i),w=wclean(vm.words[i]);const j=vm.blanks.find(b=>!vm.filled.includes(b)&&wclean(vm.words[b])===w);if(j===undefined){toast("Not yet. Try another word.");return;}vm.filled.push(j);if(vm.filled.length>=vm.blanks.length){vm.done=true;const l=vml();l[vm.ref]=Math.max(l[vm.ref]||0,vm.lvl);localStorage.setItem("fh_vml",JSON.stringify(l));if(db&&FV&&me)setMeta("board",{[me]:{verses:FV.increment(1)}});confetti();}render();}
+  else if(a==="gstart"){gm.mode=d.m||null;if(d.m==="who"){const w=shuf(WHO)[0];gm.who={d:w,opts:shuf(w[2]),clue:0,done:false,right:false};}else if(d.m==="scr"){const src=MEMV.filter(v=>v[1].split(/\s+/).length<=14);const v=shuf(src)[0];const words=v[1].split(/\s+/);gm.sc={ref:v[0],words,bank:shuf(words.map((x,i)=>i)),picked:[],done:false};}render();scrollTo(0,0);}
+  else if(a==="gclue"&&gm.who){gm.who.clue=Math.min(2,gm.who.clue+1);render();}
+  else if(a==="gwho"&&gm.who&&!gm.who.done){gm.who.done=true;gm.who.right=d.o===gm.who.d[0];if(gm.who.right)gWin();render();}
+  else if(a==="gscr"&&gm.sc&&!gm.sc.done){const i=Number(d.i),s=gm.sc,need=s.words[s.picked.length];if(wclean(s.words[i])===wclean(need)&&s.words[i]===need||s.words[i]===need){s.picked.push(i);if(s.picked.length>=s.words.length){s.done=true;gWin();}}else toast("Not that one. Try again.");render();}
+  else if(a==="gundo"&&gm.sc){gm.sc.picked.pop();render();}
+  else if(a==="srshow"){sr.show=true;render();}
+  else if(a==="srnext"){sr.i++;sr.show=false;render();}
+  else if(a==="arttheme"){art.th=Number(d.i);render();}
+  else if(a==="artpick"){const v=[...MEMV,...items.filter(i=>i.type==="verse"&&i.ref&&i.text).map(i=>[i.ref,i.text])].find(x=>x[0]===d.r);if(v){art.ref=v[0];art.text=v[1];}render();scrollTo(0,0);}
+  else if(a==="artsave"){const c=$("artc");if(c){const l=document.createElement("a");l.href=c.toDataURL("image/png");l.download="verse.png";document.body.appendChild(l);l.click();l.remove();}}
+  else if(a==="artshare"){const c=$("artc");if(c)c.toBlob(async b=>{try{const f=new File([b],"verse.png",{type:"image/png"});if(navigator.canShare&&navigator.canShare({files:[f]}))await navigator.share({files:[f],title:art.ref});else toast("Tap Save picture, then share it from your photos");}catch(e){}});}
+  else if(a==="install")installDlg();
+  else if(a==="doinstall"){if(dip){dip.prompt();dip=null;closeDlg();}}
+  else if(a==="ppdone"){const k=weekKey()+"_"+me;setMeta("ppd",{[k]:FV?FV.increment(1):1});}
+  else if(a==="pptell"){sendPing([d.p],"is praying for you this week 🙏","reply").then(()=>toast("Sent 💌"));}
+  else if(a==="mvknow"){const w=weekKey();setMeta("mvk",{[w+"_"+me]:!((metas.mvk||{})[w+"_"+me])});}
+  else if(a==="vmgo"){vmStart(d.r);grp="faith";subSel.faith="memorize";render();scrollTo(0,0);}
+  else if(a==="nudge"){sendPing([d.p],"is nudging you to read today 📖","reply").then(()=>toast("Nudged "+d.p));}
+  else if(a==="pksel"){pkSel=d.k||null;render();scrollTo(0,0);}
+  else if(a==="pkday"){const pr=pkProg(),l=pr[pkSel]||[],i=Number(d.i),j=l.indexOf(i);if(j>=0)l.splice(j,1);else l.push(i);pr[pkSel]=l;localStorage.setItem("fh_pk",JSON.stringify(pr));if(l.length===7)confetti();render();}
+  else if(a==="faststart"){const t=(($("ftitle")||{}).value||"").trim(),now=Date.now();setMeta("fast",{cur:{by:me,title:t,start:now,days:Number(d.n)}});sendPing(PEOPLE.filter(p=>p!==me),"started a "+d.n+" day fast"+(t?" for "+t:"")+". Join in 🍞","activity");}
+  else if(a==="fastcheck"){const f=fastCur();if(f&&FV)setMeta("fast",{["d"+f.start+"_"+me]:FV.arrayUnion(ymd(new Date()))});}
+  else if(a==="fastend"){setMeta("fast",{cur:{start:0,days:0,by:"",title:""}});}
+  else if(a==="calsel"){cal.sel=Number(d.d);render();}
+  else if(a==="calmv"){cal.m+=Number(d.n);if(cal.m<0){cal.m=11;cal.y--;}if(cal.m>11){cal.m=0;cal.y++;}cal.sel=null;render();}
+  else if(a==="going"&&it){const cur=(it.going||{})[me];patch(it.id,{["going."+me]:!cur});}
+  else if(a==="madeit"){if(db&&FV)setMeta("wins",{[me]:FV.increment(1)});const pp=partnerOf();if(pp)sendPing([pp],"made it through a hard moment 💪 Thank you for being there.","reply");confetti();toast("Proud of you 💪");closeDlg();}
+  else if(a==="wgset"){openDlg(`<h3>🎯 My goal this week</h3><input id="wgt" placeholder="Example: Read one chapter a day"><div class="row"><button class="btn" data-act="wgsave">Save</button><button class="btn ghost" data-act="close">Cancel</button></div>`);}
+  else if(a==="wgsave"){const t=(($("wgt")||{}).value||"").trim();if(t){const w=weekKey();setMeta("wg",{["g_"+w+"_"+me]:t,["x_"+w+"_"+me]:false});}closeDlg();}
+  else if(a==="wgdone"){const w=weekKey();setMeta("wg",{["x_"+w+"_"+me]:true});confetti();}
+  else if(a==="trivmode"){const o=trivOpt();o.mode=d.m;localStorage.setItem("fh_trivopt",JSON.stringify(o));render();}
+  else if(a==="ntog3"&&me){setMeta("notif",{[me]:{vib:d.v}});}
+  else if(a==="askletter"){sendPing([d.p],"asked you to write them a letter for the future 💌","reply").then(()=>toast("Asked "+d.p));}
+  else if(a==="print")window.print();
+  else if(a==="lbtab"){lbTab=d.t;render();}
   else if(a==="trivn"){const o=trivOpt();o.n=Number(d.n);localStorage.setItem("fh_trivopt",JSON.stringify(o));render();}
   else if(a==="trivfacts"){const o=trivOpt();o.facts=!o.facts;localStorage.setItem("fh_trivopt",JSON.stringify(o));render();}
   else if(a==="trivmenu"){triv.cat=null;render();}
-  else if(a==="trivpick"){if(triv.pick===null){triv.pick=Number(d.i);const q=QUIZ[triv.set[triv.i]];if(triv.pick===q.a){triv.score++;triv.streak++;}else triv.streak=0;render();}}
-  else if(a==="trivnext"){triv.i++;triv.pick=null;if(triv.i>=triv.set.length){const b=trivBest(),key=triv.cat+"|"+triv.set.length;if(b[key]===undefined||triv.score>b[key]){b[key]=triv.score;triv.best=triv.score>=1?1:0;try{localStorage.setItem("fh_trivbest",JSON.stringify(b));}catch(e){}}if(triv.score>=Math.ceil(triv.set.length*.8))confetti();}else trivOrd();render();scrollTo(0,0);}
+  else if(a==="trivpick"){if(triv.pick===null){triv.pick=Number(d.i);const q=TQ();if(triv.pick===q.a){triv.score++;triv.streak++;if(db&&FV&&me){setMeta("board",{[me]:{triv:FV.increment(1)}});setMeta("bw",{[weekKey()]:{[me]:FV.increment(1)}});}if(db&&me&&triv.streak>boardOf(me).streak)setMeta("board",{[me]:{streak:triv.streak}});}else triv.streak=0;render();}}
+  else if(a==="trivnext"){triv.i++;triv.pick=null;if(triv.i>=triv.set.length){const b=trivBest(),key=triv.cat+"|"+triv.set.length;if(b[key]===undefined||triv.score>b[key]){b[key]=triv.score;triv.best=triv.score>=1?1:0;try{localStorage.setItem("fh_trivbest",JSON.stringify(b));}catch(e){}}if(triv.duel&&duels()[triv.duel]&&(duels()[triv.duel].scores||{})[me]===undefined)setMeta("duels",{[triv.duel]:{scores:{[me]:triv.score}}});if(db&&FV&&me)setMeta("board",{[me]:{rounds:FV.increment(1),perfect:FV.increment(triv.score===triv.set.length?1:0)}});if(triv.score>=Math.ceil(triv.set.length*.8))confetti();}else trivOrd();render();scrollTo(0,0);}
   else if(a==="who")loginStep(d.p,"in");
   else if(a==="chto"){chatTo=d.p;render();}
   else if(a==="askwho"){if(auth)auth.signOut().catch(()=>{});}
@@ -2124,13 +2596,13 @@ document.addEventListener("click",async e=>{
   else if(a==="changepin")changePinDlg();
   else if(a==="pinchange")pinChange();
   else if(a==="back"){subSel[grp]=null;render();scrollTo(0,0);}
-  else if(a==="htab"){homeTab=d.t;render();}
+  else if(a==="htab"){homeTab=d.t;render();scrollTo(0,0);}
   else if(a==="gsearch")searchDlg();
   else if(a==="gopen"&&it){const L=typeLoc(it);closeDlg();if(L){if(L[0]==="home"){grp="home";homeTab="me";}else{grp=L[0];subSel[L[0]]=L[1];}filt="all";q="";render();scrollTo(0,0);}}
   else if(a==="scene"){scn=d.s;localStorage.setItem("fh_scene",scn);if(shareCur)shareCard(shareCur.ref,shareCur.text);}
   else if(a==="shareout")shareOut();
   else if(a==="support")supportDlg();
-  else if(a==="poke"){pokeFly();sendPing([d.p],"wants to talk","poke").then(()=>toast("Poked "+d.p+" 👉"));}
+  else if(a==="poke"){pokeFly();sendPing([d.p],"wants to talk","poke").then(()=>toast("Poked "+d.p+" 👉"));if(STRONGP.includes(me)&&STRONGP.includes(d.p))setTimeout(()=>afterPokeDlg(d.p),700);}
   else if(a==="supportsend")supportSend();
   else if(a==="pleasepray")pleasePrayDlg();
   else if(a==="ppsend")ppSend();
@@ -2150,7 +2622,8 @@ document.addEventListener("click",async e=>{
   else if(a==="calm"){const on=localStorage.getItem("fh_calm")!=="1";localStorage.setItem("fh_calm",on?"1":"0");if(on)document.documentElement.dataset.calm="1";else delete document.documentElement.dataset.calm;render();}
   else if(a==="theme"){localStorage.setItem("fh_theme",d.t);applyTheme();render();}
   else if(a==="scene"){localStorage.setItem("fh_scene",d.s);localStorage.removeItem("fh_acc");document.documentElement.style.removeProperty("--acc");applyTheme();if(me)setMeta("theme",{[me]:d.s});render();}
-  else if(a==="accent"){localStorage.setItem("fh_acc",d.c);document.documentElement.style.setProperty("--acc",d.c);}
+  else if(a==="accent"){localStorage.setItem("fh_acc",d.c);document.documentElement.style.setProperty("--acc",d.c);if(db&&me)setMeta("accent",{[me]:d.c});}
+  else if(a==="layout"){localStorage.setItem("fh_lay",d.l);localStorage.setItem("fh_homeoff",JSON.stringify(d.l==="min"?["chips","pray","favs"]:[]));render();}
   else if(a==="fs"){const cur=parseInt(getComputedStyle(document.body).fontSize)||17;const n=Math.max(14,Math.min(26,cur+Number(d.d)*2));document.body.style.fontSize=n+"px";localStorage.setItem("fh_fs",n);}
   else if(a==="notif")enablePush();
   else if(a==="ntog"&&me){const c=notifCfg();setMeta("notif",{[me]:{[d.k]:!c[d.k]}});}
