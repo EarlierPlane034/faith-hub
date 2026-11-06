@@ -50,7 +50,8 @@ async function main() {
     return true;
   }
 
-  await db.collection("meta").doc("heartbeat").set({ pings: Date.now() }, { merge: true }).catch(() => {});
+  // heartbeat only every 5 minutes: each write is re-read by every open app tab
+  if (new Date().getUTCMinutes() % 5 === 0) await db.collection("meta").doc("heartbeat").set({ pings: Date.now() }, { merge: true }).catch(() => {});
   // 1) New pings
   const snap = await db.collection("pings").where("push", "==", true).where("pushed", "==", false).get();
   for (const doc of snap.docs) {
@@ -75,7 +76,7 @@ async function main() {
   }
 
   // 2) Re-send a poke once if nobody answered within 10 minutes
-  const recent = await db.collection("pings").where("ts", ">", Date.now() - RESEND_UNTIL).get();
+  const recent = await db.collection("pings").where("ts", ">", Date.now() - RESEND_UNTIL).orderBy("ts", "desc").limit(30).get();
   const all = recent.docs.map(d => ({ ref: d.ref, ...d.data() }));
   for (const p of all) {
     if (!["poke", "support"].includes(p.kind) || !p.pushed || p.resent) continue;
