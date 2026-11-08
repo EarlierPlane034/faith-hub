@@ -13,14 +13,18 @@ const messaging = firebase.messaging();
 
 self.addEventListener("notificationclick", e => {
   e.notification.close();
-  const url = (e.notification.data && (e.notification.data.FCM_MSG && e.notification.data.FCM_MSG.notification && e.notification.data.FCM_MSG.notification.click_action)) || "./";
+  const d = e.notification.data || {};
+  const fm = (d.FCM_MSG && d.FCM_MSG.data) || d;
+  const go = fm.go || "";
+  const base = (d.FCM_MSG && d.FCM_MSG.notification && d.FCM_MSG.notification.click_action) || "./";
+  const url = go ? "./?go=" + encodeURIComponent(go) : base;
   e.waitUntil(clients.matchAll({type:"window",includeUncontrolled:true}).then(list => {
-    for (const c of list) { if ("focus" in c) return c.focus(); }
+    for (const c of list) { if ("focus" in c) { try { c.postMessage({fhGo: go}); } catch (x) {} return c.focus(); } }
     return clients.openWindow(url);
   }));
 });
 
-const CACHE = "faith-hub-v5-4";
+const CACHE = "faith-hub-v5-16";
 const CORE = ["./", "index.html", "today.html", "manifest.json", "manifest-today.json", "icon-192.png", "icon-512.png"];
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(CORE)).then(() => self.skipWaiting()));
