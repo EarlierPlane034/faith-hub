@@ -15,18 +15,21 @@ async function main() {
   tokSnap.docs.forEach(d => { const u = d.data().user; if (USERS.includes(u)) (tokensBy[u] = tokensBy[u] || []).push(d.id); });
 
   function vibFor(u) { const v = ((typeof ncfg !== "undefined" && ncfg[u]) || {}).vib || "gentle"; return v === "off" ? { silent: true } : v === "strong" ? { vibrate: [500, 200, 500, 200, 500] } : { vibrate: [200, 100, 200] }; }
-  async function pushTo(u, title, body) {
+  async function pushTo(u, title, body, go) {
+    go = go || "home";
     const tokens = tokensBy[u] || [];
-    if (!tokens.length) { console.log(`[${u}] no devices, skipped`); return 0; }
+    if (!tokens.length) { console.log(`[${u}] no devices, skipped`); await db.collection("meta").doc("ndiag").set({ [u]: { srv: { ts: Date.now(), devices: 0, ok: 0, err: "" } } }, { merge: true }).catch(() => {}); return 0; }
     const res = await admin.messaging().sendEachForMulticast({
-      tokens, notification: { title, body },
-      webpush: { headers: { Urgency: "high", TTL: "86400" }, fcmOptions: { link: SITE }, notification: Object.assign({ icon: SITE + "icon-192.png", requireInteraction: true }, vibFor(u)) },
+      tokens, notification: { title, body }, data: { go },
+      webpush: { headers: { Urgency: "high", TTL: "86400" }, fcmOptions: { link: SITE + "?go=" + encodeURIComponent(go) }, notification: Object.assign({ icon: SITE + "icon-192.png", requireInteraction: true }, vibFor(u)) },
       android: { priority: "high" }
     });
     console.log(`[${u}] "${title}": ${res.successCount} sent, ${res.failureCount} failed`);
     const dead = [];
     res.responses.forEach((r, i) => { if (!r.success && r.error && /not-registered|invalid-registration-token|invalid-argument/.test(r.error.code || "")) dead.push(tokens[i]); });
     await Promise.all(dead.map(t => db.collection("tokens").doc(t).delete()));
+    const firstErr = (res.responses.find(r => !r.success && r.error) || {}).error;
+    await db.collection("meta").doc("ndiag").set({ [u]: { srv: { ts: Date.now(), devices: tokens.length, ok: res.successCount, err: res.successCount ? "" : String((firstErr && firstErr.code) || "").slice(0, 80) } } }, { merge: true }).catch(() => {});
     if (res.successCount > 0) await db.collection("meta").doc("delivery").set({ [u]: { ts: Date.now(), title: clip(title, 40), devices: tokens.length - dead.length } }, { merge: true }).catch(() => {});
     return res.successCount;
   }
@@ -36,9 +39,11 @@ async function main() {
   const ncfg = (nsnap && nsnap.exists ? nsnap.data() : {}) || {};
   const CAT = { chat: "c_chat", activity: "c_activity", prayer: "c_prayer", goodnews: "c_cheer", goodnight: "c_cheer" };
   const URGENT = ["poke", "support", "reply", "askpray", "test", "invite"];
-  function allowed(u, kind) {
+  function allowed(u, kind, from) {
     if (URGENT.includes(kind)) return true;
     const c = ncfg[u] || {};
+    if (from && c["mute_" + from] === true) return false;
+    if (c.snooze && Date.now() < Number(c.snooze)) return false;
     const k = CAT[kind];
     if (k && c[k] === false) return false;
     if (c.quiet === true) {
@@ -50,8 +55,45 @@ async function main() {
     return true;
   }
 
-  // heartbeat only every 5 minutes: each write is re-read by every open app tab
-  if (new Date().getUTCMinutes() % 5 === 0) await db.collection("meta").doc("heartbeat").set({ pings: Date.now() }, { merge: true }).catch(() => {});
+  // nightly check-in reminders (opt-in, up to 5, 15 min apart, stops after the check-in is logged)
+  try {
+    const sentRef = db.collection("meta").doc("nightly");
+    const sentSnap = await sentRef.get();
+    const sent = sentSnap.exists ? sentSnap.data() : {};
+    const ciLegacy = ((await db.collection("meta").doc("ci").get()).data()) || {};
+    for (const u of USERS) {
+      const c = ncfg[u] || {};
+      if (c.nightOn !== true || c.vacation === true) continue;
+      if (c.snooze && Date.now() < Number(c.snooze)) continue;
+      const tz = c.tz || "America/Denver";
+      let date, nowMin;
+      try {
+        const f = new Intl.DateTimeFormat("en-CA", { timeZone: tz, year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hour12: false }).formatToParts(new Date());
+        const g = t => (f.find(x => x.type === t) || {}).value;
+        date = g("year") + "-" + g("month") + "-" + g("day"); nowMin = (Number(g("hour")) % 24) * 60 + Number(g("minute"));
+      } catch (e) { continue; }
+      if (c.nightSkip === date) continue;
+      const m = /^(\d\d):(\d\d)$/.exec(c.nightT || "21:00"); if (!m) continue;
+      const start = Number(m[1]) * 60 + Number(m[2]);
+      const n = Math.min(5, Math.max(1, Number(c.nightN) || 3));
+      for (let k = 0; k < n; k++) {
+        const slot = start + 15 * k;
+        if (slot >= 1440 || nowMin < slot || nowMin >= slot + 10) continue;
+        const key = u + "_" + date + "_" + k;
+        if (sent[key]) continue;
+        const pv = await db.collection("private").doc(u.toLowerCase()).get();
+        const done = ((pv.exists && (pv.data().ci || {})[date]) || ((ciLegacy[u] || {})[date]));
+        await sentRef.set({ [key]: Date.now() }, { merge: true });
+        if (done) break;
+        if (!allowed(u, "nightly")) continue;
+        await pushTo(u, "🌙 How was today?", k === 0 ? "One tap to check in." : "Still time to check in. Tap to log.", "home");
+      }
+    }
+    const old = Object.keys(sent).filter(k => Date.now() - Number(sent[k]) > 3 * 864e5);
+    if (old.length) await sentRef.update(Object.fromEntries(old.map(k => [k, admin.firestore.FieldValue.delete()])));
+  } catch (e) { console.log("nightly error", e.message); }
+
+  await db.collection("meta").doc("heartbeat").set({ pings: Date.now() }, { merge: true }).catch(() => {});
   // 1) New pings
   const snap = await db.collection("pings").where("push", "==", true).where("pushed", "==", false).get();
   for (const doc of snap.docs) {
@@ -71,12 +113,12 @@ async function main() {
     else if (p.kind === "chat") { title = "💬 " + from; body = clip(p.text, 140) || "Sent a message"; }
     else if (p.kind === "activity") { title = "Faith Hub"; body = from + " " + clip(p.text, 100); }
     else { title = "Faith Hub"; body = from + " " + clip(p.text, 120); }
-    for (const u of to) if (allowed(u, p.kind)) await pushTo(u, title, body);
+    for (const u of to) if (allowed(u, p.kind, from)) await pushTo(u, title, body, p.go);
     await doc.ref.update({ pushed: true });
   }
 
   // 2) Re-send a poke once if nobody answered within 10 minutes
-  const recent = await db.collection("pings").where("ts", ">", Date.now() - RESEND_UNTIL).orderBy("ts", "desc").limit(30).get();
+  const recent = await db.collection("pings").where("ts", ">", Date.now() - RESEND_UNTIL).get();
   const all = recent.docs.map(d => ({ ref: d.ref, ...d.data() }));
   for (const p of all) {
     if (!["poke", "support"].includes(p.kind) || !p.pushed || p.resent) continue;
