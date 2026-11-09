@@ -21,7 +21,7 @@ async function main() {
     if (!tokens.length) { console.log(`[${u}] no devices, skipped`); await db.collection("meta").doc("ndiag").set({ [u]: { srv: { ts: Date.now(), devices: 0, ok: 0, err: "" } } }, { merge: true }).catch(() => {}); return 0; }
     const res = await admin.messaging().sendEachForMulticast({
       tokens, notification: { title, body }, data: { go },
-      webpush: { headers: { Urgency: "high", TTL: "86400" }, fcmOptions: { link: SITE + "?go=" + encodeURIComponent(go) }, notification: Object.assign({ icon: SITE + "icon-192.png", requireInteraction: true }, vibFor(u)) },
+      webpush: { headers: { Urgency: "high", TTL: "86400" }, fcmOptions: { link: SITE + "?go=" + encodeURIComponent(go) }, notification: Object.assign({ icon: SITE + "icon-192.png", requireInteraction: true, actions: [{ action: "open", title: "Open" }, { action: "snooze", title: "Snooze 1 hr" }] }, vibFor(u)) },
       android: { priority: "high" }
     });
     console.log(`[${u}] "${title}": ${res.successCount} sent, ${res.failureCount} failed`);
@@ -93,6 +93,28 @@ async function main() {
     if (old.length) await sentRef.update(Object.fromEntries(old.map(k => [k, admin.firestore.FieldValue.delete()])));
   } catch (e) { console.log("nightly error", e.message); }
 
+  // Weekly tournament: grade submitted answers on the server so scores can't be faked on a phone.
+  try {
+    const fs = require("fs"), path = require("path"), vm = require("vm");
+    const tSnap = await db.collection("meta").doc("tourn").get();
+    const T = tSnap.exists ? tSnap.data() : {};
+    const todo = [];
+    for (const [wk, t] of Object.entries(T || {})) for (const [n, sub] of Object.entries((t && t.sub) || {})) if (!t.ver || t.ver[n] === undefined) todo.push([wk, n, sub, t.qs]);
+    if (todo.length) {
+      const html = fs.readFileSync(path.join(__dirname, "..", "index.html"), "utf8");
+      const i = html.indexOf("const QUIZ=["), j = html.indexOf("\n);", html.indexOf("QUIZ.push(")) + 3;
+      const ctx = {}; vm.runInNewContext(html.slice(i, j).replace("const QUIZ", "var QUIZ"), ctx);
+      const Q = ctx.QUIZ || [];
+      const upd = {};
+      for (const [wk, n, sub, qs] of todo) {
+        if (!Array.isArray(qs) || qs.length !== 10 || !Array.isArray(sub.a)) continue;
+        let sc = 0; qs.forEach((qi, k) => { if (Q[qi] && Number(sub.a[k]) === Q[qi].a) sc++; });
+        (upd[wk] = upd[wk] || { ver: {} }).ver[n] = sc;
+        console.log(`[tourn] ${wk} ${n}: ${sc}/10`);
+      }
+      if (Object.keys(upd).length) await db.collection("meta").doc("tourn").set(upd, { merge: true });
+    }
+  } catch (e) { console.log("tourn grading skipped:", e.message); }
   await db.collection("meta").doc("heartbeat").set({ pings: Date.now() }, { merge: true }).catch(() => {});
   // 1) New pings
   const snap = await db.collection("pings").where("push", "==", true).where("pushed", "==", false).get();
