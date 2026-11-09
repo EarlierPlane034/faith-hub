@@ -289,25 +289,47 @@ details.fold.mini{margin:8px 0}
 details.fold.mini>summary{font:700 16px system-ui,sans-serif;padding:12px 12px}
 button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid #e0a030;outline-offset:2px}
 @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+/* v5.18 */
+.hrow{position:absolute;right:14px;top:max(16px,env(safe-area-inset-top));display:flex;gap:8px;align-items:center}
+.hrow .hbtn{position:relative;right:auto;top:auto;width:40px;height:40px;padding:0;display:flex;align-items:center;justify-content:center;font:700 17px system-ui,sans-serif;color:var(--ink)}
+.hrow .hstat{position:static;gap:6px;margin-right:2px}
+#nbadge{position:absolute;top:-5px;right:-5px;min-width:18px;height:18px;line-height:18px;text-align:center;font:700 11px system-ui,sans-serif;background:#c0502d;color:#fff;border-radius:9px;padding:0 4px;box-sizing:border-box}
+.fabadd{bottom:calc(92px + env(safe-area-inset-bottom))!important;width:46px;height:46px;opacity:.92}
+main{padding-bottom:70px}
+.chips{padding:8px 4px 14px 4px;margin-bottom:-6px;scrollbar-width:none}
+.chips.ov{padding-right:28px;-webkit-mask-image:linear-gradient(to right,#000 calc(100% - 26px),transparent);mask-image:linear-gradient(to right,#000 calc(100% - 26px),transparent)}
+.chips::-webkit-scrollbar{display:none}
+.chip:focus,.chip:focus-visible{outline:none}
+.dhead{display:flex;align-items:center;justify-content:space-between;position:sticky;top:-1px;background:var(--card,#fff);z-index:3;padding:2px 0 6px}
+.dhead h3{margin:0}
+.xbtn{border:1px solid var(--line);background:var(--card);color:var(--ink);width:40px;height:40px;border-radius:50%;font:700 18px system-ui,sans-serif;cursor:pointer}
+.whatis{margin:0 0 10px}
+.laline{font:600 14px system-ui,sans-serif;color:var(--mute);margin:-4px 0 10px}
+.presets{margin:4px 0 6px}
+@media(min-width:700px){.presets{flex-wrap:wrap;mask-image:none;-webkit-mask-image:none;padding-right:4px}}
+.btn.small{min-height:40px;display:inline-flex;align-items:center;justify-content:center}
+.stay [data-act=whydlg],.stay [data-act=agreedlg]{display:inline-block;padding:10px 4px}
+.vcard.sc-dusk,.vcard.sc-forest,.vcard.sc-ocean,.vcard.sc-sunrise,.vcard.sc-night{color:#fff}
 </style>
 </head>
 <body>
 <header>
   <h1>✝️ Faith Hub</h1>
   <div class="sub" id="hello"></div>
-  <span class="hstat" id="hstat"></span>
+  <div class="hrow"><span class="hstat" id="hstat"></span>
   <button class="hbtn" data-act="gsearch" aria-label="Search">🔍</button>
-  <button class="hbtn" style="right:64px" data-act="notifs" aria-label="Notifications">🔔<span id="nbadge" style="display:none;font-size:11px;background:#c0502d;color:#fff;border-radius:9px;padding:0 5px;margin-left:2px"></span></button>
+  <button class="hbtn" data-act="notifs" aria-label="Notifications">🔔<span id="nbadge" style="display:none"></span></button>
+  <button class="hbtn" data-act="help" aria-label="How to use">?</button></div>
 </header>
 <main id="main"></main>
-<button class="help" data-act="help" aria-label="Help">?</button><button class="help fabadd" data-act="quickadd" aria-label="Quick add">+</button>
+<button class="help fabadd" data-act="quickadd" aria-label="Quick add">+</button>
 <nav id="nav"></nav>
 <dialog id="dlg"></dialog>
 <div id="toastbox"></div>
 
 <script>
 /* ============ SETUP (Jayden only) ============ */
-const APP_VER="5.17";
+const APP_VER="5.18";
 const FIREBASE_CONFIG = {
   apiKey:"AIzaSyDhwY77B-wZL7f4077kEC_tn0K2AgJ6bIs",
   authDomain:"faith-hub-71ae2.firebaseapp.com",
@@ -1488,16 +1510,23 @@ QUIZ.push(
 );
 const TCATS=[["all","🎲","Mixed","A bit of everything","#e0803a"],["Old Testament","📜","Old Testament","Stories before Jesus","#3d6fb5"],["New Testament","✉️","New Testament","The early church and letters","#2f8f5b"],["Jesus","✝️","Jesus","His life and teaching","#8a4fb5"],["Parables","🌾","Parables","Stories Jesus told","#d19a1f"],["Miracles","✨","Miracles","Signs and wonders","#c2476b"],["Psalms and Wisdom","🎶","Psalms and Wisdom","Songs, proverbs and wisdom","#5f8a84"],["Prophets","📣","Prophets","God's messengers","#e0803a"],["Apostles and Paul","🕊️","Apostles and Paul","The early church leaders","#3d6fb5"],["Creation and Genesis","🌍","Creation and Genesis","The very beginning","#2f8f5b"],["Women of the Bible","👩","Women of the Bible","Brave and faithful women","#8a4fb5"],["Kings and Kingdoms","👑","Kings and Kingdoms","Rulers and empires","#d19a1f"],["Places","🗺️","Places","Rivers, mountains and gardens","#c2476b"],["Books of the Bible","📚","Books of the Bible","Facts about the Bible itself","#5f8a84"],["People","🧑","People","Who is who","#e0803a"],["Numbers and Facts","🔢","Numbers and Facts","How many? How long?","#3d6fb5"],["Animals and nature", "\ud83d\udc3e", "Animals and nature", "Creatures great and small", "#2f8f5b"],["Science", "\ud83d\udd2c", "Science", "How the world works", "#3d6fb5"],["Geography", "\ud83d\uddfa\ufe0f", "Geography", "Places around the world", "#d19a1f"],["History", "\ud83c\udfdb\ufe0f", "History", "Things that happened", "#8a4fb5"],["Movies and TV", "\ud83c\udfac", "Movies and TV", "Family-friendly favorites", "#c2476b"],["Music", "\ud83c\udfb5", "Music", "Instruments, hymns and composers", "#5f8a84"],["Sports", "\u26bd", "Sports", "Games and records", "#e0803a"],["General knowledge", "\ud83d\udca1", "General knowledge", "Everyday facts", "#3d6fb5"]];
 const HELP=[
- ["How do I add something?","Tap a tab at the bottom, then tap the big Add button. Answer the questions and tap Save."],
+ ["What is each tab?","Home: today's verse and the Read, Pray and Message buttons. My Space: things just for you. Together: chat, polls, the shared board and notes. Faith: the Bible, prayers and verses. Play: trivia and games."],
+ ["How do I add something?","Tap a tab at the bottom, then tap the big Add button. Answer the questions and tap Save. The round + button works from anywhere."],
+ ["How do I ask for prayer?","On Home, tap Pray. Or tap Faith, then Prayer, then Add. Pick who can see it before you save."],
+ ["How do I send a voice message?","Tap Together, then Chat. Tap the 🎙️ button, talk, and tap it again to stop. It sends by itself. If it asks to use the microphone, tap Allow."],
  ["How do I say hi?","On Home, tap the 💛 Thinking of you button. Everyone else gets a pop up."],
- ["How do I get a daily verse notification?","Tap More, then Turn on daily notifications, and tap Allow. On iPhone, add the app to your Home Screen first."],
+ ["How do I get notifications?","Tap More, then Turn on notifications, and tap Allow. On iPhone, add the app to your Home Screen first."],
+ ["How do I put the app on my phone?","iPhone: open it in Safari, tap the Share button, then Add to Home Screen. Android: open it in Chrome, tap the three dots, then Install app or Add to Home screen."],
+ ["What does the number on the bell mean?","It is how many new things you have not seen. Tap the bell, then tap one to open it. The number clears when you close the list."],
+ ["How do I change how Home looks?","Tap a layout button at the top of Home: Simple, Standard, Full, Faith first, Together first or Games first. Reset layout puts it back."],
+ ["What is the 👀 line on Home?","It shows when a friend was last on the app. It is off until you choose to turn it on. You can turn it off any time on Home, under More for today."],
  ["I made a mistake","Tap Edit on the card, or Delete and then Undo right away."],
- ["How do I make it simpler?","Tap More and turn on Simple mode. It hides the extra tabs."],
  ["I need someone right now","Tap 👉 Poke at the top of Home and pick a name. They get a notification. If you might hurt yourself, call or text 988."],
- ["Something is not working","Close the app and open it again. Then tap More and Send feedback so Jayden can fix it."]
+ ["Something is not working","Close the app and open it again. Then tap Send feedback below so Jayden can fix it."]
 ];
+const HELP_STRONG=["How do I use Stay strong?","On Home, tap Stay strong. Mark a day strong, or tap I am struggling right now to reach your partner. Only you and your partner see your days. Your calendar is on top of Home and is shared with your partner by default. Tap Stop sharing under it to turn that off."];
 const TOUR=[["Welcome 💛","This is a private space for the three of you to share faith, prayers and adventures."],["Add something","Tap a tab at the bottom, pick a tile, then the big Add button. We ask one question at a time."],["Stay close","Tap 💛 Thinking of you, send a message, or react to anything with ❤️ or 🙏. Want to talk? Tap 👉 Poke at the top of Home."],["Daily verse","Turn on notifications in More to get a verse every day. Tap the ? button any time for help."],["Who sees what","Sign in with your own PIN. Check ins, questions and prayers start out private, and Home has Our space and My journal. You choose who sees anything else."]];
-const NEWS=["🎉 Version 5.17","📡 Live trivia: everyone plays the same question at once","🏆 Weekly tournament with server checked scores","🔔 Snooze or open right from a notification","🎉 Version 5.16","🧠 Trivia now has over 1,000 questions","🖍️ Shared whiteboard in Together","⏳ Bible timeline and 🖼️ Whose photo? games","😴 Snooze alerts, reorder Home, better search","🎉 Version 5.15","📷 Add several photos at once with progress and retry, 🔕 mute a person","🎉 Version 5.14","⭐ Saved folders, 📰 weekly recap, 🪣 bucket list, 📝 shared notes, 80 new general trivia questions","🎉 Version 5.13","🃏 Memory match, 🏆 Bible jeopardy, 🎯 Group bingo, 🎨 Draw and guess, 📚 Story together","🎉 Version 5.12","📖 Group Bible study, 🗳️ polls, 👋 availability status, 🌙 nightly check-in reminders (optional)","🎉 Version 5.11","🎯 What should we do? 🎡 Decision wheel, ⚖️ This or that, 🤥 Two truths and a lie, 🔤 Word puzzle","🎉 Version 5.10","🔔 Notification center with filters, Catch me up and Mark all read","🎉 Version 5.9","🤔 New game: Guess my answer. 📋 Track your problem reports. ✍️ Continue card on Home","🎉 Version 5.8","🔒 Check-ins and mood now save to a private place only you can read","🎉 Version 5.7","🎯 320 new trivia questions, 💾 save a backup of your entries","🎉 Version 5.6","🧭 New tabs: Home, My Space, Together, Faith, Play","✉️ Better problem report, 🎯 more trivia, easier focus outlines and reduced motion","🎉 Version 5.5","🔔 Alerts open the exact thing, saving shows a status, drafts are kept, big photos are shrunk, scroll no longer jumps","🎉 Version 5.4","🙏 Prayer partner of the week, 📌 memory verse of the week, 📖 who read today","📘 7 day studies, 📚 word of the day, 🍞 shared fast, 🗓️ calendar","⏱️ Trivia modes: timed, true or false, finish the verse, and team rounds","🎯 Weekly goals, 💪 I made it through, 📅 event maps and RSVP","🔍 Search filters, 📳 vibration choice, 🖨️ year in review as PDF"];
+const NEWS=["🎉 Version 5.18","🧹 The page no longer jumps to the top and sections stay open","🔔 Notifications: X at the top, tap one to open it, and the number clears","🎙️ Voice messages work on iPhone and Android","🧭 Home layout buttons at the top and a How to use page (tap ?)","👀 Optional: see when a friend was last on","🗓️ Strong days calendar is on top of Home and shared with your partner by default","🎉 Version 5.17","📡 Live trivia: everyone plays the same question at once","🏆 Weekly tournament with server checked scores","🔔 Snooze or open right from a notification","🎉 Version 5.16","🧠 Trivia now has over 1,000 questions","🖍️ Shared whiteboard in Together","⏳ Bible timeline and 🖼️ Whose photo? games","😴 Snooze alerts, reorder Home, better search","🎉 Version 5.15","📷 Add several photos at once with progress and retry, 🔕 mute a person","🎉 Version 5.14","⭐ Saved folders, 📰 weekly recap, 🪣 bucket list, 📝 shared notes, 80 new general trivia questions","🎉 Version 5.13","🃏 Memory match, 🏆 Bible jeopardy, 🎯 Group bingo, 🎨 Draw and guess, 📚 Story together","🎉 Version 5.12","📖 Group Bible study, 🗳️ polls, 👋 availability status, 🌙 nightly check-in reminders (optional)","🎉 Version 5.11","🎯 What should we do? 🎡 Decision wheel, ⚖️ This or that, 🤥 Two truths and a lie, 🔤 Word puzzle","🎉 Version 5.10","🔔 Notification center with filters, Catch me up and Mark all read","🎉 Version 5.9","🤔 New game: Guess my answer. 📋 Track your problem reports. ✍️ Continue card on Home","🎉 Version 5.8","🔒 Check-ins and mood now save to a private place only you can read","🎉 Version 5.7","🎯 320 new trivia questions, 💾 save a backup of your entries","🎉 Version 5.6","🧭 New tabs: Home, My Space, Together, Faith, Play","✉️ Better problem report, 🎯 more trivia, easier focus outlines and reduced motion","🎉 Version 5.5","🔔 Alerts open the exact thing, saving shows a status, drafts are kept, big photos are shrunk, scroll no longer jumps","🎉 Version 5.4","🙏 Prayer partner of the week, 📌 memory verse of the week, 📖 who read today","📘 7 day studies, 📚 word of the day, 🍞 shared fast, 🗓️ calendar","⏱️ Trivia modes: timed, true or false, finish the verse, and team rounds","🎯 Weekly goals, 💪 I made it through, 📅 event maps and RSVP","🔍 Search filters, 📳 vibration choice, 🖨️ year in review as PDF"];
 
 let items=[], metas={}, grp="home", subSel={faith:null,together:null,play:null}, filt="all", q="", catFilt="all";
 let me=localStorage.getItem("fh_me"), memoI=0, memoShow=false, db=null, firstItems=true, startTime=Date.now(), offline=!navigator.onLine;
@@ -1754,7 +1783,10 @@ function readPhoto(file){
     r.onerror=()=>res(null);r.readAsDataURL(file);
   });
 }
-function openDlg(html){const d=$("dlg");if(d.open)d.close();d.innerHTML=html;d.showModal();return d;}
+function chipFade(r){try{r.querySelectorAll(".chips").forEach(c=>{c.classList.remove("ov");c.classList.toggle("ov",c.scrollWidth>c.clientWidth+2);});}catch(e){}}
+function openDlg(html){const d=$("dlg");if(d.open)d.close();d.dataset.oc="";d.innerHTML=html;d.showModal();chipFade(d);return d;}
+document.addEventListener("click",e=>{const d=$("dlg");if(d&&d.open&&e.target===d&&d.dataset.oc==="1"){const r=d.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)d.close();}});
+document.addEventListener("close",e=>{if(e.target&&e.target.id==="dlg"&&ncShown){setTimeout(()=>{const d=$("dlg");if(d&&d.open&&d.querySelector("[data-act=ncclose]"))return;ncShown=false;if(me)ncMarkRead();},60);}},true);
 function closeDlg(){const d=$("dlg");if(d.open)d.close();}
 function speak(t){try{speechSynthesis.cancel();speechSynthesis.speak(new SpeechSynthesisUtterance(t));}catch(e){toast("Reading aloud is not supported here");}}
 function ago(t){if(!t)return"";const m=Math.round((Date.now()-t)/6e4);if(m<2)return"just now";if(m<60)return m+" minutes ago";const h=Math.round(m/60);if(h<24)return h+" hours ago";return Math.round(h/24)+" days ago";}
@@ -1981,16 +2013,34 @@ function wrapLines(g,text,maxW){
   if(cur)lines.push(cur);return lines;
 }
 /* ---------- voice notes ---------- */
+function recMime(){
+  if(!window.MediaRecorder||!MediaRecorder.isTypeSupported)return "";
+  for(const t of ["audio/mp4","audio/webm;codecs=opus","audio/webm","audio/ogg;codecs=opus"]){try{if(MediaRecorder.isTypeSupported(t))return t;}catch(e){}}
+  return "";
+}
+function recErr(e){
+  const n=e&&e.name;
+  if(n==="NotAllowedError"||n==="SecurityError")return "The microphone is blocked. Allow it in your phone settings for this app, then try again.";
+  if(n==="NotFoundError")return "No microphone found.";
+  if(!window.MediaRecorder)return "This phone cannot record sound in the app. Update your browser.";
+  return "Could not record. Close the app, open it again, and retry.";
+}
+function audioHtml(src,st){
+  src=String(src||"");if(!src.startsWith("data:audio/"))return "";
+  const t=(src.slice(5,src.indexOf(";"))||"audio/mp4"),ok=(()=>{try{return document.createElement("audio").canPlayType(t);}catch(e){return "maybe";}})();
+  if(!ok)return `<div class="meta" style="margin-top:6px">🎙️ This voice message was recorded on another phone and this phone cannot play it. Ask them to send it again.</div>`;
+  return `<audio controls preload="metadata" src="${src}" style="${st||"width:100%;margin-top:6px"}"></audio>`;
+}
 async function toggleRec(){
   if(rec&&rec.state==="recording"){rec.stop();return;}
   try{
     const st=await navigator.mediaDevices.getUserMedia({audio:true});
-    const mime=window.MediaRecorder&&MediaRecorder.isTypeSupported("audio/webm;codecs=opus")?"audio/webm;codecs=opus":(MediaRecorder.isTypeSupported("audio/mp4")?"audio/mp4":"");
+    const mime=recMime();
     rec=new MediaRecorder(st,mime?{mimeType:mime,audioBitsPerSecond:24000}:{audioBitsPerSecond:24000});chunks=[];voiceDraft=null;
     rec.ondataavailable=e=>chunks.push(e.data);
-    rec.onstop=()=>{st.getTracks().forEach(t=>t.stop());clearTimeout(recTimer);const b=new Blob(chunks,{type:rec.mimeType||"audio/webm"});const fr=new FileReader();fr.onload=()=>{voiceDraft=fr.result;render();};fr.readAsDataURL(b);};
+    rec.onstop=()=>{st.getTracks().forEach(t=>t.stop());clearTimeout(recTimer);const b=new Blob(chunks,{type:(rec.mimeType||mime||"audio/mp4").split(";")[0]});const fr=new FileReader();fr.onload=()=>{voiceDraft=fr.result;render();};fr.readAsDataURL(b);};
     rec.start();recTimer=setTimeout(()=>{if(rec&&rec.state==="recording")rec.stop();},60000);render();
-  }catch(e){toast("Microphone is not available");}
+  }catch(e){toast(recErr(e));}
 }
 
 /* ---------- calm ---------- */
@@ -2041,7 +2091,7 @@ function card0(it){
   ].filter(Boolean).join("");
   const prog=it.type==="goal"?`<div class="bar"><i style="width:${Number(it.progress)||0}%"></i></div><div class="meta">${Number(it.progress)||0}% done</div>`:"";
   const photo=it.photo&&String(it.photo).startsWith("data:image/")?`<img class="ph" src="${it.photo}" alt="photo">`:"";
-  const audio=it.audio&&String(it.audio).startsWith("data:audio/")?`<audio controls src="${it.audio}" style="width:100%;margin-top:8px"></audio>`:"";
+  const audio=audioHtml(it.audio,"width:100%;margin-top:8px");
   const rx=it.reactions||{};
   const reacts=REACTS.map(([k,e])=>{const a=rx[k]||[];return `<button class="react ${a.includes(me)?"on":""}" data-act="react" data-id="${it.id}" data-k="${k}">${e}${a.length?" "+a.length:""}</button>`;}).join("");
   const cms=(it.comments||[]).map(c=>`<div class="cm"><span class="who">${esc(c.a)}</span>${nl(c.t)}</div>`).join("");
@@ -2132,7 +2182,7 @@ function homeMore(){
   const reads=(metas.reads||{})[me]||[],readToday=reads.includes(today);
   const others=PEOPLE.filter(p=>p!==me),other=others.length>1?"everyone":(others[0]||"them"),seenList=others.filter(p=>(metas.seen||{})[p]).map(p=>`${p} was here ${ago((metas.seen||{})[p])}`).join(" · "),seen=seenList;
   const pushOn="Notification" in window&&Notification.permission==="granted"&&localStorage.getItem("fh_push")==="1";
-  const recent=items.filter(i=>!["msg","todo","strong","replace","why","agree"].includes(i.type)&&visible(i)).slice(0,4);
+  const recent=items.filter(i=>!["msg","todo","strong","strongshare","replace","why","agree"].includes(i.type)&&visible(i)).slice(0,4);
   let h="";
   if(simple){
     h+=`<button class="btn giant" data-act="read" ${readToday?"disabled":""}>${readToday?"✅ I read today":"📖 I read today"}</button>
@@ -2146,7 +2196,7 @@ function homeMore(){
   if(seen)h+=`<div class="meta" style="margin:6px 0">${esc(seenList)}</div>`;
   const ml=metas.moodlog||{},myLog=[...new Set([...(ml[me]||[]),...(pmeta().mood||[])])];
   const last7=[];for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);const k=ymd(d);const e=[...myLog].reverse().find(x=>x.startsWith(k+":"));last7.push(e?MOODS[Number(e.split(":")[1])-1]:"·");}
-  h+=`<div class="card"><div class="meta">How is your heart today?</div><div class="row">${MOODS.map((m,i)=>`<button class="react" style="font-size:24px" data-act="mood" data-m="${i+1}">${m}</button>`).join("")}</div><div class="meta" style="margin-top:6px">Your week: ${last7.join(" ")}</div></div>`;
+  h+=`<div class="card"><div class="meta">How is your heart today?</div><div class="row">${MOODS.map((m,i)=>`<button class="react" style="font-size:24px" data-act="mood" data-m="${i+1}" aria-label="Mood ${i+1} of 5">${m}</button>`).join("")}</div><div class="meta" style="margin-top:6px">Your week: ${last7.join(" ")}</div></div>`;
   h+=`<div class="card"><div class="meta">Reading streaks</div><div class="row">${PEOPLE.map(p=>`<span class="who">${esc(p)}: ${streak(p)} day${streak(p)===1?"":"s"} 🔥 · ${(((metas.reads||{})[p])||[]).length} total</span>`).join("")}</div><div class="meta" style="margin-top:6px">Missed a day? No pressure. Just start again today.</div></div>`;
   h+=nx?`<div class="card"><div class="meta">Next event</div><h3>${esc(nx.title||"Event")}</h3><div class="big">${daysUntil(evDate(nx))===0?"Today!":daysUntil(evDate(nx))+" days"}</div><div class="meta" style="text-align:center">${esc(fmtDay(evDate(nx)))}</div></div>`:
     `<div class="card"><div class="meta">Next event</div><p class="empty" style="padding:8px">Add a visit or birthday in Together, Events and it shows a countdown here.</p></div>`;
@@ -2155,7 +2205,7 @@ function homeMore(){
   if(!lastRead||daysUntil(lastRead)<=-3)h+=`<div class="card"><b>🌿 Want a short place to start?</b><div class="meta">Try today's Psalm. It only takes a few minutes.</div><div class="row"><button class="btn small" data-act="goto" data-g="faith" data-s="psalm">Open Psalm of the day</button></div></div>`;
   const old=items.filter(i=>i.type==="prayer"&&!i.answered&&!i.update&&visible(i)&&Date.now()-(i.created||Date.now())>14*864e5).slice(0,3);
   if(old.length)h+=`<div class="card"><b>🙏 Check in on these prayers</b>${old.map(i=>`<div class="meta">• ${esc((i.text||"").slice(0,70))}</div>`).join("")}<div class="row"><button class="btn small ghost" data-act="goto" data-g="faith" data-s="prayer">Open prayers</button></div></div>`;
-  const t=new Date(),oty=items.filter(i=>visible(i)&&i.created&&!["msg","todo","strong","replace","why","agree"].includes(i.type)&&new Date(i.created).getFullYear()<t.getFullYear()&&new Date(i.created).getMonth()===t.getMonth()&&new Date(i.created).getDate()===t.getDate()).slice(0,2);
+  const t=new Date(),oty=items.filter(i=>visible(i)&&i.created&&!["msg","todo","strong","strongshare","replace","why","agree"].includes(i.type)&&new Date(i.created).getFullYear()<t.getFullYear()&&new Date(i.created).getMonth()===t.getMonth()&&new Date(i.created).getDate()===t.getDate()).slice(0,2);
   if(oty.length)h+=`<div class="card"><b>📅 On this day</b>${oty.map(i=>`<div class="meta">${esc(i.author)}: ${esc((i.text||i.title||i.ref||"").slice(0,80))}</div>`).join("")}</div>`;
   h+=`<div class="row"><button class="btn ghost" data-act="hard">🌧️ Hard day? Give me a verse</button><button class="btn ghost" data-act="jarpull">🫙 Open the jar</button></div>`;
   h+=`<h3 style="margin-top:18px">Recent</h3>${recent.length?recent.map(card).join(""):`<p class="empty">Nothing yet. Pick a tab below and add the first one.</p>`}`;
@@ -2219,7 +2269,7 @@ function chatView(){
   <div class="row">${["Good morning ☀️","Goodnight 🌙","Praying for you 🙏","Proud of you 💛"].map(m=>`<button class="chip" data-act="quick" data-m="${esc(m)}">${m}</button>`).join("")}</div>
   <div class="row stick"><input id="cin" placeholder="Write a message" style="flex:1"><button class="btn ghost" data-act="chatrec" aria-label="Voice message">${crec&&crec.state==="recording"?"⏹️":"🎙️"}</button><button class="btn" data-act="send">Send</button></div>`;
 }
-function chatHtml(l){return l.length?l.map(m=>`<div class="bub ${m.author===me?"me":""}"><small>${esc(who(m.author))} · ${m.created?fmt(m.created):""}</small>${nl(m.text)}${m.audio?`<audio controls src="${m.audio}" style="width:100%;margin-top:6px"></audio>`:""}${m.author===me?` <a href="#" data-act="del" data-id="${m.id}" style="font-size:11px;color:var(--mute)">delete</a>`:""}</div>`).join(""):`<p class="empty">Say hello 💛</p>`;}
+function chatHtml(l){return l.length?l.map(m=>`<div class="bub ${m.author===me?"me":""}"><small>${esc(who(m.author))} · ${m.created?fmt(m.created):""}</small>${nl(m.text)}${audioHtml(m.audio)}${m.author===me?` <a href="#" data-act="del" data-id="${m.id}" style="font-size:11px;color:var(--mute)">delete</a>`:""}</div>`).join(""):`<p class="empty">Say hello 💛</p>`;}
 function voiceView(){
   const recording=rec&&rec.state==="recording";
   const l=items.filter(i=>i.type==="voice"&&visible(i)).sort((a,b)=>(b.created||0)-(a.created||0));
@@ -2329,7 +2379,7 @@ function hardDay(){
    <div class="row"><button class="btn" data-act="hard">Another</button><button class="btn ghost" data-act="goto" data-g="faith" data-s="calm">🌿 Breathe</button><button class="btn ghost" data-act="close">Close</button></div>`);
 }
 function journalHtml(){
-  const parts=Object.entries(SECTIONS).filter(([k])=>!["msg","todo","strong","replace","why","agree"].includes(k)).map(([k,S])=>{
+  const parts=Object.entries(SECTIONS).filter(([k])=>!["msg","todo","strong","strongshare","replace","why","agree"].includes(k)).map(([k,S])=>{
     const l=items.filter(i=>i.type===k&&visible(i)).sort((a,b)=>(a.created||0)-(b.created||0));
     if(!l.length)return"";
     return `<h2>${S.icon} ${esc(S.title)}</h2>`+l.map(i=>`<div style="margin:10px 0;padding:8px;border-bottom:1px solid #ddd"><b>${esc(i.title||i.place||i.church||i.for||i.tag||i.ref||"")}</b> <small>${esc(i.author)} ${i.created?fmt(i.created):""}</small><br>${[i.ref,i.text,i.note,i.update,i.apply].filter(Boolean).map(nl).join("<br>")}</div>`).join("");
@@ -2397,6 +2447,9 @@ async function afterRender(){
       <div class="row"><button class="btn small" data-act="savetv" data-i="${i}">Save to our verse bank</button><button class="btn small ghost" data-act="sharetv" data-i="${i}">📤</button><button class="btn small ghost" data-act="speaktv" data-i="${i}">🔊</button></div></div>`).join(""):`<p class="empty">Could not load verses. Check your connection.</p>`;
   }
 }
+const DET={};
+function detKey(d){const sm=d.querySelector("summary");return grp+"|"+(subSel[grp]||"")+"|"+(sm?sm.textContent.trim().slice(0,40):"");}
+document.addEventListener("toggle",e=>{const d=e.target;if(d&&d.tagName==="DETAILS"&&d.closest("#main"))DET[detKey(d)]=d.open;},true);
 let curKey=null;
 function navKey(){return [grp,subSel[grp]||"",homeTab].join("|");}
 function navSync(){try{const k=navKey();if(curKey===null){history.replaceState({k},"");curKey=k;return;}if(k!==curKey){history.pushState({k},"");curKey=k;}}catch(e){}}
@@ -2437,10 +2490,12 @@ function render(){
   }
   const rk=grp+"|"+(subSel[grp]||""),sy=window.scrollY;
   m.innerHTML=html;
+  m.querySelectorAll("details").forEach(d=>{const k=detKey(d);if(k in DET)d.open=DET[k];});
   afterRender();
   if($("chatlist")){window.scrollTo(0,document.body.scrollHeight);}
   else if(rk===window.__rk&&sy>0){window.scrollTo(0,sy);}
-  window.__rk=rk;
+  window.__rk=rk;chipFade(m);try{strongSync();}catch(e){}
+  {const sc=(grp!=="home"&&grp!=="more")?subSel[grp]:null,h2=sc&&m.querySelector("h2");if(h2&&TILEDESC[sc]&&!m.querySelector(".whatis"))h2.insertAdjacentHTML("afterend",`<div class="meta whatis">${esc(TILEDESC[sc])}.</div>`);}
   if($("artc"))drawArt();
   trivTimerSync();
 }
@@ -2504,11 +2559,21 @@ let ncf="all";
 function ncRead(){try{return Number(localStorage.getItem("fh_nc_read_"+me)||0);}catch(e){return 0;}}
 function ncMine(){return pingsAll.filter(x=>x.from&&x.from!==me&&(!x.to||x.to.includes(me))&&x.kind!=="test").sort((a,b)=>(b.ts||0)-(a.ts||0));}
 function ncBadge(){const b=$("nbadge");if(!b)return;const n=ncMine().filter(x=>x.ts>ncRead()).length;b.textContent=n>9?"9+":String(n);b.style.display=n?"inline":"none";}
+let ncShown=false,ncSnap=0;
+function ncMarkRead(){try{localStorage.setItem("fh_nc_read_"+me,String(Date.now()));}catch(e){}ncBadge();}
+function ncGoFor(x){
+  if(x.go&&x.go!=="home")return x.go;
+  if(x.kind==="chat")return "chat";
+  if(x.kind==="prayer"||x.kind==="askpray")return "wall";
+  return x.go||"home";
+}
 function ncOpen(){
-  const r=ncRead(),all=ncMine(),un=all.filter(x=>x.ts>r);
+  if(!ncShown){ncShown=true;ncSnap=ncRead();}
+  const r=ncSnap,all=ncMine(),un=all.filter(x=>x.ts>r);
   const sum={};un.forEach(x=>{const k=NCF.chat[1](x)?"chat":NCF.prayer[1](x)?"prayer":"other";sum[k]=(sum[k]||0)+1;});
   const lst=all.filter(x=>NCF[ncf][1](x,r)).slice(0,40);
-  openDlg(`<h3>🔔 Notifications</h3>${un.length?`<div class="card gentle"><b>Catch me up</b><div class="meta">${un.length} new: ${[sum.chat?sum.chat+" chat":"",sum.prayer?sum.prayer+" prayer":"",sum.other?sum.other+" other":""].filter(Boolean).join(", ")}</div></div>`:""}<div class="chips">${Object.keys(NCF).map(k=>`<button class="chip ${k===ncf?"on":""}" data-act="ncf" data-k="${k}">${NCF[k][0]}</button>`).join("")}</div>${lst.length?lst.map(x=>`<button class="trow" data-act="ncgo" data-go="${esc(x.go||"home")}"><span class="ti">${x.ts>r?"🔵":"⚪"}</span><span class="tt"><b>${esc(x.from)}</b><span class="meta">${esc(String(x.text||x.kind||"").slice(0,80))} · ${esc(new Date(x.ts).toLocaleString([], {month:"short",day:"numeric",hour:"numeric",minute:"2-digit"}))}</span></span></button>`).join(""):`<div class="empty">Nothing here.</div>`}<div class="row"><button class="btn small" data-act="ncall">Mark all read</button><button class="btn ghost" data-act="close">Close</button></div>`);
+  const d=openDlg(`<div class="dhead"><h3>🔔 Notifications</h3><button class="xbtn" data-act="ncclose" aria-label="Close">✕</button></div>${un.length?`<div class="card gentle"><b>Catch me up</b><div class="meta">${un.length} new: ${[sum.chat?sum.chat+" chat":"",sum.prayer?sum.prayer+" prayer":"",sum.other?sum.other+" other":""].filter(Boolean).join(", ")}</div></div>`:""}<div class="chips">${Object.keys(NCF).map(k=>`<button class="chip ${k===ncf?"on":""}" data-act="ncf" data-k="${k}">${NCF[k][0]}</button>`).join("")}</div>${lst.length?lst.map(x=>`<button class="trow" data-act="ncgo" data-go="${esc(ncGoFor(x))}"><span class="ti">${x.ts>r?"🔵":"⚪"}</span><span class="tt"><b>${esc(x.from)}</b><span class="meta">${esc(String(x.text||x.kind||"").slice(0,80))} · ${esc(new Date(x.ts).toLocaleString([], {month:"short",day:"numeric",hour:"numeric",minute:"2-digit"}))}</span></span></button>`).join(""):`<div class="empty">Nothing here.</div>`}<div class="row"><button class="btn small" data-act="ncall">Mark all read</button><button class="btn ghost" data-act="ncclose">Close</button></div>`);
+  d.dataset.oc="1";
 }
 const STRONGP=["Jayden","Summer"];
 let pingsAll=[];
@@ -2633,8 +2698,8 @@ function myReadStreak(){
 function headerStat(){
   const el=$("hstat");if(!el)return;
   if(!me){el.innerHTML="";return;}
-  const n=myReadStreak(),m=db?missedList().length:0;
-  el.innerHTML=`<span class="av">${esc((metas.avatars||{})[me]||"🙂")}</span>${n?`<span title="Reading streak">🔥${n}</span>`:""}${m?`<button class="hbell" data-act="nav" data-g="home" aria-label="Missed">🔔 ${m}</button>`:""}`;
+  const n=myReadStreak();
+  el.innerHTML=`<span class="av">${esc((metas.avatars||{})[me]||"🙂")}</span>${n?`<span title="Reading streak">🔥${n}</span>`:""}`;
 }
 function prayDayCard(){
   const pd=metas.praydays||{},t=ymd(new Date()),who=PEOPLE.filter(p=>(pd[p]||[]).includes(t)),cnt={};
@@ -2685,14 +2750,14 @@ async function chatRec(){
   if(crec&&crec.state==="recording"){crec.stop();return;}
   try{
     const st=await navigator.mediaDevices.getUserMedia({audio:true});
-    const mime=MediaRecorder.isTypeSupported("audio/webm;codecs=opus")?"audio/webm;codecs=opus":"";
+    const mime=recMime();
     crec=new MediaRecorder(st,mime?{mimeType:mime,audioBitsPerSecond:24000}:{audioBitsPerSecond:24000});cch=[];
     crec.ondataavailable=e=>{if(e.data.size)cch.push(e.data);};
-    crec.onstop=()=>{clearTimeout(ctimer);st.getTracks().forEach(t=>t.stop());const b=new Blob(cch,{type:crec.mimeType||"audio/webm"});
+    crec.onstop=()=>{clearTimeout(ctimer);st.getTracks().forEach(t=>t.stop());const b=new Blob(cch,{type:(crec.mimeType||mime||"audio/mp4").split(";")[0]});
       if(b.size>700000){toast("Too long. Try a shorter one.");render();return;}
       const fr=new FileReader();fr.onload=()=>{saveNew("msg",{text:"🎙️ Voice message",audio:fr.result,vis:chatTo==="all"?null:[me,chatTo]});render();};fr.readAsDataURL(b);};
     crec.start();ctimer=setTimeout(()=>{if(crec&&crec.state==="recording")crec.stop();},45000);render();
-  }catch(e){toast("Microphone is blocked. Allow it in Chrome settings.");}
+  }catch(e){toast(recErr(e));}
 }
 const b2s=b=>btoa(String.fromCharCode(...new Uint8Array(b)));
 const s2b=t=>Uint8Array.from(atob(t),c=>c.charCodeAt(0));
@@ -2727,6 +2792,8 @@ function handleGo(g){
   if(g==="pause"){grp="home";homeTab="us";render();if(STRONGP.includes(me))setTimeout(strongSos,300);return true;}
   if(g==="pray"){grp="home";homeTab="us";render();setTimeout(()=>{const b=document.querySelector("[data-act=wiz][data-t=prayer]");if(b)b.click();},300);return true;}
   if(g==="chat"){grp="together";subSel.together="chat";render();return true;}
+  if(g==="wall"){grp="faith";subSel.faith="wall";render();return true;}
+  if(g==="strongshare"){if(STRONGP.includes(me)){grp="home";homeTab="us";render();setTimeout(strongShareView,300);}else{grp="home";render();}return true;}
   if(g==="snooze1"){setMeta("notif",{[me]:{snooze:Date.now()+36e5}});grp="home";render();toast("Alerts snoozed for 1 hour 😴");return true;}
   if(g==="live"||g==="tourn"){grp="play";subSel.play="games";gmStart(g);render();return true;}
   if(g==="agree"){grp="home";homeTab="us";render();if(STRONGP.includes(me))setTimeout(agreeDlg,300);return true;}
@@ -2950,7 +3017,7 @@ function momentView(){
   if(!momSel||!L.find(m=>m[0]===momSel))return `<h2>📖 Scripture for the moment</h2><div class="meta">How are you feeling right now? Tap one for verses and a short prayer.</div><div class="tlist">${L.map(m=>`<button class="trow" data-act="mom" data-k="${m[0]}"><span class="ti">${m[1]}</span><span class="tt"><b>${m[2]}</b><span class="meta">${m[3]}</span></span></button>`).join("")}</div>`;
   const m=L.find(x=>x[0]===momSel);
   const po=PEOPLE.filter(p=>p!==me&&STRONGP.includes(p));
-  return `<h2>${m[1]} ${m[2]}</h2><div class="tvhero"><div>${esc(m[3])}. You are not alone in this.</div></div>${m[4].map(v=>`<div class="card vcard"><div>${esc(v[1])}</div><b>${esc(v[0])}</b> <span class="meta">WEB</span></div>`).join("")}<div class="card gentle"><b>🙏 A short prayer</b><div style="margin-top:6px">${esc(m[5])}</div></div>${m[0]==="tempted"&&po.length&&STRONGP.includes(me)?`<div class="row">${po.map(p=>`<button class="btn" data-act="poke" data-p="${esc(p)}">👉 Poke ${esc(p)}</button>`).join("")}</div>`:""}<div class="row">${m[0]==="tempted"?madeBtn():""}<button class="btn ghost" data-act="mom" data-k="">Pick another</button></div>`;
+  return `<h2>${m[1]} ${m[2]}</h2><div class="tvhero"><div>${esc(m[3])}. You are not alone in this.</div></div>${m[4].map((v,i)=>`<div class="card vcard sc-${SCENEKEYS[i%SCENEKEYS.length]}"><p class="verse" style="font-size:19px">${esc(v[1])}</p><b>${esc(v[0])}</b> <span class="meta">WEB</span></div>`).join("")}<div class="card gentle"><b>🙏 A short prayer</b><div style="margin-top:6px">${esc(m[5])}</div></div>${m[0]==="tempted"&&po.length&&STRONGP.includes(me)?`<div class="row">${po.map(p=>`<button class="btn" data-act="poke" data-p="${esc(p)}">👉 Poke ${esc(p)}</button>`).join("")}</div>`:""}<div class="row">${m[0]==="tempted"?madeBtn():""}<button class="btn ghost" data-act="mom" data-k="">Pick another</button></div>`;
 }
 const favs=()=>lsArr("fh_favs");
 function favCard(){
@@ -3011,7 +3078,7 @@ function badgesCard(){
   return `<div class="card"><b>🏅 My badges</b> <span class="meta">${l.filter(x=>x[3]).length} of ${l.length}</span><div class="row">${l.map(x=>`<span class="chip ${x[3]?"on":""}" style="${x[3]?"":"opacity:.45"}" title="${esc(x[2])}">${x[0]} ${esc(x[1])}</span>`).join("")}</div><div class="meta">${l.filter(x=>!x[3]).map(x=>x[1]+": "+x[2]).join(" · ")}</div></div>`;
 }
 function recapCard(){
-  const w=weekDays(),hide=["msg","strong","replace","why","journal","agree"];
+  const w=weekDays(),hide=["msg","strong","strongshare","replace","why","journal","agree"];
   const rows=PEOPLE.map(u=>{const n=items.filter(i=>i.author===u&&!hide.includes(i.type)&&visible(i)&&(i.created||0)>Date.now()-7*864e5).length;return `<div>${esc(u)}: ${wcount(u,"habit")} habits, ${wcount(u,"pray")} prayer days, ${wcount(u,"read")} reading days, ${n} new entries</div>`;}).join("");
   return `<div class="card"><b>📊 This week</b><div style="margin-top:6px">${rows}</div></div>`;
 }
@@ -3278,7 +3345,7 @@ async function mpRun(){
 }
 function recapView(){
   const wk=Date.now()-7*864e5;
-  const mine=items.filter(i=>(i.created||0)>wk&&visible(i)&&!onlyMe(i)&&!["msg","todo","strong","replace","why","journal","agree"].includes(i.type));
+  const mine=items.filter(i=>(i.created||0)>wk&&visible(i)&&!onlyMe(i)&&!["msg","todo","strong","strongshare","replace","why","journal","agree"].includes(i.type));
   const by={};mine.forEach(i=>{const S=SECTIONS[i.type];const k=S?S.label:i.type;by[k]=(by[k]||0)+1;});
   const st=Object.entries(metas.study||{}).filter(([,r])=>r&&(r.ts||0)>wk).length,pl=Object.entries(metas.polls||{}).filter(([,r])=>r&&(r.ts||0)>wk).length;
   const ev=items.filter(i=>i.type==="event"&&visible(i)&&!onlyMe(i)&&i.date&&i.date>=ymd(new Date())).sort((a,b)=>String(a.date).localeCompare(String(b.date))).slice(0,3);
@@ -3540,11 +3607,28 @@ function thanksJar(){
   const n=items.filter(i=>i.type==="thanks"&&visible(i)).length;
   return `<div class="card gentle"><b>🫙 Our thankful jar: ${n}</b><div style="font-size:22px;line-height:1.3;word-break:break-all;margin-top:6px">${n?"🌻".repeat(Math.min(n,70)):"Empty for now. Add the first one!"}</div></div>`;
 }
+const ssOn=()=>{try{return localStorage.getItem("fh_ssh")!=="0";}catch(e){return true;}};
+function ssDoc(month){const p=partnerOf();return p?"sshare_"+lc(me)+"_"+lc(p)+"_"+month:null;}
+function strongSync(force){
+  if(!db||!me||!STRONGP.includes(me)||!ssOn())return;
+  const p=partnerOf(),month=ymd(new Date()).slice(0,7),all=strongLog(),days={};
+  Object.keys(all).forEach(k=>{if(k.startsWith(month))days[k]=all[k];});
+  const sig=month+"|"+JSON.stringify(days);
+  let last="";try{last=localStorage.getItem("fh_ssig")||"";}catch(e){}
+  if(!force&&sig===last)return;
+  try{localStorage.setItem("fh_ssig",sig);}catch(e){}
+  db.collection("items").doc(ssDoc(month)).set({type:"strongshare",author:me,from:me,to:p,month,days,created:Date.now(),audience:[lc(me),lc(p)]}).catch(()=>{try{localStorage.removeItem("fh_ssig");}catch(e){}});
+}
+function strongShareSet(on){
+  try{localStorage.setItem("fh_ssh",on?"1":"0");localStorage.removeItem("fh_ssig");}catch(e){}
+  if(on)strongSync(true);
+  else if(db&&partnerOf()){const month=ymd(new Date()).slice(0,7);db.collection("items").doc(ssDoc(month)).delete().catch(()=>{});}
+  toast(on?"Shared with "+partnerOf()+" 💛":"Sharing is off");render();
+}
 function streakCal(){
   if(!STRONGP.includes(me))return "";
-  const m=strongLog(),tn=new Date(),y=tn.getFullYear(),mo=tn.getMonth(),dim=new Date(y,mo+1,0).getDate();let c="";
-  for(let d=1;d<=dim;d++){const k=ymd(new Date(y,mo,d)),v=m[k];c+=`<span title="${k}" style="display:inline-block;width:30px;height:30px;line-height:30px;text-align:center;border-radius:8px;margin:2px;font:600 13px system-ui;background:${v==="strong"?"#3a9d5d":v==="fell"?"#c4584a":"color-mix(in srgb,var(--ink) 10%,transparent)"};color:${v?"#fff":"var(--mute)"}">${d}</span>`;}
-  return `<div class="card"><b>🗓️ My strong days this month (only you see this)</b><div style="margin-top:6px">${c}</div><div class="meta">Green is a strong day. Red is a day that was hard. Grey is not logged yet.</div></div>`;
+  const m=strongLog(),month=ymd(new Date()).slice(0,7),p=partnerOf(),on=ssOn();
+  return `<div class="card"><b>🗓️ My strong days this month</b><div class="meta">${on?`Shared with ${esc(p)} only. Nobody else can see it.`:"Only you see this."}</div><div style="margin-top:6px">${strongCalHtml(m,month)}</div><div class="meta">Green is a strong day. Red is a day that was hard. Grey is not logged yet.</div><div class="row"><button class="btn small ${on?"ghost":""}" data-act="ssset" data-v="${on?"0":"1"}">${on?"Stop sharing with "+esc(p):"Share with "+esc(p)}</button></div></div>`+sharedStrongCard();
 }
 function wgCard(){
   const w=weekKey(),g=u=>(metas.wg||{})["g_"+w+"_"+u],x=u=>(metas.wg||{})["x_"+w+"_"+u];
@@ -3553,9 +3637,9 @@ function wgCard(){
 function madeBtn(){return STRONGP.includes(me)?`<button class="btn" data-act="madeit">💪 I made it through</button>`:"";}
 const HOMECARDS=[["poke","👉 Poke button"],["favs","⭐ My shortcuts"],["strong","💪 Stay strong"],["trio","📖 Read, Pray, Message buttons"],["chips","⚡ Quick buttons (good news, goodnight...)"],["verse","🕊️ Verse of the day"],["pray","🤝 Pray together today"]];
 function lsArr(k){try{return JSON.parse(localStorage.getItem(k)||"[]");}catch(e){return[];}}
-const HORD0=["trio","chips","verse","pray"];
+const HORD0=["trio","chips","verse","pray","play","tog"];
 function homeOrder(){const o=lsArr("fh_hord").filter(k=>HORD0.includes(k));HORD0.forEach(k=>{if(!o.includes(k))o.push(k);});return o;}
-const hiddenHome=()=>lsArr("fh_homeoff"),hiddenSubs=()=>lsArr("fh_hidesub"),hOn=k=>!hiddenHome().includes(k);
+const hOnX=k=>lsArr("fh_homeon").includes(k),hiddenHome=()=>lsArr("fh_homeoff"),hiddenSubs=()=>lsArr("fh_hidesub"),hOn=k=>!hiddenHome().includes(k);
 function customizeHtml(){
   const off=hiddenHome(),hs=hiddenSubs();
   const hc=HOMECARDS.filter(([k])=>k!=="strong"||STRONGP.includes(me)).map(([k,l])=>`<div class="row"><button class="chip ${off.includes(k)?"":"on"}" data-act="hometog" data-k="${k}">${off.includes(k)?"⭕":"✅"} ${l}</button></div>`).join("")+`<div class="meta" style="margin-top:8px">Order on Home (tap ⬆️ to move up)</div>`+homeOrder().map((k,i)=>`<div class="row" style="justify-content:space-between"><span>${i+1}. ${(HOMECARDS.find(x=>x[0]===k)||[k,k])[1]}</span>${i?`<button class="chip" data-act="hordup" data-k="${k}" aria-label="Move up">⬆️</button>`:""}</div>`).join("");
@@ -3565,21 +3649,85 @@ function customizeHtml(){
   const lay=localStorage.getItem("fh_lay")||"std";
   return favh+`<div class="card"><h3>Home layout</h3><div class="row">${[["min","Simple"],["std","Standard"],["full","Full"]].map(([k,l])=>`<button class="chip ${lay===k?"on":""}" data-act="layout" data-l="${k}">${l}</button>`).join("")}</div><div class="meta">Simple hides extras. Full opens everything.</div></div><div class="card"><h3>Home screen</h3><div class="meta">Choose what you see on Home.</div>${hc}</div><div class="card"><h3>Sections</h3><div class="meta">Turn off sections you do not use. They are only hidden, nothing is deleted.</div>${secs}</div>`;
 }
+const PRESETS={min:["Simple","min",["chips","pray","favs"],["trio","chips","verse","pray"],[]],std:["Standard","std",[],["trio","chips","verse","pray"],[]],full:["Full","full",[],["trio","chips","verse","pray"],[]],faith:["Faith first","std",[],["verse","pray","trio","chips"],[]],tog:["Together first","std",[],["tog","trio","chips","pray","verse"],["tog"]],play:["Games first","std",[],["play","tog","trio","chips","verse","pray"],["play","tog"]]};
+function presetBar(){
+  if(!me)return "";
+  const cur=localStorage.getItem("fh_preset")||"std";
+  return `<div class="chips presets" aria-label="Home layout">${Object.keys(PRESETS).map(k=>`<button class="chip ${cur===k?"on":""}" data-act="preset" data-k="${k}">${PRESETS[k][0]}</button>`).join("")}<button class="chip" data-act="preset" data-k="reset">↩️ Reset layout</button></div>`;
+}
+function presetApply(k){
+  try{
+    if(k==="reset"){["fh_hord","fh_lay","fh_homeoff","fh_homeon","fh_preset"].forEach(x=>localStorage.removeItem(x));}
+    else{const P=PRESETS[k];if(!P)return;localStorage.setItem("fh_lay",P[1]);localStorage.setItem("fh_homeoff",JSON.stringify(P[2]));localStorage.setItem("fh_hord",JSON.stringify(P[3]));localStorage.setItem("fh_homeon",JSON.stringify(P[4]));localStorage.setItem("fh_preset",k);}
+  }catch(e){}
+  render();
+}
+/* last on */
+let laLast=0;
+const laOn=()=>{try{return localStorage.getItem("fh_la")==="1";}catch(e){return false;}};
+function laBeat(){if(!me||!db||!laOn()||document.hidden||Date.now()-laLast<3e5)return;laLast=Date.now();setMeta("active",{[me]:{ts:Date.now(),on:true}});}
+function laSet(on){try{localStorage.setItem("fh_la",on?"1":"0");localStorage.setItem("fh_la_asked","1");}catch(e){}laLast=0;if(on)laBeat();else setMeta("active",{[me]:{ts:0,on:false}});render();}
+function laLine(){
+  if(!me)return "";
+  const a=metas.active||{},l=PEOPLE.filter(n=>n!==me&&a[n]&&a[n].on&&a[n].ts).map(n=>`${esc(n)} ${esc(ago(a[n].ts))}`);
+  return l.length?`<div class="laline">👀 Last on: ${l.join(" · ")}</div>`:"";
+}
+function laPrompt(){
+  if(!me||!db)return "";let asked="1";try{asked=localStorage.getItem("fh_la_asked");}catch(e){}
+  if(asked)return "";
+  return `<div class="card gentle"><b>👀 Show when you were last on?</b><div class="meta">Friends would see a time like "5 minutes ago" next to your name. Nothing else. You can turn it off any time.</div><div class="row"><button class="btn small" data-act="laset" data-v="1">Yes, show it</button><button class="btn small ghost" data-act="laset" data-v="0">No thanks</button></div></div>`;
+}
+function laCard(){
+  if(!me||!db)return "";
+  return `<div class="card"><b>👀 Show when I was last on</b><div class="meta">${laOn()?"On. Friends can see a time like \"5 minutes ago\".":"Off. Nobody sees when you were on."}</div><div class="row"><button class="btn small ${laOn()?"ghost":""}" data-act="laset" data-v="${laOn()?"0":"1"}">${laOn()?"Turn off":"Turn on"}</button></div></div>`;
+}
+setInterval(laBeat,60000);
+document.addEventListener("visibilitychange",()=>{if(!document.hidden){laLast=0;laBeat();}});
+/* shared strong days */
+function strongCalHtml(days,month){
+  const [y,m]=month.split("-").map(Number),dim=new Date(y,m,0).getDate();let c="";
+  for(let d=1;d<=dim;d++){const k=month+"-"+String(d).padStart(2,"0"),v=days[k];c+=`<span title="${k}" style="display:inline-block;width:30px;height:30px;line-height:30px;text-align:center;border-radius:8px;margin:2px;font:600 13px system-ui;background:${v==="strong"?"#3a9d5d":v==="fell"?"#c4584a":"color-mix(in srgb,var(--ink) 10%,transparent)"};color:${v?"#fff":"var(--mute)"}">${d}</span>`;}
+  return c;
+}
+function strongShareDlg(){
+  if(!STRONGP.includes(me))return;
+  const o=STRONGP.filter(x=>x!==me);
+  openDlg(`<div class="dhead"><h3>📤 Share my strong days</h3><button class="xbtn" data-act="close" aria-label="Close">✕</button></div><p>Pick who can see this month. Only the person you pick. Nobody else can see it, and it will not update after you send it.</p><div class="row">${o.map(x=>`<button class="btn" data-act="strongsend" data-p="${esc(x)}">Send to ${esc(x)}</button>`).join("")}<button class="btn ghost" data-act="close">Cancel</button></div>`);
+}
+function strongSend(p){
+  if(!db||!STRONGP.includes(me)||!STRONGP.includes(p)||p===me){toast("Could not share");return;}
+  const month=ymd(new Date()).slice(0,7),all=strongLog(),days={};Object.keys(all).forEach(k=>{if(k.startsWith(month))days[k]=all[k];});
+  db.collection("items").doc("sshare_"+lc(me)+"_"+lc(p)+"_"+month).set({type:"strongshare",author:me,from:me,to:p,month,days,created:Date.now(),audience:[lc(me),lc(p)]}).then(()=>{closeDlg();toast("Shared with "+p+" 💛");}).catch(()=>toast("Could not share. Check your connection."));
+  sendPing([p],"shared their strong days for this month with you","support","strongshare");
+}
+function sharedStrongCard(){
+  if(!STRONGP.includes(me))return "";
+  const l=items.filter(i=>i.type==="strongshare"&&i.to===me&&i.from!==me).sort((a,b)=>(b.created||0)-(a.created||0)).slice(0,1);
+  if(!l.length)return "";const i=l[0];
+  return `<div class="card"><b>💪 ${esc(i.from)}'s strong days (${esc(i.month)})</b><div style="margin-top:6px">${strongCalHtml(i.days||{},i.month)}</div><div class="meta">Shared with you only. Green is strong, red was hard.</div></div>`;
+}
+function strongShareView(){
+  const i=items.filter(x=>x.type==="strongshare"&&x.to===me&&x.from!==me).sort((a,b)=>(b.created||0)-(a.created||0))[0];
+  if(!i){toast("Nothing shared yet");return;}
+  openDlg(`<div class="dhead"><h3>💪 ${esc(i.from)}'s strong days</h3><button class="xbtn" data-act="close" aria-label="Close">✕</button></div><div>${strongCalHtml(i.days||{},i.month)}</div><div class="meta">${esc(i.month)}. Shared with you only.</div><div class="row"><button class="btn" data-act="close">Close</button></div>`);
+}
 function ourHome(){
   const today=ymd(new Date()),readToday=(((metas.reads||{})[me])||[]).includes(today);
   const pushOn="Notification" in window&&Notification.permission==="granted"&&localStorage.getItem("fh_push")==="1";
   const hr=new Date().getHours(),gr=hr<12?"Good morning":hr<18?"Good afternoon":"Good evening";
-  let h=`<div class="hello">${gr}, ${esc(me||"friend")} 🌤️</div>`+pokesCard()+askCards()+missedCard()+todayStrip()+(hOn("poke")?pokeCard():"")+(hOn("strong")?strongCard()+checkinCard()+weeklyCard():"")+duelHomeCard()+rescueCard()+followCard()+roomCard(false)+friendStatus()+ppCard()+readBar()+(new Date().getDay()===0?recapCard():"")+(hOn("favs")?favCard():"");
+  let h=`<div class="hello">${gr}, ${esc(me||"friend")} 🌤️</div>`+laLine()+presetBar()+laPrompt()+streakCal()+pokesCard()+askCards()+missedCard()+todayStrip()+(hOn("poke")?pokeCard():"")+(hOn("strong")?strongCard()+checkinCard()+weeklyCard():"")+duelHomeCard()+rescueCard()+followCard()+roomCard(false)+friendStatus()+ppCard()+readBar()+(new Date().getDay()===0?recapCard():"")+(hOn("favs")?favCard():"");
   if(!pushOn&&db&&"Notification" in window&&Notification.permission!=="denied")h+=`<div class="card gentle"><b>🔔 Turn on notifications</b><div class="meta">So pokes and your verse reach this phone.</div><div class="row"><button class="btn" data-act="notif">Turn on</button></div></div>`;
   const HB={};HB.trio=``;
   if(hOn("trio"))HB.trio=`<div class="trio"><button class="bigact" data-act="read" ${readToday?"disabled":""}><span>${readToday?"✅":"📖"}</span>${readToday?"Read today":"I read"}</button><button class="bigact" data-act="wiz" data-t="prayer"><span>🙏</span>Pray</button><button class="bigact" data-act="goto" data-g="together" data-s="chat"><span>💬</span>Message</button></div>`;
   if(hOn("chips"))HB.chips=`<div class="row" style="justify-content:center"><button class="chip" data-act="goodnews">🎉 Share good news</button><button class="chip" data-act="goodnight">🌙 Goodnight</button><button class="chip" data-act="askpraydlg">🤍 Ask how to pray</button><button class="chip" data-act="goto" data-g="faith" data-s="topics">🔎 Verses for...</button></div>`;
+  if(hOnX("play"))HB.play=`<div class="card"><b>🎮 Play</b><div class="row"><button class="btn" data-act="goto" data-g="play" data-s="games">Games</button><button class="btn" data-act="goto" data-g="play" data-s="trivia">Trivia</button></div></div>`;
+  if(hOnX("tog"))HB.tog=`<div class="card"><b>💬 Together</b><div class="row"><button class="btn" data-act="goto" data-g="together" data-s="chat">Chat</button><button class="btn" data-act="goto" data-g="together" data-s="polls">Polls</button><button class="btn" data-act="goto" data-g="faith" data-s="wall">Prayer wall</button></div></div>`;
   if(hOn("verse"))HB.verse=dailyCard();
   if(hOn("pray"))HB.pray=prayDayCard();
   h+=windCard()+homeOrder().map(k=>HB[k]||"").join("");
-  let more=mvCard()+wordCard()+wgCard()+streakCal()+(roomOn()?"":roomCard(true))+dqCard()+potdCard()+(STRONGP.includes(me)?strongWeek():"")+wchalCard()+habitsCard()+sotwCard()+togetherCard()+answeredCard()+armorCard()+memCard()+readingCard()+skyLine();
+  let more=mvCard()+wordCard()+wgCard()+(roomOn()?"":roomCard(true))+dqCard()+potdCard()+(STRONGP.includes(me)?strongWeek():"")+wchalCard()+habitsCard()+sotwCard()+togetherCard()+answeredCard()+armorCard()+memCard()+readingCard()+skyLine();
   if(Date.now()-Number(localStorage.getItem("fh_lastbackup")||0)>30*864e5)more+=`<div class="card"><b>💾 Monthly backup</b><div class="meta">Save a copy of everything you can see. It takes a second.</div><div class="row"><button class="btn small" data-act="backup">Download backup</button><button class="btn small ghost" data-act="backuplater">Remind me later</button></div></div>`;
-  more+=sysStatus()+(new Date().getDay()===0?"":recapCard())+weekCard()+`<div class="row"><button class="chip" data-act="add" data-t="event" data-pre='{"repeat":"Every year","title":"Birthday: "}'>🎂 Add a birthday</button></div>`+healthCard();
+  more+=laCard()+sysStatus()+(new Date().getDay()===0?"":recapCard())+weekCard()+`<div class="row"><button class="chip" data-act="add" data-t="event" data-pre='{"repeat":"Every year","title":"Birthday: "}'>🎂 Add a birthday</button></div>`+healthCard();
   if(!simple)more+=homeMore();
   const lay=localStorage.getItem("fh_lay")||"std";
   return h+`<details class="more" ${lay==="full"?"open":""}><summary>More for today</summary>${more}</details>`;
@@ -3998,7 +4146,7 @@ document.addEventListener("click",async e=>{
   else if(a==="srshow"){sr.show=true;render();}
   else if(a==="srnext"){sr.i++;sr.show=false;render();}
   else if(a==="arttheme"){art.th=Number(d.i);render();}
-  else if(a==="artpick"){const v=[...MEMV,...items.filter(i=>i.type==="verse"&&i.ref&&i.text).map(i=>[i.ref,i.text])].find(x=>x[0]===d.r);if(v){art.ref=v[0];art.text=v[1];}render();scrollTo(0,0);}
+  else if(a==="artpick"){const v=[...MEMV,...items.filter(i=>i.type==="verse"&&i.ref&&i.text).map(i=>[i.ref,i.text])].find(x=>x[0]===d.r);if(v){art.ref=v[0];art.text=v[1];}render();}
   else if(a==="artsave"){const c=$("artc");if(c){const l=document.createElement("a");l.href=c.toDataURL("image/png");l.download="verse.png";document.body.appendChild(l);l.click();l.remove();}}
   else if(a==="artshare"){const c=$("artc");if(c)c.toBlob(async b=>{try{const f=new File([b],"verse.png",{type:"image/png"});if(navigator.canShare&&navigator.canShare({files:[f]}))await navigator.share({files:[f],title:art.ref});else toast("Tap Save picture, then share it from your photos");}catch(e){}});}
   else if(a==="install")installDlg();
@@ -4008,7 +4156,7 @@ document.addEventListener("click",async e=>{
   else if(a==="mvknow"){const w=weekKey();setMeta("mvk",{[w+"_"+me]:!((metas.mvk||{})[w+"_"+me])});}
   else if(a==="vmgo"){vmStart(d.r);grp="faith";subSel.faith="memorize";render();scrollTo(0,0);}
   else if(a==="nudge"){sendPing([d.p],"is nudging you to read today 📖","reply").then(()=>toast("Nudged "+d.p));}
-  else if(a==="pksel"){pkSel=d.k||null;render();scrollTo(0,0);}
+  else if(a==="pksel"){pkSel=d.k||null;render();}
   else if(a==="pkday"){const pr=pkProg(),l=pr[pkSel]||[],i=Number(d.i),j=l.indexOf(i);if(j>=0)l.splice(j,1);else l.push(i);pr[pkSel]=l;localStorage.setItem("fh_pk",JSON.stringify(pr));if(l.length===7)confetti();render();}
   else if(a==="faststart"){const t=(($("ftitle")||{}).value||"").trim(),now=Date.now();setMeta("fast",{cur:{by:me,title:t,start:now,days:Number(d.n)}});sendPing(PEOPLE.filter(p=>p!==me),"started a "+d.n+" day fast"+(t?" for "+t:"")+". Join in 🍞","activity");}
   else if(a==="fastcheck"){const f=fastCur();if(f&&FV)setMeta("fast",{["d"+f.start+"_"+me]:FV.arrayUnion(ymd(new Date()))});}
@@ -4077,10 +4225,16 @@ document.addEventListener("click",async e=>{
   else if(a==="review")reviewDialog();
   else if(a==="journal")download("faith-hub-journal.html",journalHtml(),"text/html");
   else if(a==="backup"){localStorage.setItem("fh_lastbackup",String(Date.now()));download("faith-hub-backup.json",JSON.stringify({items,metas},null,1),"application/json");render();}
-  else if(a==="help")openDlg(`<h3>❓ Help</h3>${HELP.map(([q2,a2])=>`<details class="card"><summary>${esc(q2)}</summary><p>${esc(a2)}</p></details>`).join("")}<div class="row"><button class="btn ghost" data-act="feedback">✉️ Send feedback</button><button class="btn" data-act="close">Close</button></div>`);
+  else if(a==="help")openDlg(`<div class="dhead"><h3>❓ How to use Faith Hub</h3><button class="xbtn" data-act="close" aria-label="Close">✕</button></div>${HELP.concat(STRONGP.includes(me)?[HELP_STRONG]:[]).map(([q2,a2])=>`<details class="card"><summary>${esc(q2)}</summary><p>${esc(a2)}</p></details>`).join("")}<div class="row"><button class="btn" data-act="tour" data-i="0">🧭 Take the tour</button></div><div class="row"><button class="btn ghost" data-act="feedback">✉️ Send feedback</button><button class="btn" data-act="close">Close</button></div>`);
   else if(a==="notifs")ncOpen();
   else if(a==="ncf"){ncf=d.k;ncOpen();}
-  else if(a==="ncall"){try{localStorage.setItem("fh_nc_read_"+me,String(Date.now()));}catch(e){}ncBadge();ncOpen();}
+  else if(a==="ncall"){ncMarkRead();ncSnap=Date.now();ncOpen();}
+  else if(a==="ncclose"){ncShown=false;if(me)ncMarkRead();closeDlg();}
+  else if(a==="preset")presetApply(d.k);
+  else if(a==="laset")laSet(d.v==="1");
+  else if(a==="strongshare")strongShareDlg();
+  else if(a==="ssset")strongShareSet(d.v==="1");
+  else if(a==="strongsend")strongSend(d.p);
   else if(a==="ncgo"){closeDlg();handleGo(d.go);}
   else if(a==="myreports")openReports();
   else if(a==="fbreply"){const v=(($("rp_"+d.id)||{}).value||"").trim();if(ADMINS.includes(me)&&db){db.collection("feedback").doc(d.id).update({reply:v.slice(0,500)}).then(()=>{toast("Reply saved");if(d.from&&d.from!==me&&v)sendPing([d.from],"Reply on your report","activity","reports");}).catch(()=>toast("Could not save"));}}
