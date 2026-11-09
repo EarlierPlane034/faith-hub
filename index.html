@@ -2486,7 +2486,7 @@ async function openReports(){
   const adm=ADMINS.includes(me);
   openDlg(`<h3>📋 ${adm?"All reports":"My reports"}</h3><div class="meta">Loading...</div><div class="row"><button class="btn ghost" data-act="close">Close</button></div>`);
   try{
-    const q=adm?db.collection("feedback").orderBy("ts","desc").limit(30):db.collection("feedback").where("from","==",me);
+    const q=adm?db.collection("feedback").orderBy("ts","desc").limit(30):db.collection("feedback").where("fromLc","==",lc(me));
     const sn=await q.get();let rs=sn.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(b.ts||0)-(a.ts||0));
     const h=rs.length?rs.map(r=>`<div class="card"><div class="meta">${esc(r.kind||"Report")} · ${esc(r.from||"")} · ${esc(new Date(r.ts||0).toLocaleDateString())} · #${esc(r.id.slice(0,6))}</div><p style="margin:4px 0">${esc(r.text||"")}</p><div><b>${esc(r.status||"Submitted")}</b>${r.reply?`<div class="meta">Reply: ${esc(r.reply)}</div>`:""}</div>${adm?`<div class="row"><select data-act="fbstat" data-id="${r.id}" data-from="${esc(r.from||"")}">${RSTAT.map(x=>`<option ${x===(r.status||"Submitted")?"selected":""}>${esc(x)}</option>`).join("")}</select></div><div class="row"><input id="rp_${r.id}" placeholder="Reply (optional)" value="${esc(r.reply||"")}" style="flex:1"><button class="btn small" data-act="fbreply" data-id="${r.id}" data-from="${esc(r.from||"")}">Send</button></div>`:""}</div>`).join(""):`<div class="empty">No reports yet.</div>`;
     openDlg(`<h3>📋 ${adm?"All reports":"My reports"}</h3>${h}<div class="row"><button class="btn ghost" data-act="close">Close</button></div>`);
@@ -3200,7 +3200,7 @@ function liveView(){
 /* weekly tournament, graded by the server */
 function tourW(){return (metas.tourn||{})[weekKey()]||{};}
 function tournView(){
-  const T=tourW(),sub=(T.sub||{})[me],ver=T.ver||{};
+  const T=tourW(),sub=(T.sub||{})[me],ver=(metas.tournver||{})[weekKey()]||{};
   const board=Object.keys(T.sub||{}).map(n=>[n,ver[n]]).sort((a,b)=>(b[1]??-1)-(a[1]??-1));
   const bh=`<div class="card"><b>This week's standings</b>${board.map(([n,v],k)=>`<div>${k===0&&v!==undefined?"👑 ":""}${esc(n)}: ${v!==undefined?v+" / 10 ✅":"checking..."}</div>`).join("")||"<div class='meta'>Nobody has played yet</div>"}<div class="meta">✅ means the server checked the answers. It updates within a few minutes.</div></div>`;
   if(sub||!tr){if(sub)return BACKG+`<h2>🏆 Weekly tournament</h2><div class="tvhero"><div class="tvbig">You played this week</div><div>Your score on this phone: ${sub.local??"?"} / 10</div></div>`+bh;
@@ -4089,7 +4089,7 @@ document.addEventListener("click",async e=>{
   else if(a==="feedback"){openDlg(`<h3>✉️ Report a problem or idea</h3><label for="fbk">What kind?</label><select id="fbk"><option>Something is not working</option><option>Notifications</option><option>Photos or saving</option><option>Confusing</option><option>Idea</option></select><label for="fbt">What happened?</label><textarea id="fbt" placeholder="What were you doing and what went wrong?"></textarea><div class="meta">This also sends your app version, phone browser and whether alerts are on. It never sends your messages or prayers.</div><div class="row"><button class="btn" data-act="fbsend">Send</button><button class="btn ghost" data-act="myreports">📋 My reports</button><button class="btn ghost" data-act="close">Cancel</button></div>`);}
   else if(a==="fbsend"){const t=($("fbt").value||"").trim();if(!t){toast("Write a few words first");return;}if(!db){toast("Sharing is not set up yet");return;}
     const info={v:APP_VER,ua:String(navigator.userAgent).slice(0,160),notif:("Notification" in window)?Notification.permission:"none",sw:!!(navigator.serviceWorker&&navigator.serviceWorker.controller),online:navigator.onLine,standalone:!!(window.matchMedia&&matchMedia("(display-mode: standalone)").matches),screen:innerWidth+"x"+innerHeight,sub:grp+"/"+(subSel[grp]||"")};
-    db.collection("feedback").add({from:me||"Someone",text:t.slice(0,2000),kind:$("fbk").value,ts:Date.now(),v:APP_VER,info}).then(()=>{toast("Thank you! Sent.");closeDlg();}).catch(()=>toast("Could not send. Try again."));}
+    db.collection("feedback").add({fromLc:lc(me||"someone"),from:me||"Someone",text:t.slice(0,2000),kind:$("fbk").value,ts:Date.now(),v:APP_VER,info}).then(()=>{toast("Thank you! Sent.");closeDlg();}).catch(()=>toast("Could not send. Try again."));}
   else if(a==="news")showNews();
   else if(a==="newsdone"){localStorage.setItem("fh_ver_seen",APP_VER);closeDlg();}
   else if(a==="tour"){const i=Number(d.i);if(i>=TOUR.length){localStorage.setItem("fh_tour","1");localStorage.setItem("fh_ver_seen",APP_VER);closeDlg();render();}else openTour(i);}
