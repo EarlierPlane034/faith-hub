@@ -98,8 +98,10 @@ async function main() {
     const fs = require("fs"), path = require("path"), vm = require("vm");
     const tSnap = await db.collection("meta").doc("tourn").get();
     const T = tSnap.exists ? tSnap.data() : {};
+    const vSnap = await db.collection("meta").doc("tournver").get();
+    const V = vSnap.exists ? vSnap.data() : {};
     const todo = [];
-    for (const [wk, t] of Object.entries(T || {})) for (const [n, sub] of Object.entries((t && t.sub) || {})) if (!t.ver || t.ver[n] === undefined) todo.push([wk, n, sub, t.qs]);
+    for (const [wk, t] of Object.entries(T || {})) for (const [n, sub] of Object.entries((t && t.sub) || {})) if (!V[wk] || V[wk][n] === undefined) todo.push([wk, n, sub, t.qs]);
     if (todo.length) {
       const html = fs.readFileSync(path.join(__dirname, "..", "index.html"), "utf8");
       const i = html.indexOf("const QUIZ=["), j = html.indexOf("\n);", html.indexOf("QUIZ.push(")) + 3;
@@ -109,10 +111,10 @@ async function main() {
       for (const [wk, n, sub, qs] of todo) {
         if (!Array.isArray(qs) || qs.length !== 10 || !Array.isArray(sub.a)) continue;
         let sc = 0; qs.forEach((qi, k) => { if (Q[qi] && Number(sub.a[k]) === Q[qi].a) sc++; });
-        (upd[wk] = upd[wk] || { ver: {} }).ver[n] = sc;
+        (upd[wk] = upd[wk] || {})[n] = sc;
         console.log(`[tourn] ${wk} ${n}: ${sc}/10`);
       }
-      if (Object.keys(upd).length) await db.collection("meta").doc("tourn").set(upd, { merge: true });
+      if (Object.keys(upd).length) await db.collection("meta").doc("tournver").set(upd, { merge: true });
     }
   } catch (e) { console.log("tourn grading skipped:", e.message); }
   await db.collection("meta").doc("heartbeat").set({ pings: Date.now() }, { merge: true }).catch(() => {});
