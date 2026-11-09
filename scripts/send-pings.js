@@ -93,6 +93,130 @@ async function main() {
     if (old.length) await sentRef.update(Object.fromEntries(old.map(k => [k, admin.firestore.FieldValue.delete()])));
   } catch (e) { console.log("nightly error", e.message); }
 
+  // evening reading reminders (opt-in; one gentle or repeated at 0/5/15/30/45/60 min; stops when read today or skipped; no backlog)
+  try {
+    const rrRef = db.collection("meta").doc("readrem");
+    const rrSnap = await rrRef.get(); const rrSent = rrSnap.exists ? rrSnap.data() : {};
+    const readsDoc = ((await db.collection("meta").doc("reads").get()).data()) || {};
+    const OFFS = [0, 5, 15, 30, 45, 60];
+    for (const u of USERS) {
+      const c = ncfg[u] || {};
+      if (c.readOn !== true || c.vacation === true) continue;
+      if (c.snooze && Date.now() < Number(c.snooze)) continue;
+      const tz = c.tz || "America/Denver";
+      let date, nowMin;
+      try {
+        const f = new Intl.DateTimeFormat("en-CA", { timeZone: tz, year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hour12: false }).formatToParts(new Date());
+        const g = t => (f.find(x => x.type === t) || {}).value;
+        date = g("year") + "-" + g("month") + "-" + g("day"); nowMin = (Number(g("hour")) % 24) * 60 + Number(g("minute"));
+      } catch (e) { continue; }
+      if (c.nightSkip === date) continue;
+      if ((readsDoc[u] || []).includes(date)) continue;
+      const m = /^(\d\d):(\d\d)$/.exec(c.readT || "21:00"); if (!m) continue;
+      const start = Number(m[1]) * 60 + Number(m[2]);
+      const offs = c.readMode === "rep" ? OFFS : [0];
+      for (let k = 0; k < offs.length; k++) {
+        const slot = start + offs[k];
+        if (slot >= 1440 || nowMin < slot || nowMin >= slot + 5) continue;
+        const key = u + "_" + date + "_" + k;
+        if (rrSent[key]) continue;
+        await rrRef.set({ [key]: Date.now() }, { merge: true });
+        if (!allowed(u, "readrem")) continue;
+        await pushTo(u, "📖 Time to read", k === 0 ? "A few quiet minutes with your reading." : k === offs.length - 1 ? "Last reminder for tonight." : "Still time to read tonight.", "bedtime");
+      }
+    }
+    const oldR = Object.keys(rrSent).filter(k => Date.now() - Number(rrSent[k]) > 3 * 864e5);
+    if (oldR.length) await rrRef.update(Object.fromEntries(oldR.map(k => [k, admin.firestore.FieldValue.delete()])));
+  } catch (e) { console.log("reading reminder error", e.message); }
+
+  // Sunday summary (opt-in, one notification, 6 PM Sunday in the user's time zone)
+  try {
+    const wkRef = db.collection("meta").doc("weekrem");
+    const wkSnap = await wkRef.get(); const wkSent = wkSnap.exists ? wkSnap.data() : {};
+    for (const u of USERS) {
+      const c = ncfg[u] || {};
+      if (c.weekOn !== true || c.vacation === true) continue;
+      if (c.snooze && Date.now() < Number(c.snooze)) continue;
+      const tz = c.tz || "America/Denver";
+      let date, nowMin, wd;
+      try {
+        const f = new Intl.DateTimeFormat("en-CA", { timeZone: tz, weekday: "short", year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hour12: false }).formatToParts(new Date());
+        const g = t => (f.find(x => x.type === t) || {}).value;
+        date = g("year") + "-" + g("month") + "-" + g("day"); nowMin = (Number(g("hour")) % 24) * 60 + Number(g("minute")); wd = g("weekday");
+      } catch (e) { continue; }
+      if (wd !== "Sun" || nowMin < 1080 || nowMin >= 1085) continue;
+      const key = u + "_" + date; if (wkSent[key]) continue;
+      await wkRef.set({ [key]: Date.now() }, { merge: true });
+      const snap = await db.collection("items").where("audience", "array-contains", u.toLowerCase()).get();
+      const cut = Date.now() - 7 * 864e5; const by = {}; let n = 0;
+      snap.forEach(d0 => { const x = d0.data(); if (x.author && x.author !== u && Number(x.created || 0) > cut && !["strongshare", "strong", "replace", "why", "agree"].includes(x.type)) { n++; by[x.author] = (by[x.author] || 0) + 1; } });
+      if (!n) continue;
+      if (!allowed(u, "weekly")) continue;
+      await pushTo(u, "📰 This week", n + " new thing" + (n === 1 ? "" : "s") + " from " + Object.keys(by).join(" and ") + ". Tap to catch up.", "home");
+    }
+    const oldW = Object.keys(wkSent).filter(k => Date.now() - Number(wkSent[k]) > 10 * 864e5);
+    if (oldW.length) await wkRef.update(Object.fromEntries(oldW.map(k => [k, admin.firestore.FieldValue.delete()])));
+  } catch (e) { console.log("weekly summary error", e.message); }
+
+  // verse practice reminder (opt-in, once at chosen time, only if not practiced today)
+  try {
+    const mRef = db.collection("meta").doc("memrem");
+    const mSnap = await mRef.get(); const mSent = mSnap.exists ? mSnap.data() : {};
+    const mdone = ((await db.collection("meta").doc("memdone").get()).data()) || {};
+    for (const u of USERS) {
+      const c = ncfg[u] || {};
+      if (c.memOn !== true || c.vacation === true) continue;
+      if (c.snooze && Date.now() < Number(c.snooze)) continue;
+      const tz = c.tz || "America/Denver";
+      let date, nowMin;
+      try {
+        const f = new Intl.DateTimeFormat("en-CA", { timeZone: tz, year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hour12: false }).formatToParts(new Date());
+        const g = t => (f.find(x => x.type === t) || {}).value;
+        date = g("year") + "-" + g("month") + "-" + g("day"); nowMin = (Number(g("hour")) % 24) * 60 + Number(g("minute"));
+      } catch (e) { continue; }
+      const m = /^(\d\d):(\d\d)$/.exec(c.memT || "19:00"); if (!m) continue;
+      const slot = Number(m[1]) * 60 + Number(m[2]);
+      if (nowMin < slot || nowMin >= slot + 5) continue;
+      const key = u + "_" + date; if (mSent[key]) continue;
+      await mRef.set({ [key]: Date.now() }, { merge: true });
+      if ((mdone[u] || []).includes(date)) continue;
+      if (!allowed(u, "memrem")) continue;
+      await pushTo(u, "🧠 Verse practice", "Two minutes with a verse. Tap to practice.", "sub:faith/memo");
+    }
+    const oldM = Object.keys(mSent).filter(k => Date.now() - Number(mSent[k]) > 5 * 864e5);
+    if (oldM.length) await mRef.update(Object.fromEntries(oldM.map(k => [k, admin.firestore.FieldValue.delete()])));
+  } catch (e) { console.log("verse practice error", e.message); }
+
+
+
+
+  // Scheduled Bible studies: remind everyone 1 hour before and at start
+  try {
+    const stSnap = await db.collection("meta").doc("study").get();
+    const stData = stSnap.exists ? stSnap.data() : {};
+    const remRef = db.collection("meta").doc("evrem");
+    const remSnap = await remRef.get();
+    const rem = remSnap.exists ? remSnap.data() : {};
+    const nowMs = Date.now();
+    for (const id of Object.keys(stData)) {
+      const r = stData[id];
+      if (!r || !r.when || !r.ref) continue;
+      for (const [tag, lead, msg] of [["1h", 3600e3, "starts in 1 hour"], ["0", 0, "starts now"]]) {
+        const at = Number(r.when) - lead;
+        if (nowMs < at || nowMs >= at + 10 * 60e3) continue;
+        for (const u of USERS) {
+          const key = id + "_" + u + "_" + tag;
+          if (rem[key]) continue;
+          await remRef.set({ [key]: nowMs }, { merge: true });
+          if (!allowed(u, "activity")) continue;
+          await pushTo(u, "📖 Bible study " + msg, clip(r.ref, 60), "study");
+        }
+      }
+    }
+    const oldK = Object.keys(rem).filter(k => nowMs - Number(rem[k]) > 3 * 864e5);
+    if (oldK.length) await remRef.update(Object.fromEntries(oldK.map(k => [k, admin.firestore.FieldValue.delete()])));
+  } catch (e) { console.log("study reminders error", e.message); }
+
   // Weekly tournament: grade submitted answers on the server so scores can't be faked on a phone.
   try {
     const fs = require("fs"), path = require("path"), vm = require("vm");
