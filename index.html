@@ -324,6 +324,36 @@ button,a,summary,.chip,.trow{-webkit-tap-highlight-color:transparent;touch-actio
 .trow,.tile,.card{transition:transform .15s ease,box-shadow .2s ease}
 details>summary{transition:background .15s}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+/* v5.22 polish */
+:root{--r:22px;--sh1:0 1px 2px rgba(40,30,20,.05),0 8px 24px rgba(40,30,20,.07);--sh2:0 2px 4px rgba(40,30,20,.06),0 16px 40px rgba(40,30,20,.12)}
+:root[data-theme=dark]{--sh1:0 1px 2px rgba(0,0,0,.35),0 10px 28px rgba(0,0,0,.35);--sh2:0 2px 4px rgba(0,0,0,.4),0 18px 44px rgba(0,0,0,.45)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--sh1:0 1px 2px rgba(0,0,0,.35),0 10px 28px rgba(0,0,0,.35);--sh2:0 2px 4px rgba(0,0,0,.4),0 18px 44px rgba(0,0,0,.45)}}
+body{letter-spacing:.005em;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+header h1{letter-spacing:-.01em;font-weight:800}
+.card:not(.vcard):not(.gentle){border-radius:var(--r);padding:18px 18px;box-shadow:var(--sh1);border:1px solid color-mix(in srgb,var(--line) 60%,transparent)}
+.card.gentle{border-radius:var(--r);padding:16px 18px}
+.card b:first-child{letter-spacing:-.005em}
+main h2{font-size:30px;letter-spacing:-.015em;margin:14px 0 6px}
+.hello{font-size:30px;letter-spacing:-.02em;margin:18px 0 6px}
+.btn:not(.ghost){background:linear-gradient(180deg,color-mix(in srgb,var(--acc) 88%,#fff),var(--acc));border:0;box-shadow:0 1px 0 rgba(255,255,255,.35) inset,0 6px 16px color-mix(in srgb,var(--acc) 32%,transparent)}
+.btn.ghost{background:transparent;border:1.5px solid color-mix(in srgb,var(--acc) 55%,transparent)}
+.btn:active{box-shadow:0 2px 6px color-mix(in srgb,var(--acc) 25%,transparent)}
+.chip{box-shadow:0 1px 2px rgba(40,30,20,.06);border-color:color-mix(in srgb,var(--line) 70%,transparent)}
+.hbtn{box-shadow:var(--sh1)}
+nav{border-radius:30px;box-shadow:var(--sh2)}
+nav button.on{background:color-mix(in srgb,var(--acc) 16%,transparent);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--acc) 22%,transparent)}
+.trow,.tile{border-radius:var(--r);box-shadow:var(--sh1)}
+.trow:active,.tile:active{box-shadow:0 1px 2px rgba(0,0,0,.08)}
+dialog{border-radius:28px;box-shadow:var(--sh2)}
+input,textarea,select{border-radius:14px}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--acc);box-shadow:0 0 0 4px color-mix(in srgb,var(--acc) 18%,transparent)}
+.card.vcard{box-shadow:var(--sh2)}
+.sday{text-align:center;border-radius:9px;height:32px;line-height:32px;font:600 13px system-ui,sans-serif;background:color-mix(in srgb,var(--ink) 8%,transparent);color:var(--mute);transition:transform .15s}
+.sday.ok{background:linear-gradient(160deg,#4cb273,#2f8f5b);color:#fff;box-shadow:0 3px 8px #2f8f5b44}
+.sday.bad{background:linear-gradient(160deg,#d46a5b,#b04a3d);color:#fff;box-shadow:0 3px 8px #b04a3d44}
+.sday.today{outline:2px solid var(--acc);outline-offset:2px}
+.laline{background:color-mix(in srgb,var(--acc) 10%,transparent);display:inline-block;padding:5px 12px;border-radius:99px}
+.fabadd{background:linear-gradient(160deg,color-mix(in srgb,var(--acc) 85%,#fff),var(--acc));box-shadow:0 8px 20px color-mix(in srgb,var(--acc) 40%,transparent)}
 </style>
 </head>
 <body>
@@ -343,7 +373,7 @@ details>summary{transition:background .15s}
 
 <script>
 /* ============ SETUP (Jayden only) ============ */
-const APP_VER="5.19";
+const APP_VER="5.23";
 const FIREBASE_CONFIG = {
   apiKey:"AIzaSyDhwY77B-wZL7f4077kEC_tn0K2AgJ6bIs",
   authDomain:"faith-hub-71ae2.firebaseapp.com",
@@ -1540,7 +1570,7 @@ const HELP=[
 ];
 const HELP_STRONG=["How do I use Stay strong?","On Home, tap Stay strong. Mark a day strong, or tap I am struggling right now to reach your partner. Only you and your partner see your days. Your calendar is on top of Home and is shared with your partner by default. Tap Stop sharing under it to turn that off."];
 const TOUR=[["Welcome 💛","This is a private space for the three of you to share faith, prayers and adventures."],["Add something","Tap a tab at the bottom, pick a tile, then the big Add button. We ask one question at a time."],["Stay close","Tap 💛 Thinking of you, send a message, or react to anything with ❤️ or 🙏. Want to talk? Tap 👉 Poke at the top of Home."],["Daily verse","Turn on notifications in More to get a verse every day. Tap the ? button any time for help."],["Who sees what","Sign in with your own PIN. Check ins, questions and prayers start out private, and Home has Our space and My journal. You choose who sees anything else."]];
-const NEWS=["🎉 Version 5.19","🗓️ Your strong days calendar is now at the very top and shared with your partner by default","✨ Smoother scrolling and animations","👆 Bigger buttons that are easier to tap","🧹 Header no longer overlaps the title","🎉 Version 5.18","🧹 The page no longer jumps to the top and sections stay open","🔔 Notifications: X at the top, tap one to open it, and the number clears","🎙️ Voice messages work on iPhone and Android","🧭 Home layout buttons at the top and a How to use page (tap ?)","👀 Optional: see when a friend was last on","🎉 Version 5.17","📡 Live trivia: everyone plays the same question at once","🏆 Weekly tournament with server checked scores","🔔 Snooze or open right from a notification","🎉 Version 5.16","🧠 Trivia now has over 1,000 questions","🖍️ Shared whiteboard in Together","⏳ Bible timeline and 🖼️ Whose photo? games","😴 Snooze alerts, reorder Home, better search","🎉 Version 5.15","📷 Add several photos at once with progress and retry, 🔕 mute a person","🎉 Version 5.14","⭐ Saved folders, 📰 weekly recap, 🪣 bucket list, 📝 shared notes, 80 new general trivia questions","🎉 Version 5.13","🃏 Memory match, 🏆 Bible jeopardy, 🎯 Group bingo, 🎨 Draw and guess, 📚 Story together","🎉 Version 5.12","📖 Group Bible study, 🗳️ polls, 👋 availability status, 🌙 nightly check-in reminders (optional)","🎉 Version 5.11","🎯 What should we do? 🎡 Decision wheel, ⚖️ This or that, 🤥 Two truths and a lie, 🔤 Word puzzle","🎉 Version 5.10","🔔 Notification center with filters, Catch me up and Mark all read","🎉 Version 5.9","🤔 New game: Guess my answer. 📋 Track your problem reports. ✍️ Continue card on Home","🎉 Version 5.8","🔒 Check-ins and mood now save to a private place only you can read","🎉 Version 5.7","🎯 320 new trivia questions, 💾 save a backup of your entries","🎉 Version 5.6","🧭 New tabs: Home, My Space, Together, Faith, Play","✉️ Better problem report, 🎯 more trivia, easier focus outlines and reduced motion","🎉 Version 5.5","🔔 Alerts open the exact thing, saving shows a status, drafts are kept, big photos are shrunk, scroll no longer jumps","🎉 Version 5.4","🙏 Prayer partner of the week, 📌 memory verse of the week, 📖 who read today","📘 7 day studies, 📚 word of the day, 🍞 shared fast, 🗓️ calendar","⏱️ Trivia modes: timed, true or false, finish the verse, and team rounds","🎯 Weekly goals, 💪 I made it through, 📅 event maps and RSVP","🔍 Search filters, 📳 vibration choice, 🖨️ year in review as PDF"];
+const NEWS=["🎉 Version 5.23","⬆️ Stay strong, check in and weekly cards are now right under your calendar at the top","🎉 Version 5.22","✨ A prettier look: softer cards and shadows, nicer buttons, and today is highlighted on your calendar","🎉 Version 5.21","💪 Stayed strong and I fell buttons are now right on the strong days calendar","🎉 Version 5.20","⬅️ Back now returns you to the same spot you left, not the top","🎉 Version 5.19","🗓️ Your strong days calendar is now at the very top and shared with your partner by default","✨ Smoother scrolling and animations","👆 Bigger buttons that are easier to tap","🧹 Header no longer overlaps the title","🎉 Version 5.18","🧹 The page no longer jumps to the top and sections stay open","🔔 Notifications: X at the top, tap one to open it, and the number clears","🎙️ Voice messages work on iPhone and Android","🧭 Home layout buttons at the top and a How to use page (tap ?)","👀 Optional: see when a friend was last on","🎉 Version 5.17","📡 Live trivia: everyone plays the same question at once","🏆 Weekly tournament with server checked scores","🔔 Snooze or open right from a notification","🎉 Version 5.16","🧠 Trivia now has over 1,000 questions","🖍️ Shared whiteboard in Together","⏳ Bible timeline and 🖼️ Whose photo? games","😴 Snooze alerts, reorder Home, better search","🎉 Version 5.15","📷 Add several photos at once with progress and retry, 🔕 mute a person","🎉 Version 5.14","⭐ Saved folders, 📰 weekly recap, 🪣 bucket list, 📝 shared notes, 80 new general trivia questions","🎉 Version 5.13","🃏 Memory match, 🏆 Bible jeopardy, 🎯 Group bingo, 🎨 Draw and guess, 📚 Story together","🎉 Version 5.12","📖 Group Bible study, 🗳️ polls, 👋 availability status, 🌙 nightly check-in reminders (optional)","🎉 Version 5.11","🎯 What should we do? 🎡 Decision wheel, ⚖️ This or that, 🤥 Two truths and a lie, 🔤 Word puzzle","🎉 Version 5.10","🔔 Notification center with filters, Catch me up and Mark all read","🎉 Version 5.9","🤔 New game: Guess my answer. 📋 Track your problem reports. ✍️ Continue card on Home","🎉 Version 5.8","🔒 Check-ins and mood now save to a private place only you can read","🎉 Version 5.7","🎯 320 new trivia questions, 💾 save a backup of your entries","🎉 Version 5.6","🧭 New tabs: Home, My Space, Together, Faith, Play","✉️ Better problem report, 🎯 more trivia, easier focus outlines and reduced motion","🎉 Version 5.5","🔔 Alerts open the exact thing, saving shows a status, drafts are kept, big photos are shrunk, scroll no longer jumps","🎉 Version 5.4","🙏 Prayer partner of the week, 📌 memory verse of the week, 📖 who read today","📘 7 day studies, 📚 word of the day, 🍞 shared fast, 🗓️ calendar","⏱️ Trivia modes: timed, true or false, finish the verse, and team rounds","🎯 Weekly goals, 💪 I made it through, 📅 event maps and RSVP","🔍 Search filters, 📳 vibration choice, 🖨️ year in review as PDF"];
 
 let items=[], metas={}, grp="home", subSel={faith:null,together:null,play:null}, filt="all", q="", catFilt="all";
 let me=localStorage.getItem("fh_me"), memoI=0, memoShow=false, db=null, firstItems=true, startTime=Date.now(), offline=!navigator.onLine;
@@ -2461,7 +2491,8 @@ async function afterRender(){
       <div class="row"><button class="btn small" data-act="savetv" data-i="${i}">Save to our verse bank</button><button class="btn small ghost" data-act="sharetv" data-i="${i}">📤</button><button class="btn small ghost" data-act="speaktv" data-i="${i}">🔊</button></div></div>`).join(""):`<p class="empty">Could not load verses. Check your connection.</p>`;
   }
 }
-const DET={};
+const DET={},SCR={};
+function scrollRestore(){window.scrollTo(0,SCR[window.__rk]||0);}
 function detKey(d){const sm=d.querySelector("summary");return grp+"|"+(subSel[grp]||"")+"|"+(sm?sm.textContent.trim().slice(0,40):"");}
 document.addEventListener("toggle",e=>{const d=e.target;if(d&&d.tagName==="DETAILS"&&d.closest("#main"))DET[detKey(d)]=d.open;},true);
 let curKey=null;
@@ -2474,7 +2505,7 @@ window.addEventListener("popstate",e=>{
   if(!k){try{history.pushState({k:curKey},"");}catch(x){}toast("You are on the first screen");return;}
   const [g,sb,t]=k.split("|");
   grp=g;if(g in subSel)subSel[g]=sb||null;homeTab=t||"us";filt="all";q="";curKey=k;
-  render();scrollTo(0,0);
+  render();scrollRestore();
 });
 function render(){
   navSync();
@@ -2495,7 +2526,7 @@ function render(){
   
   const m=$("main");
   let html=(db?"":`<div class="banner">Not shared yet: entries only save on this device.</div>`)+(offline?`<div class="banner">You are offline. Changes will save when you are back.</div>`:"");
-  if(grp==="home")html+=streakCal()+homeView();
+  if(grp==="home")html+=streakCal()+(STRONGP.includes(me)&&hOn("strong")?strongCard()+checkinCard()+weeklyCard()+strongWeek():"")+homeView();
   else if(grp==="more")html+=moreView();
   else{
     const subs=subsFor(grp),cur=subs.includes(subSel[grp])?subSel[grp]:null;
@@ -2503,6 +2534,7 @@ function render(){
     else html+=`<button class="btn small ghost" data-act="back">← Back</button>`+viewFor(cur);
   }
   const rk=grp+"|"+(subSel[grp]||""),sy=window.scrollY;
+  if(window.__rk&&sy>=0)SCR[window.__rk]=sy;
   m.innerHTML=html;
   m.querySelectorAll("details").forEach(d=>{const k=detKey(d);if(k in DET)d.open=DET[k];});
   afterRender();
@@ -2946,7 +2978,7 @@ function strongCard(){
   if(!STRONGP.includes(me))return "";
   const m=strongLog(),t=m[ymd(new Date())],n=strongStreak();
   const top=n?`<div class="streak">${n} day${n===1?"":"s"} strong 💪</div>`:`<div class="streak">Fresh start 🌅</div>`;
-  const row=t==="strong"?`<p>Logged today. Well done. 🙌</p>`:t==="fell"?`<p>Grace is new this morning. Tomorrow is a fresh start. 💛</p>`:`<p>How did today go?</p><button class="sbtn" data-act="strongok">Stayed strong 💪</button><button class="sbtn o" data-act="strongfell">I fell</button>`;
+  const row=t==="strong"?`<p>Logged today. Well done. 🙌</p>`:t==="fell"?`<p>Grace is new this morning. Tomorrow is a fresh start. 💛</p>`:`<p>Log today with the buttons on your calendar above. ☝️</p>`;
   return `<div class="stay"><h3>💪 Stay strong</h3>${top}${row}<div style="margin-top:10px"><button class="sbtn" data-act="strongsos">I am struggling right now</button></div>${badgeRow()}<div class="meta" style="color:#fff;opacity:.85;margin-top:8px"><span data-act="whydlg" style="color:#fff;text-decoration:underline;cursor:pointer">❤️ My reason</span> · <span data-act="agreedlg" style="color:#fff;text-decoration:underline;cursor:pointer">🤝 Our agreement</span> · Only you see your streak. Nobody is told unless you choose to tell them.</div></div>`;
 }
 function strongLogSave(status){
@@ -3641,8 +3673,8 @@ function strongShareSet(on){
 }
 function streakCal(){
   if(!STRONGP.includes(me))return "";
-  const m=strongLog(),month=ymd(new Date()).slice(0,7),p=partnerOf(),on=ssOn();
-  return `<div class="card"><b>🗓️ My strong days this month</b><div class="meta">${on?`Shared with ${esc(p)} only. Nobody else can see it.`:"Only you see this."}</div><div style="margin-top:8px">${strongCalHtml(m,month)}</div><div class="meta">Green is a strong day. Red is a day that was hard. Grey is not logged yet.</div><div class="row"><button class="btn small ${on?"ghost":""}" data-act="ssset" data-v="${on?"0":"1"}">${on?"Stop sharing with "+esc(p):"Share with "+esc(p)}</button></div></div>`+sharedStrongCard();
+  const m=strongLog(),month=ymd(new Date()).slice(0,7),p=partnerOf(),on=ssOn(),tdy=m[ymd(new Date())];
+  return `<div class="card"><b>🗓️ My strong days this month</b><div class="meta">${on?`Shared with ${esc(p)} only. Nobody else can see it.`:"Only you see this."}</div><div style="margin-top:8px"><div class="meta" style="margin:0 0 6px">${tdy==="strong"?"Today: stayed strong 💪":tdy==="fell"?"Today: I fell. Grace is new tomorrow 💛":"How did today go?"}</div><div class="row" style="margin:0 0 10px"><button class="btn small" style="background:#3a9d5d;color:#fff;border-color:#3a9d5d;${tdy==="strong"?"box-shadow:0 0 0 3px #3a9d5d55":""}" data-act="strongok">Stayed strong 💪</button><button class="btn small" style="background:#c4584a;color:#fff;border-color:#c4584a;${tdy==="fell"?"box-shadow:0 0 0 3px #c4584a55":""}" data-act="strongfell">I fell</button></div></div><div>${strongCalHtml(m,month)}</div><div class="meta">Green is a strong day. Red is a day that was hard. Grey is not logged yet.</div><div class="row"><button class="btn small ${on?"ghost":""}" data-act="ssset" data-v="${on?"0":"1"}">${on?"Stop sharing with "+esc(p):"Share with "+esc(p)}</button></div></div>`+sharedStrongCard();
 }
 function wgCard(){
   const w=weekKey(),g=u=>(metas.wg||{})["g_"+w+"_"+u],x=u=>(metas.wg||{})["x_"+w+"_"+u];
@@ -3699,9 +3731,9 @@ setInterval(laBeat,60000);
 document.addEventListener("visibilitychange",()=>{if(!document.hidden){laLast=0;laBeat();}});
 /* shared strong days */
 function strongCalHtml(days,month){
-  const [y,m]=month.split("-").map(Number),dim=new Date(y,m,0).getDate();let c="";
-  for(let d=1;d<=dim;d++){const k=month+"-"+String(d).padStart(2,"0"),v=days[k];c+=`<span title="${k}" style="text-align:center;border-radius:8px;height:30px;line-height:30px;font:600 13px system-ui;background:${v==="strong"?"#3a9d5d":v==="fell"?"#c4584a":"color-mix(in srgb,var(--ink) 10%,transparent)"};color:${v?"#fff":"var(--mute)"}">${d}</span>`;}
-  return `<div style="display:grid;grid-template-columns:repeat(10,1fr);gap:4px;margin-bottom:8px">${c}</div>`;
+  const [y,m]=month.split("-").map(Number),dim=new Date(y,m,0).getDate(),td=ymd(new Date());let c="";
+  for(let d=1;d<=dim;d++){const k=month+"-"+String(d).padStart(2,"0"),v=days[k];c+=`<span class="sday ${v==="strong"?"ok":v==="fell"?"bad":""} ${k===td?"today":""}" title="${k}">${d}</span>`;}
+  return `<div style="display:grid;grid-template-columns:repeat(10,1fr);gap:5px;margin-bottom:8px">${c}</div>`;
 }
 function strongShareDlg(){
   if(!STRONGP.includes(me))return;
@@ -3729,7 +3761,7 @@ function ourHome(){
   const today=ymd(new Date()),readToday=(((metas.reads||{})[me])||[]).includes(today);
   const pushOn="Notification" in window&&Notification.permission==="granted"&&localStorage.getItem("fh_push")==="1";
   const hr=new Date().getHours(),gr=hr<12?"Good morning":hr<18?"Good afternoon":"Good evening";
-  let h=`<div class="hello">${gr}, ${esc(me||"friend")} 🌤️</div>`+laLine()+presetBar()+laPrompt()+pokesCard()+askCards()+missedCard()+todayStrip()+(hOn("poke")?pokeCard():"")+(hOn("strong")?strongCard()+checkinCard()+weeklyCard():"")+duelHomeCard()+rescueCard()+followCard()+roomCard(false)+friendStatus()+ppCard()+readBar()+(new Date().getDay()===0?recapCard():"")+(hOn("favs")?favCard():"");
+  let h=`<div class="hello">${gr}, ${esc(me||"friend")} 🌤️</div>`+laLine()+presetBar()+laPrompt()+pokesCard()+askCards()+missedCard()+todayStrip()+(hOn("poke")?pokeCard():"")+duelHomeCard()+rescueCard()+followCard()+roomCard(false)+friendStatus()+ppCard()+readBar()+(new Date().getDay()===0?recapCard():"")+(hOn("favs")?favCard():"");
   if(!pushOn&&db&&"Notification" in window&&Notification.permission!=="denied")h+=`<div class="card gentle"><b>🔔 Turn on notifications</b><div class="meta">So pokes and your verse reach this phone.</div><div class="row"><button class="btn" data-act="notif">Turn on</button></div></div>`;
   const HB={};HB.trio=``;
   if(hOn("trio"))HB.trio=`<div class="trio"><button class="bigact" data-act="read" ${readToday?"disabled":""}><span>${readToday?"✅":"📖"}</span>${readToday?"Read today":"I read"}</button><button class="bigact" data-act="wiz" data-t="prayer"><span>🙏</span>Pray</button><button class="bigact" data-act="goto" data-g="together" data-s="chat"><span>💬</span>Message</button></div>`;
@@ -3739,7 +3771,7 @@ function ourHome(){
   if(hOn("verse"))HB.verse=dailyCard();
   if(hOn("pray"))HB.pray=prayDayCard();
   h+=windCard()+homeOrder().map(k=>HB[k]||"").join("");
-  let more=mvCard()+wordCard()+wgCard()+(roomOn()?"":roomCard(true))+dqCard()+potdCard()+(STRONGP.includes(me)?strongWeek():"")+wchalCard()+habitsCard()+sotwCard()+togetherCard()+answeredCard()+armorCard()+memCard()+readingCard()+skyLine();
+  let more=mvCard()+wordCard()+wgCard()+(roomOn()?"":roomCard(true))+dqCard()+potdCard()+wchalCard()+habitsCard()+sotwCard()+togetherCard()+answeredCard()+armorCard()+memCard()+readingCard()+skyLine();
   if(Date.now()-Number(localStorage.getItem("fh_lastbackup")||0)>30*864e5)more+=`<div class="card"><b>💾 Monthly backup</b><div class="meta">Save a copy of everything you can see. It takes a second.</div><div class="row"><button class="btn small" data-act="backup">Download backup</button><button class="btn small ghost" data-act="backuplater">Remind me later</button></div></div>`;
   more+=laCard()+sysStatus()+(new Date().getDay()===0?"":recapCard())+weekCard()+`<div class="row"><button class="chip" data-act="add" data-t="event" data-pre='{"repeat":"Every year","title":"Birthday: "}'>🎂 Add a birthday</button></div>`+healthCard();
   if(!simple)more+=homeMore();
@@ -4202,7 +4234,7 @@ document.addEventListener("click",async e=>{
   else if(a==="pinback")showLogin();
   else if(a==="changepin")changePinDlg();
   else if(a==="pinchange")pinChange();
-  else if(a==="back"){subSel[grp]=null;render();scrollTo(0,0);}
+  else if(a==="back"){subSel[grp]=null;render();scrollRestore();}
   else if(a==="htab"){homeTab=d.t;render();scrollTo(0,0);}
   else if(a==="gsearch")searchDlg();
   else if(a==="srecent"){const g=$("gq");if(g){g.value=d.q;runSearch(d.q);}}
