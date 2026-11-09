@@ -15,7 +15,7 @@ self.addEventListener("notificationclick", e => {
   e.notification.close();
   const d = e.notification.data || {};
   const fm = (d.FCM_MSG && d.FCM_MSG.data) || d;
-  const go = fm.go || "";
+  const go = e.action === "snooze" ? "snooze1" : (fm.go || "");
   const base = (d.FCM_MSG && d.FCM_MSG.notification && d.FCM_MSG.notification.click_action) || "./";
   const url = go ? "./?go=" + encodeURIComponent(go) : base;
   e.waitUntil(clients.matchAll({type:"window",includeUncontrolled:true}).then(list => {
@@ -24,7 +24,7 @@ self.addEventListener("notificationclick", e => {
   }));
 });
 
-const CACHE = "faith-hub-v5-16";
+const CACHE = "faith-hub-v5-17";
 const CORE = ["./", "index.html", "today.html", "manifest.json", "manifest-today.json", "icon-192.png", "icon-512.png"];
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(CORE)).then(() => self.skipWaiting()));

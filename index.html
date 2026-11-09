@@ -307,7 +307,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 
 <script>
 /* ============ SETUP (Jayden only) ============ */
-const APP_VER="5.16";
+const APP_VER="5.17";
 const FIREBASE_CONFIG = {
   apiKey:"AIzaSyDhwY77B-wZL7f4077kEC_tn0K2AgJ6bIs",
   authDomain:"faith-hub-71ae2.firebaseapp.com",
@@ -1497,7 +1497,7 @@ const HELP=[
  ["Something is not working","Close the app and open it again. Then tap More and Send feedback so Jayden can fix it."]
 ];
 const TOUR=[["Welcome 💛","This is a private space for the three of you to share faith, prayers and adventures."],["Add something","Tap a tab at the bottom, pick a tile, then the big Add button. We ask one question at a time."],["Stay close","Tap 💛 Thinking of you, send a message, or react to anything with ❤️ or 🙏. Want to talk? Tap 👉 Poke at the top of Home."],["Daily verse","Turn on notifications in More to get a verse every day. Tap the ? button any time for help."],["Who sees what","Sign in with your own PIN. Check ins, questions and prayers start out private, and Home has Our space and My journal. You choose who sees anything else."]];
-const NEWS=["🎉 Version 5.16","🧠 Trivia now has over 1,000 questions","🖍️ Shared whiteboard in Together","⏳ Bible timeline and 🖼️ Whose photo? games","😴 Snooze alerts, reorder Home, better search","🎉 Version 5.15","📷 Add several photos at once with progress and retry, 🔕 mute a person","🎉 Version 5.14","⭐ Saved folders, 📰 weekly recap, 🪣 bucket list, 📝 shared notes, 80 new general trivia questions","🎉 Version 5.13","🃏 Memory match, 🏆 Bible jeopardy, 🎯 Group bingo, 🎨 Draw and guess, 📚 Story together","🎉 Version 5.12","📖 Group Bible study, 🗳️ polls, 👋 availability status, 🌙 nightly check-in reminders (optional)","🎉 Version 5.11","🎯 What should we do? 🎡 Decision wheel, ⚖️ This or that, 🤥 Two truths and a lie, 🔤 Word puzzle","🎉 Version 5.10","🔔 Notification center with filters, Catch me up and Mark all read","🎉 Version 5.9","🤔 New game: Guess my answer. 📋 Track your problem reports. ✍️ Continue card on Home","🎉 Version 5.8","🔒 Check-ins and mood now save to a private place only you can read","🎉 Version 5.7","🎯 320 new trivia questions, 💾 save a backup of your entries","🎉 Version 5.6","🧭 New tabs: Home, My Space, Together, Faith, Play","✉️ Better problem report, 🎯 more trivia, easier focus outlines and reduced motion","🎉 Version 5.5","🔔 Alerts open the exact thing, saving shows a status, drafts are kept, big photos are shrunk, scroll no longer jumps","🎉 Version 5.4","🙏 Prayer partner of the week, 📌 memory verse of the week, 📖 who read today","📘 7 day studies, 📚 word of the day, 🍞 shared fast, 🗓️ calendar","⏱️ Trivia modes: timed, true or false, finish the verse, and team rounds","🎯 Weekly goals, 💪 I made it through, 📅 event maps and RSVP","🔍 Search filters, 📳 vibration choice, 🖨️ year in review as PDF"];
+const NEWS=["🎉 Version 5.17","📡 Live trivia: everyone plays the same question at once","🏆 Weekly tournament with server checked scores","🔔 Snooze or open right from a notification","🎉 Version 5.16","🧠 Trivia now has over 1,000 questions","🖍️ Shared whiteboard in Together","⏳ Bible timeline and 🖼️ Whose photo? games","😴 Snooze alerts, reorder Home, better search","🎉 Version 5.15","📷 Add several photos at once with progress and retry, 🔕 mute a person","🎉 Version 5.14","⭐ Saved folders, 📰 weekly recap, 🪣 bucket list, 📝 shared notes, 80 new general trivia questions","🎉 Version 5.13","🃏 Memory match, 🏆 Bible jeopardy, 🎯 Group bingo, 🎨 Draw and guess, 📚 Story together","🎉 Version 5.12","📖 Group Bible study, 🗳️ polls, 👋 availability status, 🌙 nightly check-in reminders (optional)","🎉 Version 5.11","🎯 What should we do? 🎡 Decision wheel, ⚖️ This or that, 🤥 Two truths and a lie, 🔤 Word puzzle","🎉 Version 5.10","🔔 Notification center with filters, Catch me up and Mark all read","🎉 Version 5.9","🤔 New game: Guess my answer. 📋 Track your problem reports. ✍️ Continue card on Home","🎉 Version 5.8","🔒 Check-ins and mood now save to a private place only you can read","🎉 Version 5.7","🎯 320 new trivia questions, 💾 save a backup of your entries","🎉 Version 5.6","🧭 New tabs: Home, My Space, Together, Faith, Play","✉️ Better problem report, 🎯 more trivia, easier focus outlines and reduced motion","🎉 Version 5.5","🔔 Alerts open the exact thing, saving shows a status, drafts are kept, big photos are shrunk, scroll no longer jumps","🎉 Version 5.4","🙏 Prayer partner of the week, 📌 memory verse of the week, 📖 who read today","📘 7 day studies, 📚 word of the day, 🍞 shared fast, 🗓️ calendar","⏱️ Trivia modes: timed, true or false, finish the verse, and team rounds","🎯 Weekly goals, 💪 I made it through, 📅 event maps and RSVP","🔍 Search filters, 📳 vibration choice, 🖨️ year in review as PDF"];
 
 let items=[], metas={}, grp="home", subSel={faith:null,together:null,play:null}, filt="all", q="", catFilt="all";
 let me=localStorage.getItem("fh_me"), memoI=0, memoShow=false, db=null, firstItems=true, startTime=Date.now(), offline=!navigator.onLine;
@@ -1860,8 +1860,17 @@ function openTour(i){
   openDlg(`<div class="big">${i===0?"💛":["","➕","🤝","🔔","🔒"][i]}</div><h3 style="text-align:center">${esc(t[0])}</h3><p style="text-align:center">${esc(t[1])}</p>
   <div class="row" style="justify-content:center">${i>0?`<button class="btn ghost" data-act="tour" data-i="${i-1}">Back</button>`:""}<button class="btn" data-act="tour" data-i="${i+1}">${i===TOUR.length-1?"Let's go":"Next"}</button></div>`);
 }
-function showNews(){
-  openDlg(`<h3>✨ What's new (version ${APP_VER})</h3>${NEWS.map(n=>`<p>• ${esc(n)}</p>`).join("")}<div class="row"><button class="btn" data-act="newsdone">Got it</button></div>`);
+function newsSince(seen){
+  const out=[];let cur=null;
+  NEWS.forEach(n=>{const m=/^🎉 Version ([\d.]+)/.exec(n);if(m){cur={v:m[1],l:[]};out.push(cur);}else if(cur)cur.l.push(n);});
+  const vn=v=>String(v||"0").split(".").map(Number).reduce((a,x)=>a*1000+(x||0),0);
+  const fresh=out.filter(x=>vn(x.v)>vn(seen));
+  return (fresh.length?fresh:out).slice(0,seen?99:3);
+}
+function showNews(all){
+  const seen=all?"":(localStorage.getItem("fh_ver_seen")||"");
+  const g=newsSince(seen);
+  openDlg(`<h3>✨ What's new</h3><div class="meta">You have version ${APP_VER}.</div>${g.map(x=>`<p style="margin:10px 0 2px"><b>Version ${esc(x.v)}</b></p>${x.l.map(n=>`<div>• ${esc(n)}</div>`).join("")}`).join("")}<div class="row"><button class="btn" data-act="newsdone">Got it</button></div>`);
 }
 
 /* ---------- forms ---------- */
@@ -2123,7 +2132,7 @@ function homeMore(){
   const reads=(metas.reads||{})[me]||[],readToday=reads.includes(today);
   const others=PEOPLE.filter(p=>p!==me),other=others.length>1?"everyone":(others[0]||"them"),seenList=others.filter(p=>(metas.seen||{})[p]).map(p=>`${p} was here ${ago((metas.seen||{})[p])}`).join(" · "),seen=seenList;
   const pushOn="Notification" in window&&Notification.permission==="granted"&&localStorage.getItem("fh_push")==="1";
-  const recent=items.filter(i=>!["msg","todo","strong","replace","why"].includes(i.type)&&visible(i)).slice(0,4);
+  const recent=items.filter(i=>!["msg","todo","strong","replace","why","agree"].includes(i.type)&&visible(i)).slice(0,4);
   let h="";
   if(simple){
     h+=`<button class="btn giant" data-act="read" ${readToday?"disabled":""}>${readToday?"✅ I read today":"📖 I read today"}</button>
@@ -2146,7 +2155,7 @@ function homeMore(){
   if(!lastRead||daysUntil(lastRead)<=-3)h+=`<div class="card"><b>🌿 Want a short place to start?</b><div class="meta">Try today's Psalm. It only takes a few minutes.</div><div class="row"><button class="btn small" data-act="goto" data-g="faith" data-s="psalm">Open Psalm of the day</button></div></div>`;
   const old=items.filter(i=>i.type==="prayer"&&!i.answered&&!i.update&&visible(i)&&Date.now()-(i.created||Date.now())>14*864e5).slice(0,3);
   if(old.length)h+=`<div class="card"><b>🙏 Check in on these prayers</b>${old.map(i=>`<div class="meta">• ${esc((i.text||"").slice(0,70))}</div>`).join("")}<div class="row"><button class="btn small ghost" data-act="goto" data-g="faith" data-s="prayer">Open prayers</button></div></div>`;
-  const t=new Date(),oty=items.filter(i=>visible(i)&&i.created&&!["msg","todo","strong","replace","why"].includes(i.type)&&new Date(i.created).getFullYear()<t.getFullYear()&&new Date(i.created).getMonth()===t.getMonth()&&new Date(i.created).getDate()===t.getDate()).slice(0,2);
+  const t=new Date(),oty=items.filter(i=>visible(i)&&i.created&&!["msg","todo","strong","replace","why","agree"].includes(i.type)&&new Date(i.created).getFullYear()<t.getFullYear()&&new Date(i.created).getMonth()===t.getMonth()&&new Date(i.created).getDate()===t.getDate()).slice(0,2);
   if(oty.length)h+=`<div class="card"><b>📅 On this day</b>${oty.map(i=>`<div class="meta">${esc(i.author)}: ${esc((i.text||i.title||i.ref||"").slice(0,80))}</div>`).join("")}</div>`;
   h+=`<div class="row"><button class="btn ghost" data-act="hard">🌧️ Hard day? Give me a verse</button><button class="btn ghost" data-act="jarpull">🫙 Open the jar</button></div>`;
   h+=`<h3 style="margin-top:18px">Recent</h3>${recent.length?recent.map(card).join(""):`<p class="empty">Nothing yet. Pick a tab below and add the first one.</p>`}`;
@@ -2320,7 +2329,7 @@ function hardDay(){
    <div class="row"><button class="btn" data-act="hard">Another</button><button class="btn ghost" data-act="goto" data-g="faith" data-s="calm">🌿 Breathe</button><button class="btn ghost" data-act="close">Close</button></div>`);
 }
 function journalHtml(){
-  const parts=Object.entries(SECTIONS).filter(([k])=>!["msg","todo","strong","replace","why"].includes(k)).map(([k,S])=>{
+  const parts=Object.entries(SECTIONS).filter(([k])=>!["msg","todo","strong","replace","why","agree"].includes(k)).map(([k,S])=>{
     const l=items.filter(i=>i.type===k&&visible(i)).sort((a,b)=>(a.created||0)-(b.created||0));
     if(!l.length)return"";
     return `<h2>${S.icon} ${esc(S.title)}</h2>`+l.map(i=>`<div style="margin:10px 0;padding:8px;border-bottom:1px solid #ddd"><b>${esc(i.title||i.place||i.church||i.for||i.tag||i.ref||"")}</b> <small>${esc(i.author)} ${i.created?fmt(i.created):""}</small><br>${[i.ref,i.text,i.note,i.update,i.apply].filter(Boolean).map(nl).join("<br>")}</div>`).join("");
@@ -2718,6 +2727,9 @@ function handleGo(g){
   if(g==="pause"){grp="home";homeTab="us";render();if(STRONGP.includes(me))setTimeout(strongSos,300);return true;}
   if(g==="pray"){grp="home";homeTab="us";render();setTimeout(()=>{const b=document.querySelector("[data-act=wiz][data-t=prayer]");if(b)b.click();},300);return true;}
   if(g==="chat"){grp="together";subSel.together="chat";render();return true;}
+  if(g==="snooze1"){setMeta("notif",{[me]:{snooze:Date.now()+36e5}});grp="home";render();toast("Alerts snoozed for 1 hour 😴");return true;}
+  if(g==="live"||g==="tourn"){grp="play";subSel.play="games";gmStart(g);render();return true;}
+  if(g==="agree"){grp="home";homeTab="us";render();if(STRONGP.includes(me))setTimeout(agreeDlg,300);return true;}
   if(g==="study"){grp="together";subSel.together="study";render();return true;}
   if(g==="polls"){grp="together";subSel.together="polls";render();return true;}
   if(g==="ttl"){grp="play";subSel.play="games";gm.mode="ttl";render();return true;}
@@ -2854,7 +2866,7 @@ function strongCard(){
   const m=strongLog(),t=m[ymd(new Date())],n=strongStreak();
   const top=n?`<div class="streak">${n} day${n===1?"":"s"} strong 💪</div>`:`<div class="streak">Fresh start 🌅</div>`;
   const row=t==="strong"?`<p>Logged today. Well done. 🙌</p>`:t==="fell"?`<p>Grace is new this morning. Tomorrow is a fresh start. 💛</p>`:`<p>How did today go?</p><button class="sbtn" data-act="strongok">Stayed strong 💪</button><button class="sbtn o" data-act="strongfell">I fell</button>`;
-  return `<div class="stay"><h3>💪 Stay strong</h3>${top}${row}<div style="margin-top:10px"><button class="sbtn" data-act="strongsos">I am struggling right now</button></div>${badgeRow()}<div class="meta" style="color:#fff;opacity:.85;margin-top:8px"><span data-act="whydlg" style="color:#fff;text-decoration:underline;cursor:pointer">❤️ My reason</span> · Only you see your streak. Nobody is told unless you choose to tell them.</div></div>`;
+  return `<div class="stay"><h3>💪 Stay strong</h3>${top}${row}<div style="margin-top:10px"><button class="sbtn" data-act="strongsos">I am struggling right now</button></div>${badgeRow()}<div class="meta" style="color:#fff;opacity:.85;margin-top:8px"><span data-act="whydlg" style="color:#fff;text-decoration:underline;cursor:pointer">❤️ My reason</span> · <span data-act="agreedlg" style="color:#fff;text-decoration:underline;cursor:pointer">🤝 Our agreement</span> · Only you see your streak. Nobody is told unless you choose to tell them.</div></div>`;
 }
 function strongLogSave(status){
   const day=ymd(new Date());
@@ -2999,7 +3011,7 @@ function badgesCard(){
   return `<div class="card"><b>🏅 My badges</b> <span class="meta">${l.filter(x=>x[3]).length} of ${l.length}</span><div class="row">${l.map(x=>`<span class="chip ${x[3]?"on":""}" style="${x[3]?"":"opacity:.45"}" title="${esc(x[2])}">${x[0]} ${esc(x[1])}</span>`).join("")}</div><div class="meta">${l.filter(x=>!x[3]).map(x=>x[1]+": "+x[2]).join(" · ")}</div></div>`;
 }
 function recapCard(){
-  const w=weekDays(),hide=["msg","strong","replace","why","journal"];
+  const w=weekDays(),hide=["msg","strong","replace","why","journal","agree"];
   const rows=PEOPLE.map(u=>{const n=items.filter(i=>i.author===u&&!hide.includes(i.type)&&visible(i)&&(i.created||0)>Date.now()-7*864e5).length;return `<div>${esc(u)}: ${wcount(u,"habit")} habits, ${wcount(u,"pray")} prayer days, ${wcount(u,"read")} reading days, ${n} new entries</div>`;}).join("");
   return `<div class="card"><b>📊 This week</b><div style="margin-top:6px">${rows}</div></div>`;
 }
@@ -3125,6 +3137,7 @@ function gmStart(m){
   if(m==="jp")gm.jp=null;
   if(m==="tl")tl=null;
   if(m==="pg")pg=null;
+  if(m==="tourn")tr=null;
   if(m==="who"){const w=shuf(WHO)[0];gm.who={d:w,opts:shuf(w[2]),clue:0,done:false,right:false};}
   else if(m==="scr"){const src=MEMV.filter(v=>v[1].split(/\s+/).length<=14);const v=shuf(src)[0];const words=v[1].split(/\s+/);gm.sc={ref:v[0],words,bank:shuf(words.map((x,i)=>i)),picked:[],done:false};}
 }
@@ -3156,6 +3169,47 @@ function availCard(){
   return `<details class="card"><summary><b>👋 Availability</b>${lines?` · ${Object.keys(o).length} open`:""}</summary><div class="meta">Optional. Share a short status with the group. It clears by itself.</div><div class="chips">${AVAIL.map(([k,l])=>`<button class="chip ${on===k?"on":""}" data-act="avset" data-v="${k}">${l}</button>`).join("")}${on?`<button class="chip" data-act="avset" data-v="">Clear</button>`:""}</div>${lines}</details>`;
 }
 const BACKG='<button class="btn small ghost" data-act="gstart" data-m="">← Games</button>';
+/* accountability agreement (only the two STRONGP people) */
+const AGREE_T="We agree to:\n1. Be honest with each other, even when it is hard.\n2. Reach out right away when we are struggling.\n3. Pray for each other every day.\n4. Check in every night.\n5. Respond with grace, not shame, when one of us falls.";
+function agreeItem(){return items.filter(i=>i.type==="agree"&&visible(i)).sort((a,b)=>(b.created||0)-(a.created||0))[0];}
+function agreeDlg(){
+  if(!STRONGP.includes(me))return;
+  const pt=STRONGP.find(x=>x!==me),r=agreeItem(),sg=(r&&r.signed)||{};
+  if(!r||agreeEdit){agreeEdit=false;openDlg(`<h3>🤝 Our agreement</h3><p class="meta">Only you and ${esc(pt)} can see this. Both of you sign it.</p><textarea id="agt" rows="8">${esc((r&&r.text)||AGREE_T)}</textarea><div class="row"><button class="btn" data-act="agreesave">Save and sign</button><button class="btn ghost" data-act="close">Cancel</button></div>`);return;}
+  openDlg(`<h3>🤝 Our agreement</h3><div class="card" style="white-space:pre-wrap">${esc(r.text)}</div>${STRONGP.map(p=>`<div class="meta">${sg[p]?"✅ Signed by "+esc(p)+" "+ago(sg[p]):"⏳ Waiting for "+esc(p)}</div>`).join("")}<div class="row">${sg[me]?"":`<button class="btn" data-act="agreesign">Sign it</button>`}${r.author===me?`<button class="btn small ghost" data-act="agreeedit">Edit (both sign again)</button>`:""}<button class="btn ghost" data-act="close">Close</button></div>`);
+}
+let agreeEdit=false;
+function agreeSave(){const t=($("agt").value||"").trim();if(!t){toast("Write the agreement first");return;}const r=agreeItem(),pt=STRONGP.find(x=>x!==me);
+  const it=r&&r.author===me?{...r,text:t,signed:{[me]:Date.now()},edited:Date.now()}:{type:"agree",text:t,author:me,vis:[me,pt],priv:null,signed:{[me]:Date.now()},created:Date.now()};
+  if(it.signed&&r&&r.author===me&&db&&FV){it.signed={[me]:Date.now()};}
+  save(it,true);sendPing([pt],"Our agreement is ready to sign","support","agree");closeDlg();toast("Saved and signed 🤝");}
+function agreeSign(){const r=agreeItem();if(!r)return;save({...r,signed:{...(r.signed||{}),[me]:Date.now()}},true);closeDlg();toast("Signed 🤝");}
+/* live trivia */
+function liveG(){return metas.live||{};}
+function liveScores(L){const sc={};(L.qs||[]).forEach((qi,i)=>{if(i>=(L.rev||0))return;const an=(L.ans||{})[i]||{};Object.entries(an).forEach(([n,c])=>{sc[n]=(sc[n]||0)+(QUIZ[qi]&&Number(c)===QUIZ[qi].a?1:0);});});return sc;}
+function liveView(){
+  const L=liveG();
+  if(!L.on)return BACKG+`<h2>📡 Live trivia</h2><div class="meta">Start a game and everyone plays the same question at the same time. The host moves to the next question.</div>${L.qs?`<div class="card"><b>Last game</b>${Object.entries(liveScores(L)).sort((a,b)=>b[1]-a[1]).map(([n,v])=>`<div>${esc(n)}: ${v}</div>`).join("")||"<div class='meta'>No answers</div>"}</div>`:""}<div class="row"><button class="btn" data-act="livestart">Start a live game</button></div>`;
+  const i=L.i||0,qi=L.qs[i],q=QUIZ[qi],an=(L.ans||{})[i]||{},mine=an[me],host=L.host===me,shown=(L.rev||0)>i;
+  const sc=liveScores(L);
+  return BACKG+`<h2>📡 Live trivia</h2><div class="meta">Host: ${esc(L.host)} · Question ${i+1} of ${L.qs.length}</div><div class="card"><b>${esc(q.q)}</b></div><div class="tlist">${q.o.map((o,k)=>`<button class="trow" data-act="livepick" data-i="${k}" ${mine!==undefined||shown?"disabled":""} style="${shown&&k===q.a?"outline:3px solid #2f8f5b":""}${mine===k?";font-weight:700":""}"><span class="tt">${mine===k?"👉 ":""}${esc(o)}</span></button>`).join("")}</div>
+  <div class="meta">Answered: ${Object.keys(an).map(esc).join(", ")||"nobody yet"}</div>${shown?`<div class="card gentle"><b>Answer: ${esc(q.o[q.a])}</b><div class="meta">${esc(q.e)}</div></div>`:""}
+  <div class="card"><b>Scores</b>${PEOPLE.map(p=>`<div>${esc(p)}: ${sc[p]||0}</div>`).join("")}</div>
+  ${host?`<div class="row">${shown?(i+1<L.qs.length?`<button class="btn" data-act="livenext">Next question</button>`:`<button class="btn" data-act="liveend">Finish game</button>`):`<button class="btn" data-act="livereveal">Show answer</button>`}<button class="btn small ghost" data-act="liveend">End game</button></div>`:`<div class="meta">Waiting for ${esc(L.host)} to move on.</div>`}`;
+}
+/* weekly tournament, graded by the server */
+function tourW(){return (metas.tourn||{})[weekKey()]||{};}
+function tournView(){
+  const T=tourW(),sub=(T.sub||{})[me],ver=T.ver||{};
+  const board=Object.keys(T.sub||{}).map(n=>[n,ver[n]]).sort((a,b)=>(b[1]??-1)-(a[1]??-1));
+  const bh=`<div class="card"><b>This week's standings</b>${board.map(([n,v],k)=>`<div>${k===0&&v!==undefined?"👑 ":""}${esc(n)}: ${v!==undefined?v+" / 10 ✅":"checking..."}</div>`).join("")||"<div class='meta'>Nobody has played yet</div>"}<div class="meta">✅ means the server checked the answers. It updates within a few minutes.</div></div>`;
+  if(sub||!tr){if(sub)return BACKG+`<h2>🏆 Weekly tournament</h2><div class="tvhero"><div class="tvbig">You played this week</div><div>Your score on this phone: ${sub.local??"?"} / 10</div></div>`+bh;
+    return BACKG+`<h2>🏆 Weekly tournament</h2><div class="meta">Everyone gets the same 10 questions this week. You get one try. New tournament every Monday.</div><div class="row"><button class="btn" data-act="trstart">Start my try</button></div>`+bh;}
+  const q=QUIZ[tr.qs[tr.i]];
+  return BACKG+`<h2>🏆 Weekly tournament</h2><div class="meta">Question ${tr.i+1} of 10</div><div class="card"><b>${esc(q.q)}</b></div><div class="tlist">${q.o.map((o,k)=>`<button class="trow" data-act="trpick" data-i="${k}"><span class="tt">${esc(o)}</span></button>`).join("")}</div>`;
+}
+let tr=null;
+function tournQs(){let T=tourW();if(T.qs&&T.qs.length===10&&T.qs.every(i=>QUIZ[i]))return T.qs;let h=0;const w=weekKey();for(const ch of w)h=(h*31+ch.charCodeAt(0))>>>0;const out=[];while(out.length<10){h=(h*1103515245+12345)>>>0;const i=h%QUIZ.length;if(!out.includes(i))out.push(i);}setMeta("tourn",{[w]:{qs:out}});return out;}
 const TLE=[["God creates the world",1],["Adam and Eve leave Eden",2],["The great flood",3],["The Tower of Babel",4],["God calls Abraham",5],["Jacob dreams of a ladder",7],["Joseph is sold by his brothers",8],["Moses at the burning bush",10],["Israel crosses the Red Sea",11],["The Ten Commandments at Sinai",12],["The walls of Jericho fall",14],["Gideon and his 300 men",16],["Samson and Delilah",18],["Samuel anointed Saul as king",20],["David defeats Goliath",21],["David becomes king",22],["Solomon builds the temple",24],["The kingdom splits in two",25],["Elijah on Mount Carmel",26],["Assyria takes the northern kingdom",28],["Daniel taken to Babylon",30],["Babylon destroys Jerusalem",31],["The Jews return under Cyrus",33],["Esther becomes queen",35],["Nehemiah rebuilds the walls",37],["Jesus is born",40],["Jesus is baptized",42],["Jesus raises Lazarus",44],["Jesus rides into Jerusalem",45],["The Last Supper",46],["Jesus dies and rises",47],["Jesus ascends to heaven",48],["Pentecost",49],["Stephen is stoned",51],["Paul meets Jesus on the road to Damascus",52],["Paul is shipwrecked on Malta",55]];
 let tl=null,pg=null;
 function tlNew(){
@@ -3224,7 +3278,7 @@ async function mpRun(){
 }
 function recapView(){
   const wk=Date.now()-7*864e5;
-  const mine=items.filter(i=>(i.created||0)>wk&&visible(i)&&!onlyMe(i)&&!["msg","todo","strong","replace","why","journal"].includes(i.type));
+  const mine=items.filter(i=>(i.created||0)>wk&&visible(i)&&!onlyMe(i)&&!["msg","todo","strong","replace","why","journal","agree"].includes(i.type));
   const by={};mine.forEach(i=>{const S=SECTIONS[i.type];const k=S?S.label:i.type;by[k]=(by[k]||0)+1;});
   const st=Object.entries(metas.study||{}).filter(([,r])=>r&&(r.ts||0)>wk).length,pl=Object.entries(metas.polls||{}).filter(([,r])=>r&&(r.ts||0)>wk).length;
   const ev=items.filter(i=>i.type==="event"&&visible(i)&&!onlyMe(i)&&i.date&&i.date>=ymd(new Date())).sort((a,b)=>String(a.date).localeCompare(String(b.date))).slice(0,3);
@@ -3348,7 +3402,7 @@ function gmaView(){
 }
 
 function gamesView(){
-  if(!gm.mode)return `<h2>🎮 Bible games</h2><div class="meta">Quick games. Each win is 2 points on the Leaderboard.</div><div class="tlist"><button class="trow" data-act="gstart" data-m="who"><span class="ti">🕵️</span><span class="tt"><b>Who am I?</b><span class="meta">Guess the Bible person from clues</span></span></button><button class="trow" data-act="gstart" data-m="scr"><span class="ti">🔀</span><span class="tt"><b>Scripture scramble</b><span class="meta">Put the verse words in order</span></span></button><button class="trow" data-act="gstart" data-m="gma"><span class="ti">🤔</span><span class="tt"><b>Guess my answer</b><span class="meta">2 or 3 players. Guess what a friend picked</span></span></button><button class="trow" data-act="gstart" data-m="tot"><span class="ti">⚖️</span><span class="tt"><b>This or that</b><span class="meta">Daily pick. See who chose the same</span></span></button><button class="trow" data-act="gstart" data-m="ttl"><span class="ti">🤥</span><span class="tt"><b>Two truths and a lie</b><span class="meta">Write 3 statements, friends spot the lie</span></span></button><button class="trow" data-act="gstart" data-m="hang"><span class="ti">🔤</span><span class="tt"><b>Word puzzle</b><span class="meta">Guess the Bible word letter by letter</span></span></button><button class="trow" data-act="gstart" data-m="wheel"><span class="ti">🎡</span><span class="tt"><b>Decision wheel</b><span class="meta">Type options and let the wheel pick</span></span></button><button class="trow" data-act="gstart" data-m="mem"><span class="ti">🃏</span><span class="tt"><b>Memory match</b><span class="meta">Find the matching pairs</span></span></button><button class="trow" data-act="gstart" data-m="jp"><span class="ti">🏆</span><span class="tt"><b>Bible jeopardy</b><span class="meta">Pick a category and a prize value</span></span></button><button class="trow" data-act="gstart" data-m="bingo"><span class="ti">🎯</span><span class="tt"><b>Group bingo</b><span class="meta">A weekly card of small good habits</span></span></button><button class="trow" data-act="gstart" data-m="draw"><span class="ti">🎨</span><span class="tt"><b>Draw and guess</b><span class="meta">Draw a word, friends guess it</span></span></button><button class="trow" data-act="gstart" data-m="story"><span class="ti">📚</span><span class="tt"><b>Story together</b><span class="meta">Take turns adding a sentence</span></span></button><button class="trow" data-act="gstart" data-m="tl"><span class="ti">⏳</span><span class="tt"><b>Bible timeline</b><span class="meta">Put four events in the right order</span></span></button><button class="trow" data-act="gstart" data-m="pg"><span class="ti">🖼️</span><span class="tt"><b>Whose photo?</b><span class="meta">Guess who posted the album photo</span></span></button></div>`;
+  if(!gm.mode)return `<h2>🎮 Bible games</h2><div class="meta">Quick games. Each win is 2 points on the Leaderboard.</div><div class="tlist"><button class="trow" data-act="gstart" data-m="who"><span class="ti">🕵️</span><span class="tt"><b>Who am I?</b><span class="meta">Guess the Bible person from clues</span></span></button><button class="trow" data-act="gstart" data-m="scr"><span class="ti">🔀</span><span class="tt"><b>Scripture scramble</b><span class="meta">Put the verse words in order</span></span></button><button class="trow" data-act="gstart" data-m="gma"><span class="ti">🤔</span><span class="tt"><b>Guess my answer</b><span class="meta">2 or 3 players. Guess what a friend picked</span></span></button><button class="trow" data-act="gstart" data-m="tot"><span class="ti">⚖️</span><span class="tt"><b>This or that</b><span class="meta">Daily pick. See who chose the same</span></span></button><button class="trow" data-act="gstart" data-m="ttl"><span class="ti">🤥</span><span class="tt"><b>Two truths and a lie</b><span class="meta">Write 3 statements, friends spot the lie</span></span></button><button class="trow" data-act="gstart" data-m="hang"><span class="ti">🔤</span><span class="tt"><b>Word puzzle</b><span class="meta">Guess the Bible word letter by letter</span></span></button><button class="trow" data-act="gstart" data-m="wheel"><span class="ti">🎡</span><span class="tt"><b>Decision wheel</b><span class="meta">Type options and let the wheel pick</span></span></button><button class="trow" data-act="gstart" data-m="mem"><span class="ti">🃏</span><span class="tt"><b>Memory match</b><span class="meta">Find the matching pairs</span></span></button><button class="trow" data-act="gstart" data-m="jp"><span class="ti">🏆</span><span class="tt"><b>Bible jeopardy</b><span class="meta">Pick a category and a prize value</span></span></button><button class="trow" data-act="gstart" data-m="bingo"><span class="ti">🎯</span><span class="tt"><b>Group bingo</b><span class="meta">A weekly card of small good habits</span></span></button><button class="trow" data-act="gstart" data-m="draw"><span class="ti">🎨</span><span class="tt"><b>Draw and guess</b><span class="meta">Draw a word, friends guess it</span></span></button><button class="trow" data-act="gstart" data-m="story"><span class="ti">📚</span><span class="tt"><b>Story together</b><span class="meta">Take turns adding a sentence</span></span></button><button class="trow" data-act="gstart" data-m="tl"><span class="ti">⏳</span><span class="tt"><b>Bible timeline</b><span class="meta">Put four events in the right order</span></span></button><button class="trow" data-act="gstart" data-m="pg"><span class="ti">🖼️</span><span class="tt"><b>Whose photo?</b><span class="meta">Guess who posted the album photo</span></span></button><button class="trow" data-act="gstart" data-m="live"><span class="ti">📡</span><span class="tt"><b>Live trivia</b><span class="meta">Play the same questions at the same time</span></span></button><button class="trow" data-act="gstart" data-m="tourn"><span class="ti">🏆</span><span class="tt"><b>Weekly tournament</b><span class="meta">Same 10 questions for everyone. One try. Scores checked by the server</span></span></button></div>`;
   if(gm.mode==="gma")return gmaView();
   if(gm.mode==="tot")return totView();
   if(gm.mode==="mem")return memView();
@@ -3356,6 +3410,8 @@ function gamesView(){
   if(gm.mode==="bingo")return bingoView();
   if(gm.mode==="draw")return drawView();
   if(gm.mode==="tl"){if(!tl)tlNew();return tlView();}
+  if(gm.mode==="live")return liveView();
+  if(gm.mode==="tourn")return tournView();
   if(gm.mode==="pg"){if(!pg)pgNew();return pgView();}
   if(gm.mode==="story")return storyView();
   if(gm.mode==="ttl")return ttlView();
@@ -3529,7 +3585,7 @@ function ourHome(){
   return h+`<details class="more" ${lay==="full"?"open":""}><summary>More for today</summary>${more}</details>`;
 }
 function journalHome(){
-  const l=items.filter(i=>i.author===me&&!["msg","strong","replace","why"].includes(i.type)&&(i.type==="journal"||onlyMe(i))).sort((a,b)=>(b.created||0)-(a.created||0));
+  const l=items.filter(i=>i.author===me&&!["msg","strong","replace","why","agree"].includes(i.type)&&(i.type==="journal"||onlyMe(i))).sort((a,b)=>(b.created||0)-(a.created||0));
   return `<div class="card"><b>🔒 Only you can see this page</b><div class="meta">Check ins, questions and prayers start out private. You can share any entry later with Edit.</div></div>
   <button class="btn add" data-act="add" data-t="journal">+ Write in my journal</button>
   <div class="row"><button class="btn small ghost" data-act="wiz" data-t="checkin">💛 Check in</button><button class="btn small ghost" data-act="wiz" data-t="prayer">🙏 Private prayer</button><button class="btn small ghost" data-act="wiz" data-t="question">❓ A question</button></div>
@@ -3709,7 +3765,7 @@ function metaHits(v){
 function runSearch(v){
   v=lc(v).trim();const box=$("gres");if(!box)return;
   if(v.length<2){box.innerHTML="";return;}
-  const r=items.filter(i=>visible(i)&&!["strong","replace","why"].includes(i.type)&&(sf.p==="all"||i.author===sf.p)&&(sf.t==="all"||i.type===sf.t)&&(!sf.d||(i.created||0)>Date.now()-sf.d*864e5)&&lc(JSON.stringify({...i,photo:"",audio:"",audience:"",reactions:"",type:""})).includes(v)).sort((a,b)=>(b.created||0)-(a.created||0)).slice(0,25);
+  const r=items.filter(i=>visible(i)&&!["strong","replace","why","agree"].includes(i.type)&&(sf.p==="all"||i.author===sf.p)&&(sf.t==="all"||i.type===sf.t)&&(!sf.d||(i.created||0)>Date.now()-sf.d*864e5)&&lc(JSON.stringify({...i,photo:"",audio:"",audience:"",reactions:"",type:""})).includes(v)).sort((a,b)=>(b.created||0)-(a.created||0)).slice(0,25);
   const jump=["faith","together","play"].flatMap(g=>GROUPS[g].subs.filter(x=>lc(LBL[x]||x).includes(v)).map(x=>[g,x])).slice(0,6);
   const jh=jump.length?`<div class="meta">Go to a section</div><div class="row">${jump.map(([g,x])=>`<button class="chip" data-act="goto" data-g="${g}" data-s="${x}">${esc(LBL[x]||x)}</button>`).join("")}</div>`:"";
   srRemember(v);const mh=metaHits(v);
@@ -3892,6 +3948,17 @@ document.addEventListener("click",async e=>{
   else if(a==="tlnew"){tlNew();render();}
   else if(a==="pgpick"&&pg&&!pg.done){pg.done=true;pg.right=d.p===pg.ans;if(pg.right)gWin();render();}
   else if(a==="pgnew"){pgNew();render();}
+  else if(a==="agreedlg")agreeDlg();
+  else if(a==="agreesave")agreeSave();
+  else if(a==="agreesign")agreeSign();
+  else if(a==="agreeedit"){agreeEdit=true;agreeDlg();}
+  else if(a==="livestart"){if(!db){toast("Sharing is not set up yet");return;}const qs=shuf(QUIZ.map((x,i)=>i)).slice(0,10);setMeta("live",{on:true,host:me,qs,i:0,rev:0,ans:FV?FV.delete():{},ts:Date.now()});sendPing(PEOPLE.filter(p=>p!==me),me+" started live trivia. Join now!","invite","live");}
+  else if(a==="livepick"){const L=liveG();if(!L.on)return;const i=L.i||0;if(((L.ans||{})[i]||{})[me]!==undefined||(L.rev||0)>i)return;setMeta("live",{ans:{[i]:{[me]:Number(d.i)}}});}
+  else if(a==="livereveal"){const L=liveG();if(L.host!==me)return;setMeta("live",{rev:(L.i||0)+1});}
+  else if(a==="livenext"){const L=liveG();if(L.host!==me)return;setMeta("live",{i:(L.i||0)+1});}
+  else if(a==="liveend"){const L=liveG();if(L.host!==me)return;setMeta("live",{on:false,rev:(L.qs||[]).length});const sc=liveScores({...L,rev:(L.qs||[]).length});const top=Object.entries(sc).sort((a,b)=>b[1]-a[1])[0];if(top&&FV)setMeta("board",{[top[0]]:{games:FV.increment(1)}});}
+  else if(a==="trstart"){if(!db){toast("Sharing is not set up yet");return;}if((tourW().sub||{})[me])return;tr={qs:tournQs(),i:0,a:[]};render();}
+  else if(a==="trpick"&&tr){tr.a.push(Number(d.i));tr.i++;if(tr.i>=10){const local=tr.qs.reduce((n,qi,k)=>n+(QUIZ[qi].a===tr.a[k]?1:0),0);setMeta("tourn",{[weekKey()]:{qs:tr.qs,sub:{[me]:{a:tr.a,ts:Date.now(),local}}}});tr=null;if(local>=8)confetti();}render();scrollTo(0,0);}
   else if(a==="wsd")wsdOpen();
   else if(a==="wsdset"){wsd[d.k]=d.k==="m"?Number(d.v):d.v;wsdOpen();}
   else if(a==="wsdre")wsdOpen();
