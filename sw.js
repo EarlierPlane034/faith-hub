@@ -18,13 +18,18 @@ self.addEventListener("notificationclick", e => {
   const go = e.action === "snooze" ? "snooze1" : (fm.go || "");
   const base = (d.FCM_MSG && d.FCM_MSG.notification && d.FCM_MSG.notification.click_action) || "./";
   const url = go ? "./?go=" + encodeURIComponent(go) : base;
-  e.waitUntil(clients.matchAll({type:"window",includeUncontrolled:true}).then(list => {
-    for (const c of list) { if ("focus" in c) { try { c.postMessage({fhGo: go}); } catch (x) {} return c.focus(); } }
-    return clients.openWindow(url);
-  }));
+  const abs = new URL(url, self.registration.scope).href;
+  e.waitUntil((async () => {
+    let list = [];
+    try { list = await clients.matchAll({type:"window",includeUncontrolled:true}); } catch (x) {}
+    for (const c of list) {
+      try { c.postMessage({fhGo: go}); if ("focus" in c) { await c.focus(); return; } } catch (x) {}
+    }
+    try { await clients.openWindow(abs); } catch (x) {}
+  })());
 });
 
-const CACHE = "faith-hub-v5-32";
+const CACHE = "faith-hub-v5-34";
 const CORE = ["./", "index.html", "today.html", "manifest.json", "manifest-today.json", "icon-192.png", "icon-512.png"];
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(CORE)).then(() => self.skipWaiting()));

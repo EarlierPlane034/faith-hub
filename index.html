@@ -90,14 +90,14 @@ dialog::backdrop{background:#0008}
 .chat{display:flex;flex-direction:column;gap:6px;margin:8px 0}
 .bub{max-width:82%;padding:8px 12px;border-radius:16px;background:var(--card);border:1px solid var(--line);font:16px system-ui,sans-serif;align-self:flex-start}
 .bub.me{align-self:flex-end;background:var(--acc2)}
-.bub small{display:block;color:var(--mute);font-size:11px}
+.bub small{display:block;color:var(--mute);font-size:12px}
 .agrid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px}
 .agrid img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;cursor:pointer}
 .breath{width:150px;height:150px;border-radius:50%;background:var(--acc2);border:3px solid var(--acc);margin:22px auto;display:flex;align-items:center;justify-content:center;font:600 16px system-ui,sans-serif;text-align:center;transition:transform 4s ease-in-out}
 details.card summary{font-weight:600;cursor:pointer}
 .cross{text-decoration:line-through;opacity:.6}
 .locked{text-align:center;opacity:.85}
-.stick{position:sticky;bottom:90px}
+.stick{position:sticky;bottom:calc(var(--navtop,100px) + 6px);z-index:4;background:var(--bg);padding:8px 0 6px;margin-bottom:0;box-shadow:0 -10px 14px -6px var(--bg)}.chat{padding-bottom:6px}body.insub .subrow{display:none}body.insub header{padding-bottom:2px}.backb{position:sticky;top:calc(env(safe-area-inset-top) + 8px);z-index:6;background:var(--card)!important;box-shadow:0 4px 14px #0000002e}body.inchat .whatis{display:none}body.inchat .backb{position:static}body.inchat main h2{font-size:24px;margin:8px 0 2px}.qrow{display:flex;gap:8px;overflow-x:auto;padding:6px 0 2px;scrollbar-width:none;-webkit-overflow-scrolling:touch}.qrow::-webkit-scrollbar{display:none}.qrow .chip{flex:0 0 auto}body.inchat{padding-bottom:calc(var(--navtop,100px) + 6px)!important}body.inchat main{padding-bottom:0!important}.bdel{display:inline-block;font-size:13px;padding:8px 6px;margin:-6px -2px -6px 4px;color:inherit;opacity:.7;text-decoration:underline}
 .card{box-shadow:0 1px 3px #0000000d,0 6px 18px #00000008}
 .btn{box-shadow:0 1px 2px #0003}
 nav{box-shadow:0 -4px 16px #00000012}
@@ -393,7 +393,7 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--acc);box
 
 <script>
 /* ============ SETUP (Jayden only) ============ */
-const APP_VER="5.32";
+const APP_VER="5.34";
 const FIREBASE_CONFIG = {
   apiKey:"AIzaSyDhwY77B-wZL7f4077kEC_tn0K2AgJ6bIs",
   authDomain:"faith-hub-71ae2.firebaseapp.com",
@@ -1605,7 +1605,7 @@ const HELP=[
 ];
 const HELP_STRONG=["How do I use Stay strong?","On Home, tap Stay strong. Mark a day strong, or tap I am struggling right now to reach your partner. Only you and your partner see your days. Your calendar is on top of Home and is shared with your partner by default. Tap Stop sharing under it to turn that off."];
 const TOUR=[["Welcome 💛","This is a private space for the three of you to share faith, prayers and adventures."],["Add something","Tap a tab at the bottom, pick a tile, then the big Add button. We ask one question at a time."],["Stay close","Tap 💛 Thinking of you, send a message, or react to anything with ❤️ or 🙏. Want to talk? Tap 👉 Poke at the top of Home."],["Daily verse","Turn on notifications in More to get a verse every day. Tap the ? button any time for help."],["Who sees what","Sign in with your own PIN. Check ins, questions and prayers start out private, and Home has Our space and My journal. You choose who sees anything else."]];
-const NEWS=["🎉 Version 5.32","🔔 After a notification, Back returns you to where you were","↩️ Switching tabs remembers where you were scrolled","🔎 Tap a word in Bedtime reading to find more verses","📍 Maps on the Bible timeline, 🚗 Rides, 🎁 Giving goals","🎙️ Voice time capsules, 🖨️ Print my year, weekly backup option","🎉 Version 5.31","🤝 Today together card: prayer circle, word of the day, verse hunt, kindness idea","🤝 Team trivia goal: 100 right answers a week, together","🗺️ Bible timeline, 🕊️ Testimonies, 📜 Story builder, 🤗 Care list, ✈️ Mission trip","📍 Read together marker and 🔀 Compare translations in Bible study","📆 New plans: James, Romans, 7 Psalms. High contrast option","🎉 Version 5.30","✨ Smoother screens, cards and buttons","➕ The plus button hides on screens where you cannot add anything","🎉 Version 5.29","📌 Pin your own posts to the top","🌗 High and low weekly check-in","🔄 Check for updates and 🩺 Is it working? buttons","🔒 Optional auto sign out for shared phones","📆 3 new 7 day plans: trust, strength, hope","🎉 Version 5.28","🗓️ Studies and kindness plans show on Our calendar with Add to Google Calendar","🧠 Verse practice streak and optional daily reminder","🎉 Version 5.27","🔔 Notifications now open the exact post, comment or screen","💬 You get notified when someone comments or replies on your post","📆 Plans: start date, catch-up count and a discussion for each day","💾 Weekly backup reminder and 📰 optional Sunday summary","🎉 Version 5.26","🌙 Together tonight: a short guided evening, every step optional","🎯 Rotating host, ❓ Our quizzes, 🤲 Kindness plans (all under Together)","🧠 Memorize: hidden words and word order","📖 Optional evening reading reminder (Settings, off until you turn it on)","🎉 Version 5.25","🔤 Text size fixed. Comments are bigger and easier to read","↪️ You can now reply to a comment","🌙 Bedtime reading mode on the chapter page","👉 Your turn card on Home and 🎲 Pick something for us under Together","⚠️ Report a wrong trivia question","🎉 Version 5.24","📅 Group Bible study: pick a date and time, add it to Google Calendar, and everyone gets a reminder","👀 Everyone's study notes are shown in their own boxes","🎉 Version 5.23","⬆️ Stay strong, check in and weekly cards are now right under your calendar at the top","🎉 Version 5.22","✨ A prettier look: softer cards and shadows, nicer buttons, and today is highlighted on your calendar","🎉 Version 5.21","💪 Stayed strong and I fell buttons are now right on the strong days calendar","🎉 Version 5.20","⬅️ Back now returns you to the same spot you left, not the top","🎉 Version 5.19","🗓️ Your strong days calendar is now at the very top and shared with your partner by default","✨ Smoother scrolling and animations","👆 Bigger buttons that are easier to tap","🧹 Header no longer overlaps the title","🎉 Version 5.18","🧹 The page no longer jumps to the top and sections stay open","🔔 Notifications: X at the top, tap one to open it, and the number clears","🎙️ Voice messages work on iPhone and Android","🧭 Home layout buttons at the top and a How to use page (tap ?)","👀 Optional: see when a friend was last on","🎉 Version 5.17","📡 Live trivia: everyone plays the same question at once","🏆 Weekly tournament with server checked scores","🔔 Snooze or open right from a notification","🎉 Version 5.16","🧠 Trivia now has over 1,000 questions","🖍️ Shared whiteboard in Together","⏳ Bible timeline and 🖼️ Whose photo? games","😴 Snooze alerts, reorder Home, better search","🎉 Version 5.15","📷 Add several photos at once with progress and retry, 🔕 mute a person","🎉 Version 5.14","⭐ Saved folders, 📰 weekly recap, 🪣 bucket list, 📝 shared notes, 80 new general trivia questions","🎉 Version 5.13","🃏 Memory match, 🏆 Bible jeopardy, 🎯 Group bingo, 🎨 Draw and guess, 📚 Story together","🎉 Version 5.12","📖 Group Bible study, 🗳️ polls, 👋 availability status, 🌙 nightly check-in reminders (optional)","🎉 Version 5.11","🎯 What should we do? 🎡 Decision wheel, ⚖️ This or that, 🤥 Two truths and a lie, 🔤 Word puzzle","🎉 Version 5.10","🔔 Notification center with filters, Catch me up and Mark all read","🎉 Version 5.9","🤔 New game: Guess my answer. 📋 Track your problem reports. ✍️ Continue card on Home","🎉 Version 5.8","🔒 Check-ins and mood now save to a private place only you can read","🎉 Version 5.7","🎯 320 new trivia questions, 💾 save a backup of your entries","🎉 Version 5.6","🧭 New tabs: Home, My Space, Together, Faith, Play","✉️ Better problem report, 🎯 more trivia, easier focus outlines and reduced motion","🎉 Version 5.5","🔔 Alerts open the exact thing, saving shows a status, drafts are kept, big photos are shrunk, scroll no longer jumps","🎉 Version 5.4","🙏 Prayer partner of the week, 📌 memory verse of the week, 📖 who read today","📘 7 day studies, 📚 word of the day, 🍞 shared fast, 🗓️ calendar","⏱️ Trivia modes: timed, true or false, finish the verse, and team rounds","🎯 Weekly goals, 💪 I made it through, 📅 event maps and RSVP","🔍 Search filters, 📳 vibration choice, 🖨️ year in review as PDF"];
+const NEWS=["🎉 Version 5.34","⬅️ Back button stays at the top of the screen while you scroll","💬 Chat: more room for messages, press Enter to send, keyboard stays open","🔔 Tapping a notification is more reliable on iPhone","🎉 Version 5.33","💬 Chat opens on the newest message and the message box no longer covers the bottom bar","⏰ Reminders now use your phone's own time zone automatically","🎉 Version 5.32","🔔 After a notification, Back returns you to where you were","↩️ Switching tabs remembers where you were scrolled","🔎 Tap a word in Bedtime reading to find more verses","📍 Maps on the Bible timeline, 🚗 Rides, 🎁 Giving goals","🎙️ Voice time capsules, 🖨️ Print my year, weekly backup option","🎉 Version 5.31","🤝 Today together card: prayer circle, word of the day, verse hunt, kindness idea","🤝 Team trivia goal: 100 right answers a week, together","🗺️ Bible timeline, 🕊️ Testimonies, 📜 Story builder, 🤗 Care list, ✈️ Mission trip","📍 Read together marker and 🔀 Compare translations in Bible study","📆 New plans: James, Romans, 7 Psalms. High contrast option","🎉 Version 5.30","✨ Smoother screens, cards and buttons","➕ The plus button hides on screens where you cannot add anything","🎉 Version 5.29","📌 Pin your own posts to the top","🌗 High and low weekly check-in","🔄 Check for updates and 🩺 Is it working? buttons","🔒 Optional auto sign out for shared phones","📆 3 new 7 day plans: trust, strength, hope","🎉 Version 5.28","🗓️ Studies and kindness plans show on Our calendar with Add to Google Calendar","🧠 Verse practice streak and optional daily reminder","🎉 Version 5.27","🔔 Notifications now open the exact post, comment or screen","💬 You get notified when someone comments or replies on your post","📆 Plans: start date, catch-up count and a discussion for each day","💾 Weekly backup reminder and 📰 optional Sunday summary","🎉 Version 5.26","🌙 Together tonight: a short guided evening, every step optional","🎯 Rotating host, ❓ Our quizzes, 🤲 Kindness plans (all under Together)","🧠 Memorize: hidden words and word order","📖 Optional evening reading reminder (Settings, off until you turn it on)","🎉 Version 5.25","🔤 Text size fixed. Comments are bigger and easier to read","↪️ You can now reply to a comment","🌙 Bedtime reading mode on the chapter page","👉 Your turn card on Home and 🎲 Pick something for us under Together","⚠️ Report a wrong trivia question","🎉 Version 5.24","📅 Group Bible study: pick a date and time, add it to Google Calendar, and everyone gets a reminder","👀 Everyone's study notes are shown in their own boxes","🎉 Version 5.23","⬆️ Stay strong, check in and weekly cards are now right under your calendar at the top","🎉 Version 5.22","✨ A prettier look: softer cards and shadows, nicer buttons, and today is highlighted on your calendar","🎉 Version 5.21","💪 Stayed strong and I fell buttons are now right on the strong days calendar","🎉 Version 5.20","⬅️ Back now returns you to the same spot you left, not the top","🎉 Version 5.19","🗓️ Your strong days calendar is now at the very top and shared with your partner by default","✨ Smoother scrolling and animations","👆 Bigger buttons that are easier to tap","🧹 Header no longer overlaps the title","🎉 Version 5.18","🧹 The page no longer jumps to the top and sections stay open","🔔 Notifications: X at the top, tap one to open it, and the number clears","🎙️ Voice messages work on iPhone and Android","🧭 Home layout buttons at the top and a How to use page (tap ?)","👀 Optional: see when a friend was last on","🎉 Version 5.17","📡 Live trivia: everyone plays the same question at once","🏆 Weekly tournament with server checked scores","🔔 Snooze or open right from a notification","🎉 Version 5.16","🧠 Trivia now has over 1,000 questions","🖍️ Shared whiteboard in Together","⏳ Bible timeline and 🖼️ Whose photo? games","😴 Snooze alerts, reorder Home, better search","🎉 Version 5.15","📷 Add several photos at once with progress and retry, 🔕 mute a person","🎉 Version 5.14","⭐ Saved folders, 📰 weekly recap, 🪣 bucket list, 📝 shared notes, 80 new general trivia questions","🎉 Version 5.13","🃏 Memory match, 🏆 Bible jeopardy, 🎯 Group bingo, 🎨 Draw and guess, 📚 Story together","🎉 Version 5.12","📖 Group Bible study, 🗳️ polls, 👋 availability status, 🌙 nightly check-in reminders (optional)","🎉 Version 5.11","🎯 What should we do? 🎡 Decision wheel, ⚖️ This or that, 🤥 Two truths and a lie, 🔤 Word puzzle","🎉 Version 5.10","🔔 Notification center with filters, Catch me up and Mark all read","🎉 Version 5.9","🤔 New game: Guess my answer. 📋 Track your problem reports. ✍️ Continue card on Home","🎉 Version 5.8","🔒 Check-ins and mood now save to a private place only you can read","🎉 Version 5.7","🎯 320 new trivia questions, 💾 save a backup of your entries","🎉 Version 5.6","🧭 New tabs: Home, My Space, Together, Faith, Play","✉️ Better problem report, 🎯 more trivia, easier focus outlines and reduced motion","🎉 Version 5.5","🔔 Alerts open the exact thing, saving shows a status, drafts are kept, big photos are shrunk, scroll no longer jumps","🎉 Version 5.4","🙏 Prayer partner of the week, 📌 memory verse of the week, 📖 who read today","📘 7 day studies, 📚 word of the day, 🍞 shared fast, 🗓️ calendar","⏱️ Trivia modes: timed, true or false, finish the verse, and team rounds","🎯 Weekly goals, 💪 I made it through, 📅 event maps and RSVP","🔍 Search filters, 📳 vibration choice, 🖨️ year in review as PDF"];
 
 let items=[], metas={}, grp="home", subSel={faith:null,together:null,play:null}, filt="all", q="", catFilt="all";
 let me=localStorage.getItem("fh_me"), memoI=0, memoShow=false, db=null, firstItems=true, startTime=Date.now(), offline=!navigator.onLine;
@@ -2383,13 +2383,13 @@ function chatList(){
 }
 function chatView(){
   const others=PEOPLE.filter(p=>p!==me);
-  return `<h2>💬 Chat</h2><div class="chips"><button class="chip ${chatTo==="all"?"on":""}" data-act="chto" data-p="all">👥 Everyone</button>${others.map(o=>`<button class="chip ${chatTo===o?"on":""}" data-act="chto" data-p="${o}">🔒 ${esc(o)} only</button>`).join("")}</div>
+  return `<h2>💬 Chat</h2><div class="chips"><button class="chip ${chatTo==="all"?"on":""}" data-act="chto" data-p="all">👥 Everyone</button>${others.map(o=>`<button class="chip ${chatTo===o?"on":""}" data-act="chto" data-p="${o}">🔒 ${esc(o)}</button>`).join("")}</div>
   <div class="meta">${chatTo==="all"?"Everyone can see these messages.":"Only you and "+esc(chatTo)+" can see these messages."}</div>
   <div class="chat" id="chatlist">${chatHtml(chatList())}</div>
-  <div class="row">${["Good morning ☀️","Goodnight 🌙","Praying for you 🙏","Proud of you 💛"].map(m=>`<button class="chip" data-act="quick" data-m="${esc(m)}">${m}</button>`).join("")}</div>
-  <div class="row stick"><input id="cin" placeholder="Write a message" style="flex:1"><button class="btn ghost" data-act="chatrec" aria-label="Voice message">${crec&&crec.state==="recording"?"⏹️":"🎙️"}</button><button class="btn" data-act="send">Send</button></div>`;
+  <div class="qrow">${["Good morning ☀️","Goodnight 🌙","Praying for you 🙏","Proud of you 💛"].map(m=>`<button class="chip" data-act="quick" data-m="${esc(m)}">${m}</button>`).join("")}</div>
+  <div class="row stick"><input id="cin" placeholder="Write a message" style="flex:1;min-width:0" enterkeyhint="send" autocomplete="off"><button class="btn ghost" data-act="chatrec" aria-label="Voice message">${crec&&crec.state==="recording"?"⏹️":"🎙️"}</button><button class="btn" data-act="send">Send</button></div>`;
 }
-function chatHtml(l){return l.length?l.map(m=>`<div class="bub ${m.author===me?"me":""}"><small>${esc(who(m.author))} · ${m.created?fmt(m.created):""}</small>${nl(m.text)}${audioHtml(m.audio)}${m.author===me?` <a href="#" data-act="del" data-id="${m.id}" style="font-size:11px;color:var(--mute)">delete</a>`:""}</div>`).join(""):`<p class="empty">Say hello 💛</p>`;}
+function chatHtml(l){return l.length?l.map(m=>`<div class="bub ${m.author===me?"me":""}"><small>${esc(who(m.author))} · ${m.created?fmt(m.created):""}</small>${nl(m.text)}${audioHtml(m.audio)}${m.author===me?` <a href="#" class="bdel" data-act="del" data-id="${m.id}">delete</a>`:""}</div>`).join(""):`<p class="empty">Say hello 💛</p>`;}
 function voiceView(){
   const recording=rec&&rec.state==="recording";
   const l=items.filter(i=>i.type==="voice"&&visible(i)).sort((a,b)=>(b.created||0)-(a.created||0));
@@ -2426,7 +2426,7 @@ function weekSummary(){
 function moreView(){
   const th=localStorage.getItem("fh_theme")||"auto",pushOn="Notification" in window&&Notification.permission==="granted"&&localStorage.getItem("fh_push")==="1";
   const AV=["😊","🌻","🦋","🌲","⭐","🔥","🕊️","🐻"],ACC=["#b5722f","#2f8f5b","#3d6fb5","#8a4fb5","#b3392f","#5f8a84"];
-  return `<h2>⚙️ More</h2>
+  return `<h2>🙋 My Space</h2>
   <div class="card"><h3>You</h3><div class="meta">Signed in as ${esc(me||"nobody")}</div><div class="row"><button class="btn small ghost" data-act="askwho">Sign out</button></div>
     <div class="meta" style="margin-top:10px">Pick your picture</div><div class="row">${AV.map(a=>`<button class="react" style="font-size:22px" data-act="avatar" data-a="${a}">${a}</button>`).join("")}</div></div>
   <div class="card"><h3>Make it easier</h3><div class="row"><button class="chip ${simple?"on":""}" data-act="simple">${simple?"✅ Simple mode is on":"Turn on Simple mode"}</button><button class="chip ${localStorage.getItem("fh_calm")==="1"?"on":""}" data-act="calm">Calm mode</button></div>
@@ -2557,7 +2557,20 @@ function viewFor(sub){
 }
 
 /* ---------- render ---------- */
+let tzAuto="";
+function tzAutoSet(){
+  if(!me||!db||!metaReady||tzAuto===me)return;
+  tzAuto=me;
+  try{
+    const o=((metas.notif||{})[me])||{};if(o.tz)return;
+    const z=Intl.DateTimeFormat().resolvedOptions().timeZone||"";
+    const map={"America/Denver":1,"America/Chicago":1,"America/New_York":1,"America/Los_Angeles":1};
+    let v=map[z]?z:(/^America\/(Boise|Phoenix|Edmonton)$/.test(z)?"America/Denver":/^America\/(Detroit|Toronto|Indiana\/.*|Kentucky\/.*)$/.test(z)?"America/New_York":/^America\/(Menominee|Winnipeg|Indiana\/Knox)$/.test(z)?"America/Chicago":"");
+    if(v)setMeta("notif",{[me]:{tz:v}});
+  }catch(e){}
+}
 async function afterRender(){
+  tzAutoSet();
   if(myLoc()&&!skyData&&!window._sb){window._sb=true;loadSky();}
   const pb=$("partbox");
   if(pb){try{const r=await bibleFetch(pb.dataset.ref);if($("partbox"))$("partbox").innerHTML=`<p style="font-size:19px">${esc(r.text)}</p>`;}catch(e){if($("partbox"))$("partbox").textContent="Could not load the text. Use the Open in my Bible button.";}}
@@ -2573,7 +2586,11 @@ async function afterRender(){
   }
 }
 const DET={},SCR={};
-function scrollRestore(){window.scrollTo(0,SCR[window.__rk]||0);}
+function chatBottom(){window.scrollTo(0,document.documentElement.scrollHeight);}
+function scrollRestore(){if($("chatlist")){chatBottom();return;}window.scrollTo(0,SCR[window.__rk]||0);}
+function navTopSync(){try{const n=document.querySelector("nav");if(n)document.documentElement.style.setProperty("--navtop",Math.ceil(window.innerHeight-n.getBoundingClientRect().top)+"px");}catch(e){}}
+window.addEventListener("resize",navTopSync);
+document.addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.isComposing&&e.target&&e.target.id==="cin"){e.preventDefault();const b=document.querySelector('[data-act="send"]');if(b)b.click();}});
 function detKey(d){const sm=d.querySelector("summary");return grp+"|"+(subSel[grp]||"")+"|"+(sm?sm.textContent.trim().slice(0,40):"");}
 document.addEventListener("toggle",e=>{const d=e.target;if(d&&d.tagName==="DETAILS"&&d.closest("#main"))DET[detKey(d)]=d.open;},true);
 let curKey=null;
@@ -2589,12 +2606,14 @@ window.addEventListener("popstate",e=>{
   render();scrollRestore();
 });
 function render(){
+  const sy0=window.scrollY;
   navSync();
+  try{document.body.classList.toggle("inchat",grp==="together"&&subSel.together==="chat");document.body.classList.toggle("insub",!!((grp in subSel)&&subSel[grp]));}catch(e){}
   try{document.body.classList.toggle("nofab",["tonight","host","pick","memo","plan","uquiz","cal","polls","study","chat","btime"].includes((GROUPS[grp]&&GROUPS[grp].subs)?subSel[grp]:"")||grp==="more");}catch(e){}
   const ae=document.activeElement;
   if(ae&&ae.id==="q"&&$("lst")){$("lst").innerHTML=listItems(curSub());return;}
-  if(ae&&ae.id==="cin"&&$("chatlist")){
-    $("chatlist").innerHTML=chatHtml(chatList());return;
+  if(ae&&ae.id==="cin"&&$("chatlist")&&grp==="together"&&subSel.together==="chat"){
+    $("chatlist").innerHTML=chatHtml(chatList());chatBottom();return;
   }
   if(ae&&["chapin","vtitle"].includes(ae.id))return;
   if(db&&auth&&!me){$("main").innerHTML=`<p class="empty">Please sign in to open Faith Hub.</p><div class="row" style="justify-content:center"><button class="btn" data-act="showlogin">Sign in</button></div>`;$("nav").innerHTML="";return;}
@@ -2613,14 +2632,14 @@ function render(){
   else{
     const subs=subsFor(grp),cur=subs.includes(subSel[grp])?subSel[grp]:null;
     if(!cur)html+=tilesView(subs);
-    else html+=`<button class="btn small ghost" data-act="back">← Back</button>`+viewFor(cur);
+    else html+=`<button class="btn small ghost backb" data-act="back">← Back</button>`+viewFor(cur);
   }
-  const rk=grp+"|"+(subSel[grp]||""),sy=window.scrollY;
+  const rk=grp+"|"+(subSel[grp]||""),sy=sy0;
   if(window.__rk&&sy>=0)SCR[window.__rk]=sy;
   m.innerHTML=html;
   m.querySelectorAll("details").forEach(d=>{const k=detKey(d);if(k in DET)d.open=DET[k];});
   afterRender();
-  if($("chatlist")){window.scrollTo(0,document.body.scrollHeight);}
+  navTopSync();if($("chatlist")){chatBottom();requestAnimationFrame(chatBottom);setTimeout(chatBottom,250);}
   else if(rk===window.__rk&&sy>0){window.scrollTo(0,sy);}
   const entering=rk!==window.__rk;window.__rk=rk;chipFade(m);if(entering){m.classList.add("enter");clearTimeout(window.__enT);window.__enT=setTimeout(()=>m.classList.remove("enter"),450);}try{strongSync();}catch(e){}
   {const sc=(grp!=="home"&&grp!=="more")?subSel[grp]:null,h2=sc&&m.querySelector("h2");if(h2&&TILEDESC[sc]&&!m.querySelector(".whatis"))h2.insertAdjacentHTML("afterend",`<div class="meta whatis">${esc(TILEDESC[sc])}.</div>`);}
@@ -2642,7 +2661,7 @@ const TCOL=["#e0803a","#3d6fb5","#2f8f5b","#8a4fb5","#c2476b","#d19a1f"];
 function tilesView(subs){
   const g=GROUPS[grp];
   subs=subs.filter(x=>!hiddenSubs().includes(x));
-  return `<h2>${g.icon} ${esc(g.label)}</h2><div class="meta">Tap one to open it. You can hide sections you do not use in More, then Customize.</div><div class="tlist">${subs.map((s,n)=>{const l=(LBL[s]||s),i=l.indexOf(" ");return `<button class="trow tile" data-act="sub" data-s="${s}" style="--c:${TCOL[n%TCOL.length]}"><span class="ti">${i>0?l.slice(0,i):"•"}</span><span class="tx"><b>${esc(i>0?l.slice(i+1):l)}</b><small>${esc(TILEDESC[s]||"")}</small></span><span class="ch">›</span></button>`;}).join("")}</div>`;
+  return `<h2>${g.icon} ${esc(g.label)}</h2><div class="meta">Tap one to open it. You can hide sections you do not use in My Space, then Customize.</div><div class="tlist">${subs.map((s,n)=>{const l=(LBL[s]||s),i=l.indexOf(" ");return `<button class="trow tile" data-act="sub" data-s="${s}" style="--c:${TCOL[n%TCOL.length]}"><span class="ti">${i>0?l.slice(0,i):"•"}</span><span class="tx"><b>${esc(i>0?l.slice(i+1):l)}</b><small>${esc(TILEDESC[s]||"")}</small></span><span class="ch">›</span></button>`;}).join("")}</div>`;
 }
 const SCENEKEYS=["dusk","forest","ocean","sunrise","night"];
 function dailyCard(){
@@ -4261,6 +4280,15 @@ document.addEventListener("change",e=>{
   if(a==="ntz"&&me)setMeta("notif",{[me]:{tz:e.target.value}});
   if(a==="verpick"){ver=e.target.value;localStorage.setItem("fh_ver",ver);daily=null;loadDaily();}
 });
+// iPhone keeps the text box focused when you tap a button. Blur it so screens redraw fully.
+document.addEventListener("click",e=>{try{
+  const t=e.target.closest&&e.target.closest("button,a,[data-act]");if(!t)return;
+  const ae=document.activeElement,F=/^(INPUT|TEXTAREA|SELECT)$/;
+  if(!ae||ae===t||!F.test(ae.tagName)||F.test(t.tagName))return;
+  const a=t.dataset&&t.dataset.act;if(a==="send"||a==="quick"||a==="chatrec")return;
+  if(t.closest("dialog")||(t.closest("form")&&ae.closest("form")===t.closest("form")))return;
+  ae.blur();
+}catch(x){}},true);
 document.addEventListener("click",async e=>{
   const w=e.target.closest("[data-w]");
   if(w&&W){
@@ -4339,7 +4367,7 @@ document.addEventListener("click",async e=>{
   else if(a==="memoshuf"){memoI=Math.floor(Math.random()*versePool().length);memoShow=false;render();}
   else if(a==="send"||a==="quick"){
     const t=a==="quick"?d.m:($("cin").value||"").trim();if(!t)return;
-    saveNew("msg",{text:t,vis:chatTo==="all"?null:[me,chatTo]});if($("cin"))$("cin").value="";
+    saveNew("msg",{text:t,vis:chatTo==="all"?null:[me,chatTo]});if($("cin")){$("cin").value="";if(a==="send")try{$("cin").focus({preventScroll:true});}catch(x){}}
   }
   else if(a==="bigphoto"&&it)photoDlg(albumList.findIndex(x=>x.id===it.id));
   else if(a==="photonav")photoDlg(Number(d.k));
