@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Faith Hub</title>
 <link rel="manifest" href="manifest.json">
+<link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://firestore.googleapis.com" crossorigin>
 <meta name="theme-color" content="#1c1a1f">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -17,6 +19,10 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging-compat.js"></script>
 <style>html{-webkit-text-size-adjust:100%;text-size-adjust:100%;-webkit-tap-highlight-color:transparent}
 button,a,.chip,.trow,.tile,.react,[data-act]{touch-action:manipulation}
+html[data-hc]{--mute:#3d3a44;--line:#8a7f70;--ink:#111}html[data-hc][data-theme=dark]{--mute:#e6e1ea;--line:#b9b2c2;--ink:#fff}html[data-hc] .card,html[data-hc] .trow,html[data-hc] .chip,html[data-hc] input,html[data-hc] textarea{border:2px solid var(--line)}html[data-hc] .meta{color:var(--mute);font-weight:500}
+.trow .tt{flex:1;min-width:0}
+#printbox{display:none}#bedtxt{cursor:pointer}
+@media print{body.printing>*:not(#printbox){display:none!important}body.printing{background:#fff!important;color:#000!important}body.printing #printbox{display:block;font:12pt/1.5 Georgia,serif;color:#000;padding:0 8mm}#printbox h1{font-size:22pt}#printbox h2{font-size:15pt;margin:14pt 0 4pt;border-bottom:1px solid #999}#printbox .pk{margin:0 0 9pt;break-inside:avoid}#printbox .pk span{color:#555;font-size:10pt}}
 body.nofab .fabadd{opacity:0;pointer-events:none;transform:scale(.6)}
 .fabadd{transition:opacity .2s ease,transform .2s ease}
 @media (prefers-reduced-motion:no-preference){
@@ -387,7 +393,7 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--acc);box
 
 <script>
 /* ============ SETUP (Jayden only) ============ */
-const APP_VER="5.30";
+const APP_VER="5.32";
 const FIREBASE_CONFIG = {
   apiKey:"AIzaSyDhwY77B-wZL7f4077kEC_tn0K2AgJ6bIs",
   authDomain:"faith-hub-71ae2.firebaseapp.com",
@@ -422,6 +428,12 @@ const SECTIONS={
  vote:{label:"Next trip",icon:"🗳️",title:"Vote",f:[["title","What are we deciding?"],["a","Option A"],["b","Option B"]]},
  letter:{label:"Letters",icon:"💌",title:"Letter or time capsule",f:[["kind","Kind","select",["Letter","Time capsule","Encouragement"]],["open","Opens on","date"],["text","Write it here","area"]],p:{kind:"Is this a letter or a time capsule?",open:"When should it open?",text:"What do you want to say?"}},
  uquiz:{label:"Quiz",icon:"❓",title:"Quiz question",f:[["q","Question"],["a","Right answer"],["b","Wrong answer 1"],["c","Wrong answer 2"],["d","Wrong answer 3 (optional)"],["ref","Bible reference (optional)"],["text","Why it is the answer (optional)","area"]],p:{q:"What do you want to ask?"}},
+ ride:{label:"Rides",icon:"🚗",title:"Ride",f:[["kind","I am","select",["Offering a ride","Asking for a ride"]],["date","Date","date"],["time","Time","time"],["place","From and to"],["text","Notes (seats, stops)","area"]]},
+ give:{label:"Giving",icon:"🎁",title:"Giving goal",f:[["title","What are we collecting or giving to?"],["goal","Goal (number)"],["sofar","So far (number)"],["date","By when (optional)","date"],["text","Notes","area"]],p:{title:"Example: food drive cans",goal:"50",sofar:"0"}},
+ story:{label:"Story",icon:"📜",title:"Story line",f:[["text","Add the next line of our story","area"]],p:{text:"Add one or two sentences, then let someone else go"}},
+ care:{label:"Care",icon:"🤗",title:"Care list",f:[["title","Who needs care?"],["kind","What would help","select",["A text","A call","A visit","A meal","Prayer","A ride"]],["text","Notes (optional)","area"]],p:{title:"A name"}},
+ mission:{label:"Mission trip",icon:"✈️",title:"Mission trip plan",f:[["title","Where or what"],["date","Start date","date"],["place","Place"],["text","Plan, cost and packing list","area"],["note","What to pray for","area"]],p:{title:"Example: summer mission trip"}},
+ testimony:{label:"Testimony",icon:"🕊️",title:"Testimony",f:[["title","Title"],["text","What God did","area"],["date","When (optional)","date"]],p:{title:"A short title"}},
  highlow:{label:"High and low",icon:"🌗",title:"High and low",f:[["text","My high this week","area"],["note","My low this week","area"],["for","Something I would like prayer for (optional)"]],p:{text:"What was the best part of your week?",note:"What was hard?"}},
  kindplan:{label:"Kindness",icon:"🤲",title:"Kindness plan",f:[["title","What kind thing will we do?"],["date","Date","date"],["place","Place (only people you share with can see it)"],["text","Checklist, one thing per line","area"],["note","Afterthoughts (optional)","area"]],p:{title:"Example: write encouragement cards"}},
  jar:{label:"Jar",icon:"🫙",title:"Encouragement jar",f:[["text","Write something encouraging","area"]],p:{text:"What encouraging thing do you want to save?"}},
@@ -439,7 +451,7 @@ const SECTIONS={
  weekly:{label:"Weekly check-in",icon:"📝",title:"Weekly check-in",f:[["week","How was the week?"],["weak","Where I was weakest","area"],["win","A win this week","area"]]},
  joke:{label:"Inside jokes",icon:"😂",title:"Inside joke or fun moment",f:[["title","What is it called?"],["text","The story","area"],["date","When","date"]]},
  camp:{label:"Camping",icon:"🏕️",title:"Camping log",f:[["place","Campsite or park"],["date","Date","date"],["text","Notes and memories","area"]]},
- voice:{label:"Voice",icon:"🎙️",title:"Voice note",f:[["title","Title"]]},
+ voice:{label:"Voice",icon:"🎙️",title:"Voice note",f:[["title","Title"],["open","Lock until (optional, makes it a time capsule)","date"]]},
  journal:{label:"Journal",icon:"📓",title:"Journal entry",f:[["title","Title (optional)"],["text","What is on your heart","area"]]},
  song:{label:"Playlist",icon:"🎵",title:"Song",f:[["title","Song"],["artist","Artist"],["link","Link (optional)","url"],["text","Why it matters to you","area"]]},
  trip:{label:"Trips",icon:"🧭",title:"Trip",f:[["place","Where to? (example: Pikes Peak)"],["start","Start date","date"],["end","End date","date"],["text","Plans and notes","area"]]}
@@ -448,12 +460,12 @@ const SIMPLE_WIZ=["verse","prayer","thanks","checkin","outdoor","reading","quest
 const GROUPS={
  home:{label:"Home",icon:"🏠"},
  more:{label:"My Space",icon:"🙋"},
- together:{label:"Together",icon:"💬",subs:["chat","study","polls","recap","saved","bucket","notes","wb","checkin","goal","event","letter","jar","highlow","pick","tonight","host","uquiz","kindplan","memory","dream","album","voice","timeline","prayfor","fast","cal","ideas","wins","song","todo"]},
- faith:{label:"Faith",icon:"📖",subs:["chapter","psalm","verse","prayer","ans","moment","packs","memorize","art","srev","guided","habits","sermon","thanks","plan","memo","topics","learn","question","wall","calm"]},
+ together:{label:"Together",icon:"💬",subs:["chat","study","polls","recap","saved","bucket","notes","wb","checkin","goal","event","letter","jar","highlow","story","care","mission","ride","give","pick","tonight","host","uquiz","kindplan","memory","dream","album","voice","timeline","prayfor","fast","cal","ideas","wins","song","todo"]},
+ faith:{label:"Faith",icon:"📖",subs:["chapter","psalm","verse","prayer","ans","moment","packs","memorize","art","srev","guided","habits","sermon","thanks","testimony","btime","plan","memo","topics","learn","question","wall","calm"]},
  play:{label:"Play",icon:"🎮",subs:["trivia","games","board","fun","joke","outdoor","hike","stars","gear","vote","trip","sky","camp"]}
 };
 const SIMPLE_SUBS={faith:["chapter","verse","prayer","thanks"],together:["chat","checkin","album"],play:["trivia","games","outdoor"]};
-const LBL={highlow:"🌗 High and low",tonight:"🌙 Together tonight",host:"🎯 Rotating host",uquiz:"❓ Our quizzes",kindplan:"🤲 Kindness plans",pick:"🎲 Pick something for us",wb:"🖍️ Whiteboard",recap:"📰 Weekly recap",saved:"⭐ Saved",bucket:"🪣 Bucket list",notes:"📝 Shared notes",study:"📖 Group Bible study",polls:"🗳️ Polls",wall:"🙏 Prayer wall",song:"🎵 Playlist",trip:"🧭 Trips",sky:"🌅 Sky",chapter:"📖 Reading",psalm:"🎶 Psalm",verse:"🕊️ Verses",prayer:"🙏 Prayer",sermon:"⛪ Sermons",thanks:"🌻 Thanks",plan:"📆 Plans",memo:"🧠 Memorize",topics:"🔎 Topics",learn:"📚 Learn",question:"❓ Questions",calm:"🌿 Calm",chat:"💬 Chat",checkin:"💛 Check in",goal:"🎯 Goals",event:"📅 Events",letter:"💌 Letters",jar:"🫙 Jar",memory:"🎞️ Memories",dream:"✨ Dreams",album:"📸 Album",voice:"🎙️ Voice",timeline:"🌱 Timeline",prayfor:"🤝 Pray together",fun:"🎲 Fun",ideas:"💡 Ideas",wins:"🏆 Wins",todo:"✅ To do",outdoor:"🌲 Devotionals",hike:"🥾 Hikes",stars:"🔭 Stars",gear:"🎒 Gear",vote:"🗳️ Next trip",camp:"🏕️ Camping",trivia:"🧠 Trivia",board:"🏆 Leaderboard",moment:"📖 Scripture for the moment",packs:"📘 7 day studies",fast:"🍞 Shared fast",cal:"🗓️ Calendar",ans:"🎉 Answered prayers",memorize:"🧩 Verse practice",art:"🖼️ Verse art",srev:"🧾 Sermon review",games:"🎮 Bible games",joke:"😂 Inside jokes",guided:"🕯️ Guided prayer",habits:"✅ Habits"};
+const LBL={ride:"🚗 Rides",give:"🎁 Giving goals",story:"📜 Story builder",care:"🤗 Care list",mission:"✈️ Mission trip",testimony:"🕊️ Testimonies",btime:"🗺️ Bible timeline",highlow:"🌗 High and low",tonight:"🌙 Together tonight",host:"🎯 Rotating host",uquiz:"❓ Our quizzes",kindplan:"🤲 Kindness plans",pick:"🎲 Pick something for us",wb:"🖍️ Whiteboard",recap:"📰 Weekly recap",saved:"⭐ Saved",bucket:"🪣 Bucket list",notes:"📝 Shared notes",study:"📖 Group Bible study",polls:"🗳️ Polls",wall:"🙏 Prayer wall",song:"🎵 Playlist",trip:"🧭 Trips",sky:"🌅 Sky",chapter:"📖 Reading",psalm:"🎶 Psalm",verse:"🕊️ Verses",prayer:"🙏 Prayer",sermon:"⛪ Sermons",thanks:"🌻 Thanks",plan:"📆 Plans",memo:"🧠 Memorize",topics:"🔎 Topics",learn:"📚 Learn",question:"❓ Questions",calm:"🌿 Calm",chat:"💬 Chat",checkin:"💛 Check in",goal:"🎯 Goals",event:"📅 Events",letter:"💌 Letters",jar:"🫙 Jar",memory:"🎞️ Memories",dream:"✨ Dreams",album:"📸 Album",voice:"🎙️ Voice",timeline:"🌱 Timeline",prayfor:"🤝 Pray together",fun:"🎲 Fun",ideas:"💡 Ideas",wins:"🏆 Wins",todo:"✅ To do",outdoor:"🌲 Devotionals",hike:"🥾 Hikes",stars:"🔭 Stars",gear:"🎒 Gear",vote:"🗳️ Next trip",camp:"🏕️ Camping",trivia:"🧠 Trivia",board:"🏆 Leaderboard",moment:"📖 Scripture for the moment",packs:"📘 7 day studies",fast:"🍞 Shared fast",cal:"🗓️ Calendar",ans:"🎉 Answered prayers",memorize:"🧩 Verse practice",art:"🖼️ Verse art",srev:"🧾 Sermon review",games:"🎮 Bible games",joke:"😂 Inside jokes",guided:"🕯️ Guided prayer",habits:"✅ Habits"};
 const SUBDEFS={
  song:{type:"song",title:"Our playlist"},trip:{type:"trip",title:"Trip planner"},
  gear:{type:"todo",where:i=>i.list==="Gear",preset:{list:"Gear"},title:"Gear and packing"},
@@ -468,6 +480,9 @@ const PLANS={
  psalms:{n:"Psalms 1 to 30",book:"Psalm",days:30},
  peace:{n:"14 days of peace",refs:["Philippians 4:6-7","John 14:27","Isaiah 26:3","Psalm 4:8","Colossians 3:15","Psalm 29:11","Numbers 6:24-26","2 Thessalonians 3:16","Isaiah 32:17","Romans 5:1","Psalm 85:8","John 16:33","Matthew 11:28-30","Psalm 119:165"]},
  kindness:{n:"7 day kindness challenge",tasks:["Text someone an encouraging message","Pray for a friend by name","Say thank you to someone in person","Do one small chore for someone","Send everyone a verse","Give a sincere compliment","Listen to someone without interrupting"]},
+ james:{n:"James in 5 days",refs:["James 1","James 2","James 3","James 4","James 5"]},
+ romans:{n:"Romans in 16 days",refs:["Romans 1","Romans 2","Romans 3","Romans 4","Romans 5","Romans 6","Romans 7","Romans 8","Romans 9","Romans 10","Romans 11","Romans 12","Romans 13","Romans 14","Romans 15","Romans 16"]},
+ psalms7:{n:"7 well loved Psalms",refs:["Psalm 1","Psalm 23","Psalm 27","Psalm 46","Psalm 91","Psalm 121","Psalm 139"]},
  trust:{n:"7 days of trust",refs:["Proverbs 3:5-6","Psalm 56:3-4","Isaiah 12:2","Psalm 37:5","Jeremiah 17:7-8","Nahum 1:7","Psalm 62:8"]},
  strength:{n:"7 days of strength",refs:["Isaiah 40:29-31","Philippians 4:13","Psalm 46:1-3","Joshua 1:9","2 Corinthians 12:9-10","Psalm 28:7","Nehemiah 8:10"]},
  hope:{n:"7 days of hope",refs:["Romans 15:13","Jeremiah 29:11","Psalm 42:11","Lamentations 3:21-23","Romans 8:24-25","Hebrews 6:19","Psalm 130:5"]},
@@ -1590,7 +1605,7 @@ const HELP=[
 ];
 const HELP_STRONG=["How do I use Stay strong?","On Home, tap Stay strong. Mark a day strong, or tap I am struggling right now to reach your partner. Only you and your partner see your days. Your calendar is on top of Home and is shared with your partner by default. Tap Stop sharing under it to turn that off."];
 const TOUR=[["Welcome 💛","This is a private space for the three of you to share faith, prayers and adventures."],["Add something","Tap a tab at the bottom, pick a tile, then the big Add button. We ask one question at a time."],["Stay close","Tap 💛 Thinking of you, send a message, or react to anything with ❤️ or 🙏. Want to talk? Tap 👉 Poke at the top of Home."],["Daily verse","Turn on notifications in More to get a verse every day. Tap the ? button any time for help."],["Who sees what","Sign in with your own PIN. Check ins, questions and prayers start out private, and Home has Our space and My journal. You choose who sees anything else."]];
-const NEWS=["🎉 Version 5.30","✨ Smoother screens, cards and buttons","➕ The plus button hides on screens where you cannot add anything","🎉 Version 5.29","📌 Pin your own posts to the top","🌗 High and low weekly check-in","🔄 Check for updates and 🩺 Is it working? buttons","🔒 Optional auto sign out for shared phones","📆 3 new 7 day plans: trust, strength, hope","🎉 Version 5.28","🗓️ Studies and kindness plans show on Our calendar with Add to Google Calendar","🧠 Verse practice streak and optional daily reminder","🎉 Version 5.27","🔔 Notifications now open the exact post, comment or screen","💬 You get notified when someone comments or replies on your post","📆 Plans: start date, catch-up count and a discussion for each day","💾 Weekly backup reminder and 📰 optional Sunday summary","🎉 Version 5.26","🌙 Together tonight: a short guided evening, every step optional","🎯 Rotating host, ❓ Our quizzes, 🤲 Kindness plans (all under Together)","🧠 Memorize: hidden words and word order","📖 Optional evening reading reminder (Settings, off until you turn it on)","🎉 Version 5.25","🔤 Text size fixed. Comments are bigger and easier to read","↪️ You can now reply to a comment","🌙 Bedtime reading mode on the chapter page","👉 Your turn card on Home and 🎲 Pick something for us under Together","⚠️ Report a wrong trivia question","🎉 Version 5.24","📅 Group Bible study: pick a date and time, add it to Google Calendar, and everyone gets a reminder","👀 Everyone's study notes are shown in their own boxes","🎉 Version 5.23","⬆️ Stay strong, check in and weekly cards are now right under your calendar at the top","🎉 Version 5.22","✨ A prettier look: softer cards and shadows, nicer buttons, and today is highlighted on your calendar","🎉 Version 5.21","💪 Stayed strong and I fell buttons are now right on the strong days calendar","🎉 Version 5.20","⬅️ Back now returns you to the same spot you left, not the top","🎉 Version 5.19","🗓️ Your strong days calendar is now at the very top and shared with your partner by default","✨ Smoother scrolling and animations","👆 Bigger buttons that are easier to tap","🧹 Header no longer overlaps the title","🎉 Version 5.18","🧹 The page no longer jumps to the top and sections stay open","🔔 Notifications: X at the top, tap one to open it, and the number clears","🎙️ Voice messages work on iPhone and Android","🧭 Home layout buttons at the top and a How to use page (tap ?)","👀 Optional: see when a friend was last on","🎉 Version 5.17","📡 Live trivia: everyone plays the same question at once","🏆 Weekly tournament with server checked scores","🔔 Snooze or open right from a notification","🎉 Version 5.16","🧠 Trivia now has over 1,000 questions","🖍️ Shared whiteboard in Together","⏳ Bible timeline and 🖼️ Whose photo? games","😴 Snooze alerts, reorder Home, better search","🎉 Version 5.15","📷 Add several photos at once with progress and retry, 🔕 mute a person","🎉 Version 5.14","⭐ Saved folders, 📰 weekly recap, 🪣 bucket list, 📝 shared notes, 80 new general trivia questions","🎉 Version 5.13","🃏 Memory match, 🏆 Bible jeopardy, 🎯 Group bingo, 🎨 Draw and guess, 📚 Story together","🎉 Version 5.12","📖 Group Bible study, 🗳️ polls, 👋 availability status, 🌙 nightly check-in reminders (optional)","🎉 Version 5.11","🎯 What should we do? 🎡 Decision wheel, ⚖️ This or that, 🤥 Two truths and a lie, 🔤 Word puzzle","🎉 Version 5.10","🔔 Notification center with filters, Catch me up and Mark all read","🎉 Version 5.9","🤔 New game: Guess my answer. 📋 Track your problem reports. ✍️ Continue card on Home","🎉 Version 5.8","🔒 Check-ins and mood now save to a private place only you can read","🎉 Version 5.7","🎯 320 new trivia questions, 💾 save a backup of your entries","🎉 Version 5.6","🧭 New tabs: Home, My Space, Together, Faith, Play","✉️ Better problem report, 🎯 more trivia, easier focus outlines and reduced motion","🎉 Version 5.5","🔔 Alerts open the exact thing, saving shows a status, drafts are kept, big photos are shrunk, scroll no longer jumps","🎉 Version 5.4","🙏 Prayer partner of the week, 📌 memory verse of the week, 📖 who read today","📘 7 day studies, 📚 word of the day, 🍞 shared fast, 🗓️ calendar","⏱️ Trivia modes: timed, true or false, finish the verse, and team rounds","🎯 Weekly goals, 💪 I made it through, 📅 event maps and RSVP","🔍 Search filters, 📳 vibration choice, 🖨️ year in review as PDF"];
+const NEWS=["🎉 Version 5.32","🔔 After a notification, Back returns you to where you were","↩️ Switching tabs remembers where you were scrolled","🔎 Tap a word in Bedtime reading to find more verses","📍 Maps on the Bible timeline, 🚗 Rides, 🎁 Giving goals","🎙️ Voice time capsules, 🖨️ Print my year, weekly backup option","🎉 Version 5.31","🤝 Today together card: prayer circle, word of the day, verse hunt, kindness idea","🤝 Team trivia goal: 100 right answers a week, together","🗺️ Bible timeline, 🕊️ Testimonies, 📜 Story builder, 🤗 Care list, ✈️ Mission trip","📍 Read together marker and 🔀 Compare translations in Bible study","📆 New plans: James, Romans, 7 Psalms. High contrast option","🎉 Version 5.30","✨ Smoother screens, cards and buttons","➕ The plus button hides on screens where you cannot add anything","🎉 Version 5.29","📌 Pin your own posts to the top","🌗 High and low weekly check-in","🔄 Check for updates and 🩺 Is it working? buttons","🔒 Optional auto sign out for shared phones","📆 3 new 7 day plans: trust, strength, hope","🎉 Version 5.28","🗓️ Studies and kindness plans show on Our calendar with Add to Google Calendar","🧠 Verse practice streak and optional daily reminder","🎉 Version 5.27","🔔 Notifications now open the exact post, comment or screen","💬 You get notified when someone comments or replies on your post","📆 Plans: start date, catch-up count and a discussion for each day","💾 Weekly backup reminder and 📰 optional Sunday summary","🎉 Version 5.26","🌙 Together tonight: a short guided evening, every step optional","🎯 Rotating host, ❓ Our quizzes, 🤲 Kindness plans (all under Together)","🧠 Memorize: hidden words and word order","📖 Optional evening reading reminder (Settings, off until you turn it on)","🎉 Version 5.25","🔤 Text size fixed. Comments are bigger and easier to read","↪️ You can now reply to a comment","🌙 Bedtime reading mode on the chapter page","👉 Your turn card on Home and 🎲 Pick something for us under Together","⚠️ Report a wrong trivia question","🎉 Version 5.24","📅 Group Bible study: pick a date and time, add it to Google Calendar, and everyone gets a reminder","👀 Everyone's study notes are shown in their own boxes","🎉 Version 5.23","⬆️ Stay strong, check in and weekly cards are now right under your calendar at the top","🎉 Version 5.22","✨ A prettier look: softer cards and shadows, nicer buttons, and today is highlighted on your calendar","🎉 Version 5.21","💪 Stayed strong and I fell buttons are now right on the strong days calendar","🎉 Version 5.20","⬅️ Back now returns you to the same spot you left, not the top","🎉 Version 5.19","🗓️ Your strong days calendar is now at the very top and shared with your partner by default","✨ Smoother scrolling and animations","👆 Bigger buttons that are easier to tap","🧹 Header no longer overlaps the title","🎉 Version 5.18","🧹 The page no longer jumps to the top and sections stay open","🔔 Notifications: X at the top, tap one to open it, and the number clears","🎙️ Voice messages work on iPhone and Android","🧭 Home layout buttons at the top and a How to use page (tap ?)","👀 Optional: see when a friend was last on","🎉 Version 5.17","📡 Live trivia: everyone plays the same question at once","🏆 Weekly tournament with server checked scores","🔔 Snooze or open right from a notification","🎉 Version 5.16","🧠 Trivia now has over 1,000 questions","🖍️ Shared whiteboard in Together","⏳ Bible timeline and 🖼️ Whose photo? games","😴 Snooze alerts, reorder Home, better search","🎉 Version 5.15","📷 Add several photos at once with progress and retry, 🔕 mute a person","🎉 Version 5.14","⭐ Saved folders, 📰 weekly recap, 🪣 bucket list, 📝 shared notes, 80 new general trivia questions","🎉 Version 5.13","🃏 Memory match, 🏆 Bible jeopardy, 🎯 Group bingo, 🎨 Draw and guess, 📚 Story together","🎉 Version 5.12","📖 Group Bible study, 🗳️ polls, 👋 availability status, 🌙 nightly check-in reminders (optional)","🎉 Version 5.11","🎯 What should we do? 🎡 Decision wheel, ⚖️ This or that, 🤥 Two truths and a lie, 🔤 Word puzzle","🎉 Version 5.10","🔔 Notification center with filters, Catch me up and Mark all read","🎉 Version 5.9","🤔 New game: Guess my answer. 📋 Track your problem reports. ✍️ Continue card on Home","🎉 Version 5.8","🔒 Check-ins and mood now save to a private place only you can read","🎉 Version 5.7","🎯 320 new trivia questions, 💾 save a backup of your entries","🎉 Version 5.6","🧭 New tabs: Home, My Space, Together, Faith, Play","✉️ Better problem report, 🎯 more trivia, easier focus outlines and reduced motion","🎉 Version 5.5","🔔 Alerts open the exact thing, saving shows a status, drafts are kept, big photos are shrunk, scroll no longer jumps","🎉 Version 5.4","🙏 Prayer partner of the week, 📌 memory verse of the week, 📖 who read today","📘 7 day studies, 📚 word of the day, 🍞 shared fast, 🗓️ calendar","⏱️ Trivia modes: timed, true or false, finish the verse, and team rounds","🎯 Weekly goals, 💪 I made it through, 📅 event maps and RSVP","🔍 Search filters, 📳 vibration choice, 🖨️ year in review as PDF"];
 
 let items=[], metas={}, grp="home", subSel={faith:null,together:null,play:null}, filt="all", q="", catFilt="all";
 let me=localStorage.getItem("fh_me"), memoI=0, memoShow=false, db=null, firstItems=true, startTime=Date.now(), offline=!navigator.onLine;
@@ -1676,6 +1691,7 @@ function start(){
   }
   applyTheme();setInterval(applyTheme,600000);
   if(localStorage.getItem("fh_calm")==="1")document.documentElement.dataset.calm="1";
+  if(localStorage.getItem("fh_hc")==="1")document.documentElement.dataset.hc="1";
   const fnt=localStorage.getItem("fh_font");if(fnt&&fnt!=="clean")document.documentElement.dataset.font=fnt;
   if(!localStorage.getItem("fh_lastbackup"))localStorage.setItem("fh_lastbackup",String(Date.now()));
   const fs=parseInt(localStorage.getItem("fh_fs"));if(fs>=15&&fs<=30)document.body.style.fontSize=fs+"px";
@@ -2135,7 +2151,7 @@ function card(it){
 }
 function card0(it){
   const S=SECTIONS[it.type]||{icon:"",label:""};
-  if(it.type==="letter"&&it.author!==me&&it.open&&it.open>ymd(new Date()))
+  if((it.type==="letter"||it.type==="voice")&&it.author!==me&&it.open&&it.open>ymd(new Date()))
     return `<div class="card locked"><div class="big">💌</div><h3>A ${esc((it.kind||"letter").toLowerCase())} from ${esc(it.author)}</h3><div class="meta">Opens on ${esc(fmtDay(it.open))} (${daysUntil(it.open)} days)</div></div>`;
   if(it.type==="todo")
     return `<div class="card" style="padding:10px 14px"><div class="row" style="margin:0;justify-content:space-between"><button class="react ${it.done?"on":""}" data-act="todo" data-id="${it.id}">${it.done?"✅":"⭕"}</button><div style="flex:1" class="${it.done?"cross":""}">${esc(it.text)}</div><span class="who">${esc(it.author)}</span>${it.author===me?`<button class="btn small ghost" data-act="del" data-id="${it.id}">✕</button>`:""}</div></div>`;
@@ -2154,6 +2170,8 @@ function card0(it){
     ev&&`<div class="meta">${esc(fmtDay(ev))}${it.time?" at "+esc(it.time):""}${daysUntil(ev)>=0?` · in ${daysUntil(ev)} days`:""}${it.repeat==="Every year"?" · every year":""}</div>`,
     it.type==="hike"&&`<div class="meta">${it.miles?esc(it.miles)+" miles":""} ${esc(it.difficulty||"")}</div>`,
     (it.type==="milestone"||it.type==="win"||it.type==="stars")&&it.date&&`<div class="meta">${esc(fmtDay(it.date))}${it.kind?" · "+esc(it.kind):""}</div>`,
+    it.type==="give"&&Number(it.goal)>0&&`<div class="bar"><i style="width:${Math.max(0,Math.min(100,Math.round(Number(it.sofar||0)/Number(it.goal)*100)))}%"></i></div><div class="meta">${esc(String(it.sofar||0))} of ${esc(String(it.goal))}</div>`,
+    it.type==="voice"&&it.open&&`<div class="meta">Time capsule · opens ${esc(fmtDay(it.open))}</div>`,
     it.type==="letter"&&it.open&&`<div class="meta">${esc(it.kind||"Letter")} · opens ${esc(fmtDay(it.open))}</div>`,
     it.text&&`<div>${nl(it.text)}</div>`,
     it.note&&`<div>${nl(it.note)}</div>`,
@@ -2295,8 +2313,8 @@ async function bedOpen(ref){
   let o=$("bed");if(o)o.remove();
   o=document.createElement("div");o.id="bed";o.setAttribute("role","dialog");o.setAttribute("aria-label","Bedtime reading");
   const bp=ref?null:bedPart(),r=ref||(bp&&bp.ref)||"";
-  o.innerHTML=`<div class="bedbar"><button class="btn small ghost" data-act="bedx" aria-label="Close">✕ Close</button><span><button class="btn small ghost" data-act="bedfs" data-d="-1" aria-label="Smaller text">A−</button><button class="btn small ghost" data-act="bedfs" data-d="1" aria-label="Bigger text">A+</button><button class="btn small ghost" data-act="bedls" aria-label="Line spacing">↕</button><button class="btn small ghost" data-act="bedth" aria-label="Warm or dark">🌗</button></span></div>
-  <div class="bedmain"><h2 id="bedref">${esc(r||"Bedtime reading")}</h2>${r?"":`<div class="row"><input id="bedin" placeholder="Passage, example: Psalm 23" style="flex:1"><button class="btn" data-act="bedload">Load</button></div>`}<div id="bedtxt">${r?"Loading...":""}</div></div>
+  o.innerHTML=`<div class="bedbar"><button class="btn small ghost" data-act="bedx" aria-label="Close">✕ Close</button><span><button class="btn small ghost" data-act="bedfs" data-d="-1" aria-label="Smaller text">A−</button><button class="btn small ghost" data-act="bedfs" data-d="1" aria-label="Bigger text">A+</button><button class="btn small ghost" data-act="bedls" aria-label="Line spacing">↕</button><button class="btn small ghost" data-act="bedth" aria-label="Warm or dark">🌗</button><button class="btn small ghost" data-act="cmp" aria-label="Compare translations">🔀</button></span></div>
+  <div class="bedmain"><h2 id="bedref">${esc(r||"Bedtime reading")}</h2>${r?"":`<div class="row"><input id="bedin" placeholder="Passage, example: Psalm 23" style="flex:1"><button class="btn" data-act="bedload">Load</button></div>`}<div id="bedtxt">${r?"Loading...":""}</div><div class="meta" style="text-align:center;opacity:.7">Tap any word to find more verses with it.</div></div>
   <div class="bedfoot"><button class="btn" data-act="bedfin">✅ Finished for tonight</button><button class="btn ghost" data-act="bedsnz">😴 Snooze 15 min</button><button class="btn ghost" data-act="bedskip">⏭️ Skip tonight</button></div>`;
   document.body.appendChild(o);document.body.classList.add("bedon");bedApply();
   if(r){try{const x=await bibleFetch(r);if($("bedtxt"))$("bedtxt").textContent=x.text;}catch(e){if($("bedtxt"))$("bedtxt").innerHTML=`Could not load it. <a href="${bg(r)}" target="_blank" rel="noopener">Open in my Bible</a>`;}}
@@ -2509,7 +2527,8 @@ function viewFor(sub){
     case "notes":return notesView();
     case "wb":return wbView();
     case "polls":return pollsView();
-    case "trivia":return triviaView();
+    case "trivia":return triviaView()+coopCard();
+    case "btime":return btimeView();
     case "guided":return guidedView();
     case "habits":return habitsView();
     case "board":return boardView();
@@ -2571,7 +2590,7 @@ window.addEventListener("popstate",e=>{
 });
 function render(){
   navSync();
-  try{document.body.classList.toggle("nofab",["tonight","host","pick","memo","plan","uquiz","cal","polls","study","chat"].includes((GROUPS[grp]&&GROUPS[grp].subs)?subSel[grp]:"")||grp==="more");}catch(e){}
+  try{document.body.classList.toggle("nofab",["tonight","host","pick","memo","plan","uquiz","cal","polls","study","chat","btime"].includes((GROUPS[grp]&&GROUPS[grp].subs)?subSel[grp]:"")||grp==="more");}catch(e){}
   const ae=document.activeElement;
   if(ae&&ae.id==="q"&&$("lst")){$("lst").innerHTML=listItems(curSub());return;}
   if(ae&&ae.id==="cin"&&$("chatlist")){
@@ -2618,7 +2637,7 @@ function emptyHtml(def){
   const e=EMPTY[def.type]||["🌱","Nothing here yet."];
   return `<div class="empty"><div class="big">${e[0]}</div><p>${esc(e[1])}</p><button class="btn" data-act="add" data-t="${def.type}" ${def.preset?`data-pre="${esc(JSON.stringify(def.preset))}"`:""}>+ Add the first one</button></div>`;
 }
-const TILEDESC={highlow:"Share your best and hardest part of the week",tonight:"A short guided evening, one step at a time",host:"Take turns choosing what we do",uquiz:"Make a quiz for each other",kindplan:"Plan something kind to do in real life",pick:"Answer 3 questions and get an idea for tonight",wb:"Draw and plan on one shared board",recap:"What happened this week, shared items only",saved:"Your saved items in folders",bucket:"Things we want to do together",notes:"Notes everyone can edit safely",study:"Study a passage together and share notes",polls:"Vote on what to play, study or when to meet",wall:"Prayer requests everyone can see",song:"Songs we share",trip:"Plan trips with the weather",sky:"Sunrise, sunset and stars",chapter:"Read a chapter and share thoughts",psalm:"A psalm to pray today",verse:"Save the verses you love",prayer:"Write and track your prayers",sermon:"Notes from church",thanks:"What you are thankful for",plan:"Reading plans to follow together",memo:"Learn a verse by heart",topics:"Verses for what you are feeling",learn:"Simple Bible basics",question:"Questions you are wrestling with",calm:"Breathe and slow down",chat:"Message each other",checkin:"How is your heart today?",goal:"Goals we share",event:"Dates and countdowns",letter:"Letters and time capsules",jar:"Encouragement to save",memory:"Memories we keep",dream:"Dreams and hopes",album:"Our photos",voice:"Record a voice note",timeline:"Moments in our faith story",prayfor:"Pray for each other this week",fun:"Games and fun",ideas:"Content ideas",wins:"Advocacy wins",todo:"Our shared to do list",outdoor:"Devotionals outside",hike:"Your hike log",stars:"Stargazing log",gear:"Gear and packing",vote:"Vote on the next trip",camp:"Camping trips and memories",trivia:"Test what you know about the Bible",board:"See who is leading in trivia, habits and prayer",moment:"Verses and a prayer for how you feel",packs:"One short reading a day on a topic",fast:"Fast together and check in daily",cal:"Events, trips and sermons by date",ans:"Everything God has answered",memorize:"Fill in the blanks and learn verses",art:"Turn a verse into a picture",srev:"Review your sermon notes",games:"Who am I and Scripture scramble",joke:"Funny moments and stories we share",guided:"Pray step by step with a timer",habits:"Track daily faith habits"};
+const TILEDESC={ride:"Offer or ask for a ride",give:"Track a food drive or giving goal",story:"Write a story together, one line each",care:"Who needs a text, a visit or a meal",mission:"Plan a mission trip or service day",testimony:"Stories of what God has done",btime:"The big story of the Bible in order",highlow:"Share your best and hardest part of the week",tonight:"A short guided evening, one step at a time",host:"Take turns choosing what we do",uquiz:"Make a quiz for each other",kindplan:"Plan something kind to do in real life",pick:"Answer 3 questions and get an idea for tonight",wb:"Draw and plan on one shared board",recap:"What happened this week, shared items only",saved:"Your saved items in folders",bucket:"Things we want to do together",notes:"Notes everyone can edit safely",study:"Study a passage together and share notes",polls:"Vote on what to play, study or when to meet",wall:"Prayer requests everyone can see",song:"Songs we share",trip:"Plan trips with the weather",sky:"Sunrise, sunset and stars",chapter:"Read a chapter and share thoughts",psalm:"A psalm to pray today",verse:"Save the verses you love",prayer:"Write and track your prayers",sermon:"Notes from church",thanks:"What you are thankful for",plan:"Reading plans to follow together",memo:"Learn a verse by heart",topics:"Verses for what you are feeling",learn:"Simple Bible basics",question:"Questions you are wrestling with",calm:"Breathe and slow down",chat:"Message each other",checkin:"How is your heart today?",goal:"Goals we share",event:"Dates and countdowns",letter:"Letters and time capsules",jar:"Encouragement to save",memory:"Memories we keep",dream:"Dreams and hopes",album:"Our photos",voice:"Record a voice note",timeline:"Moments in our faith story",prayfor:"Pray for each other this week",fun:"Games and fun",ideas:"Content ideas",wins:"Advocacy wins",todo:"Our shared to do list",outdoor:"Devotionals outside",hike:"Your hike log",stars:"Stargazing log",gear:"Gear and packing",vote:"Vote on the next trip",camp:"Camping trips and memories",trivia:"Test what you know about the Bible",board:"See who is leading in trivia, habits and prayer",moment:"Verses and a prayer for how you feel",packs:"One short reading a day on a topic",fast:"Fast together and check in daily",cal:"Events, trips and sermons by date",ans:"Everything God has answered",memorize:"Fill in the blanks and learn verses",art:"Turn a verse into a picture",srev:"Review your sermon notes",games:"Who am I and Scripture scramble",joke:"Funny moments and stories we share",guided:"Pray step by step with a timer",habits:"Track daily faith habits"};
 const TCOL=["#e0803a","#3d6fb5","#2f8f5b","#8a4fb5","#c2476b","#d19a1f"];
 function tilesView(subs){
   const g=GROUPS[grp];
@@ -2896,7 +2915,14 @@ function bioCard(){
   return `<div class="card"><h3>🔐 Fingerprint lock</h3><div class="meta">Locks the app on this phone and asks for your fingerprint, face or screen lock when you open it. ${on?"It is on.":""}</div><div class="row">${on?`<button class="btn small ghost" data-act="bioff">Turn off</button>`:`<button class="btn small" data-act="bioon">Turn on</button>`}</div></div>`;
 }
 function subForType(t){if(t==="msg")return["together","chat"];for(const g of Object.keys(GROUPS)){if((GROUPS[g].subs||[]).includes(t))return[g,t];}return null;}
+let goFrom=null;
 function handleGo(g){
+  const f={g:grp,s:(grp in subSel?subSel[grp]:null)||null,t:homeTab,y:window.scrollY||0};
+  const r=handleGo0(g);
+  if(r&&(grp!==f.g||((grp in subSel?subSel[grp]:null)||null)!==f.s)){goFrom=f;if(!/^item:/.test(String(g))&&!$("chatlist"))window.scrollTo(0,0);}
+  return r;
+}
+function handleGo0(g){
   if(!g||!me)return false;
   if(g==="pause"){grp="home";homeTab="us";render();if(STRONGP.includes(me))setTimeout(strongSos,300);return true;}
   if(g==="pray"){grp="home";homeTab="us";render();setTimeout(()=>{const b=document.querySelector("[data-act=wiz][data-t=prayer]");if(b)b.click();},300);return true;}
@@ -2970,6 +2996,71 @@ function triviaView(){
 
 
 
+
+/* ---------- 5.31: bible timeline, team trivia goal, today together, compare ---------- */
+const BTIME=[["Beginnings","God creates the world","Genesis 1"],["Beginnings","The fall","Genesis 3"],["Beginnings","Noah and the flood","Genesis 6:9-22"],["Family of promise","God calls Abraham","Genesis 12:1-9"],["Family of promise","Isaac is born","Genesis 21:1-7"],["Family of promise","Jacob wrestles with God","Genesis 32:22-32"],["Family of promise","Joseph forgives his brothers","Genesis 45:1-15"],["Out of Egypt","The burning bush","Exodus 3:1-15"],["Out of Egypt","Crossing the sea","Exodus 14:10-31"],["Out of Egypt","The Ten Commandments","Exodus 20:1-17"],["The land","Jericho falls","Joshua 6:1-20","Jericho"],["The land","Ruth stays with Naomi","Ruth 1:6-18"],["Kings","David and Goliath","1 Samuel 17:32-50","Valley of Elah"],["Kings","Solomon asks for wisdom","1 Kings 3:5-14"],["Kings","Elijah on Mount Carmel","1 Kings 18:20-39","Mount Carmel, Israel"],["Exile and return","Daniel in the lions' den","Daniel 6:10-23","Babylon, Iraq"],["Exile and return","Esther saves her people","Esther 4:10-17","Susa, Iran"],["Exile and return","Nehemiah rebuilds the wall","Nehemiah 2:11-18","Jerusalem"],["Jesus","Jesus is born","Luke 2:1-20","Bethlehem"],["Jesus","The Sermon on the Mount","Matthew 5:1-16"],["Jesus","Feeding the five thousand","John 6:1-14","Sea of Galilee"],["Jesus","The cross","Luke 23:32-49","Jerusalem"],["Jesus","The empty tomb","Luke 24:1-12","Jerusalem"],["The early church","The Spirit comes at Pentecost","Acts 2:1-21","Jerusalem"],["The early church","Paul meets Jesus","Acts 9:1-19","Damascus, Syria"],["The early church","A new heaven and a new earth","Revelation 21:1-7"]];
+function btimeView(){
+  let era="",h=`<h2>🗺️ Bible timeline</h2><div class="meta">No dates here, since people date some of these differently. Tap one to read it.</div>`;
+  BTIME.forEach((x,i)=>{if(x[0]!==era){era=x[0];h+=`<h3 style="margin:16px 0 6px">${esc(era)}</h3>`;}h+=`<button class="trow" data-act="bedopen" data-ref="${esc(x[2])}"><span class="tt"><b>${i+1}. ${esc(x[1])}</b><span class="meta" style="display:block">${esc(x[2])}</span></span><span class="ch">›</span></button>${x[3]?`<div class="row" style="margin:-2px 0 8px 6px"><a class="btn small ghost" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(x[3])}">📍 See ${esc(x[3])} on a map</a></div>`:""}`;});
+  return h;
+}
+function locDay(){return Math.floor((new Date(ymd(new Date())+"T12:00").getTime()-new Date("2026-01-01T12:00").getTime())/864e5);}
+function weekNum(){return Math.floor(locDay()/7);}
+const COOPGOAL=100;
+function coopCard(){
+  if(typeof triv!=="undefined"&&triv&&triv.set&&triv.i<triv.set.length)return "";
+  const r=(metas.coop||{})["w"+weekNum()]||{},tot=PEOPLE.reduce((a,p)=>a+Number(r[p]||0),0),pct=Math.min(100,Math.round(tot/COOPGOAL*100));
+  return `<div class="card"><b>🤝 Team goal this week</b><div class="meta">Get ${COOPGOAL} right answers together. Everyone's rounds count. Nobody is ranked here.</div><div class="bar"><i style="width:${pct}%"></i></div><div class="meta">${tot} of ${COOPGOAL}${tot>=COOPGOAL?" 🎉 Goal reached!":""} · ${PEOPLE.map(p=>esc(p)+" "+Number(r[p]||0)).join(" · ")}</div></div>`;
+}
+const WOTD=[["Grace","A gift you did not earn. God's kindness to people who do not deserve it.","Ephesians 2:8"],["Mercy","Not getting the punishment you deserve.","Lamentations 3:22-23"],["Faith","Trusting God even when you cannot see how it will work out.","Hebrews 11:1"],["Hope","Confident waiting for what God has promised.","Romans 15:13"],["Covenant","A serious, lasting promise between God and His people.","Genesis 17:7"],["Redeem","To buy back or set free at a cost.","Ephesians 1:7"],["Repent","To turn around: away from sin and toward God.","Acts 3:19"],["Gospel","Good news. The news of what Jesus has done.","Romans 1:16"],["Disciple","A learner who follows a teacher closely.","Luke 9:23"],["Righteous","Right with God and living rightly.","Romans 3:22"],["Holy","Set apart for God.","1 Peter 1:15-16"],["Sabbath","A day of rest God gave His people.","Exodus 20:8-10"],["Fellowship","Sharing life together as believers.","Acts 2:42"],["Worship","Giving God the honor He is worth.","Psalm 95:6"],["Atonement","Making things right between God and people.","Romans 5:11"],["Justified","Declared not guilty before God.","Romans 5:1"],["Sanctify","To make holy over time.","1 Thessalonians 5:23"],["Shepherd","One who leads, feeds and protects the flock.","Psalm 23:1"],["Hallelujah","Praise the Lord.","Psalm 150:6"],["Amen","So be it. It is true.","2 Corinthians 1:20"],["Messiah","The Anointed One God promised to send.","John 1:41"],["Apostle","One who is sent out with a message.","Matthew 10:2"],["Parable","A short story that teaches a truth.","Matthew 13:34"],["Psalm","A song or prayer to God.","Psalm 100:1-2"],["Prophet","Someone who speaks God's message.","Jeremiah 1:5-7"],["Blessed","Deeply happy and favored by God.","Matthew 5:3"],["Steadfast","Firm and not giving up.","1 Corinthians 15:58"],["Abide","To stay close and remain.","John 15:5"],["Intercede","To pray on behalf of someone else.","1 Timothy 2:1"],["Humble","Not thinking of yourself as above others.","Philippians 2:3"],["Peace","Wholeness and calm that comes from God.","Philippians 4:7"]];
+const KINDIDEAS=["Send someone a note that says exactly why you are glad they exist.","Pay for a stranger's coffee or meal.","Call a grandparent or older friend just to listen.","Bring a snack to someone who is having a hard week.","Write a thank you to a teacher, pastor or coworker.","Help someone with a chore without being asked.","Leave a kind review for a small business.","Pray for someone and tell them you did.","Give away something you no longer use.","Invite someone who is alone to sit with you.","Pick up trash somewhere you walk every day.","Text an old friend a good memory you share."];
+const HUNTWORDS=["light","peace","strength","hope","joy","rest","love","courage","wisdom","mercy","faithful","shepherd"];
+function mod(a,n){return ((a%n)+n)%n;}
+function togetherCard(){
+  if(!me||localStorage.getItem("fh_tt_off")==="1")return "";
+  const d=locDay(),w=WOTD[mod(d,WOTD.length)],who=PEOPLE[mod(d,PEOPLE.length)],pr=((metas.circle||{})[ymd(new Date())])||{},wk=weekNum();
+  return `<div class="card"><div class="row" style="justify-content:space-between;align-items:center"><b>🤝 Today together</b><button class="btn small ghost" data-act="ttoff" aria-label="Hide this card">Hide</button></div>
+  <div style="margin-top:8px"><b>🙏 Prayer circle:</b> ${who===me?"today the others pray for you.":"today we pray for "+esc(who)+"."}</div><div class="row">${who===me?"":`<button class="chip ${pr[me]?"on":""}" data-act="circpray">${pr[me]?"✅ I prayed":"🙏 I prayed for "+esc(who)}</button>`}${PEOPLE.filter(p=>p!==me&&p!==who&&pr[p]).map(p=>`<span class="chip on">✅ ${esc(p)}</span>`).join("")}</div>
+  <div style="margin-top:8px"><b>📖 Word of the day: ${esc(w[0])}</b></div><div class="meta">${esc(w[1])}</div><div class="row"><button class="btn small ghost" data-act="bedopen" data-ref="${esc(w[2])}">Read ${esc(w[2])}</button></div>
+  <div style="margin-top:8px"><b>🔎 Verse hunt this week:</b> find a verse with the word "${esc(HUNTWORDS[mod(wk,HUNTWORDS.length)])}".</div><div class="row"><button class="btn small ghost" data-act="ytgo" data-g="faith" data-s="verse">Add my verse</button></div>
+  <div style="margin-top:8px"><b>🤲 Kindness idea this week:</b> ${esc(KINDIDEAS[mod(wk,KINDIDEAS.length)])}</div><div class="row"><button class="btn small ghost" data-act="ytgo" data-g="together" data-s="kindplan">Plan it</button></div></div>`;
+}
+async function cmpOpen(ref){
+  if(!ref)return;
+  openDlg(`<div class="dhead"><h3>🔀 Compare: ${esc(ref)}</h3><button class="xbtn" data-act="close" aria-label="Close">✕</button></div><div id="cmpbox" class="meta">Loading two translations...</div>`);
+  const get=async t=>{try{const j=await (await fetch("https://bible-api.com/"+encodeURIComponent(ref)+"?translation="+t)).json();return j&&j.text?j.text.trim().replace(/\s*\n\s*/g," "):"";}catch(e){return "";}};
+  const [a,b]=await Promise.all([get("web"),get("kjv")]);
+  const box=$("cmpbox");if(!box)return;
+  box.className="";box.innerHTML=(a||b)?`<div class="meta"><b>World English Bible</b></div><p>${esc(a||"Could not load.")}</p><div class="meta"><b>King James Version</b></div><p>${esc(b||"Could not load.")}</p>`:`<p>Could not load. Check your internet and try again.</p>`;
+}
+
+/* ---------- 5.32: word study, keepsake, auto backup ---------- */
+function wordAt(x,y){
+  try{let n,o;if(document.caretRangeFromPoint){const r=document.caretRangeFromPoint(x,y);if(!r)return "";n=r.startContainer;o=r.startOffset;}else if(document.caretPositionFromPoint){const r=document.caretPositionFromPoint(x,y);if(!r)return "";n=r.offsetNode;o=r.offset;}else return "";
+    if(!n||n.nodeType!==3)return "";const t=n.textContent;let a=o,b=o;while(a>0&&/[A-Za-z']/.test(t[a-1]))a--;while(b<t.length&&/[A-Za-z']/.test(t[b]))b++;return t.slice(a,b).replace(/^'+|'+$/g,"");}catch(e){return "";}
+}
+function wordStudy(wd){
+  wd=String(wd||"").trim();if(wd.length<3)return;
+  const re=new RegExp("\\b"+wd.replace(/[^A-Za-z']/g,"")+"\\b","i"),hits=versePool().filter(v=>re.test(v.text)).slice(0,8);
+  openDlg(`<div class="dhead"><h3>🔎 "${esc(wd)}"</h3><button class="xbtn" data-act="close" aria-label="Close">✕</button></div><div class="meta">Other verses we have with this word:</div>${hits.length?hits.map(v=>`<div class="card"><div>"${esc(v.text)}"</div><div class="meta">${esc(v.ref)}</div></div>`).join(""):`<p class="empty">None in our verse bank yet.</p>`}<div class="row"><a class="btn small" target="_blank" rel="noopener" href="https://www.biblegateway.com/quicksearch/?quicksearch=${encodeURIComponent(wd)}">Search the whole Bible</a></div>`);
+}
+document.addEventListener("click",e=>{const t=e.target&&e.target.closest&&e.target.closest("#bedtxt");if(!t||e.target.closest("a,button"))return;const w=wordAt(e.clientX,e.clientY);if(w&&w.length>=3)wordStudy(w);});
+function keepsake(){
+  const yr=new Date().getFullYear(),mine=items.filter(i=>i.author===me&&i.created&&new Date(i.created).getFullYear()===yr&&!onlyMe(i)&&i.type!=="strongshare"&&(i.text||i.title||i.note)).sort((a,b)=>a.created-b.created);
+  if(!mine.length){toast("Nothing shared this year yet");return;}
+  let box=$("printbox");if(box)box.remove();box=document.createElement("div");box.id="printbox";
+  let mo="",h=`<h1>Faith Hub ${yr}</h1><p>${esc(me)} · ${mine.length} shared entries</p>`;
+  mine.forEach(i=>{const d=new Date(i.created),m=d.toLocaleDateString([], {month:"long"});if(m!==mo){mo=m;h+=`<h2>${esc(m)}</h2>`;}const S=SECTIONS[i.type]||{};h+=`<div class="pk"><b>${esc(S.icon||"")} ${esc(i.title||i.ref||S.title||"")}</b> <span>${esc(d.toLocaleDateString())}</span><div>${nl(String(i.text||i.note||""))}</div></div>`;});
+  box.innerHTML=h;document.body.appendChild(box);document.body.classList.add("printing");
+  const done=()=>{document.body.classList.remove("printing");const b=$("printbox");if(b)b.remove();window.removeEventListener("afterprint",done);};
+  window.addEventListener("afterprint",done);setTimeout(()=>{try{window.print();}catch(e){toast("Printing is not available here");done();}},150);setTimeout(done,60000);
+}
+let autoBkRan=false;
+function autoBackup(){
+  if(autoBkRan||!me||localStorage.getItem("fh_autobk")!=="1")return;
+  const last=Number(localStorage.getItem("fh_lastbk")||0);if(Date.now()-last<7*864e5)return;
+  autoBkRan=true;setTimeout(()=>{const b=document.createElement("button");b.dataset.act="exportme";b.style.display="none";document.body.appendChild(b);b.click();b.remove();},3000);
+}
 /* ---------- together tonight, host, user quizzes ---------- */
 const TSTEPS=[["💛","Check in","together","checkin",2],["📖","Read a short passage","faith","chapter",5],["💬","One question to talk about","faith","question",5],["🙏","Share prayer requests","faith","prayer",5],["🧠","Five trivia questions","play","trivia",5]];
 function tonightRec(){return ((metas.tonight||{})[ymd(new Date())])||{};}
@@ -3020,7 +3111,7 @@ function yourTurnList(){
   return l.slice(0,4);
 }
 function backupCard(){
-  if(!me)return "";const last=Number(localStorage.getItem("fh_lastbk")||0),first=Number(localStorage.getItem("fh_firstseen")||0);
+  if(!me)return "";try{autoBackup();}catch(e){}if(localStorage.getItem("fh_autobk")==="1")return "";const last=Number(localStorage.getItem("fh_lastbk")||0),first=Number(localStorage.getItem("fh_firstseen")||0);
   if(!first){try{localStorage.setItem("fh_firstseen",String(Date.now()));}catch(e){}return "";}
   if(Date.now()-Math.max(last,first)<7*864e5)return "";
   return `<div class="card"><b>💾 Back up your stuff</b><div class="meta">${last?"Last backup "+ago(last)+".":"You have not saved a backup yet."} One tap saves a copy of everything you wrote to your phone.</div><div class="row"><button class="btn small" data-act="exportme">Save backup</button><button class="btn small ghost" data-act="bkLater">Remind me next week</button></div></div>`;
@@ -3421,7 +3512,7 @@ function studyView(){
   if(!l.length)return h+`<div class="empty">No studies yet.</div>`;
   return h+l.map(r=>{const mine=(r.notes||{})[me],dn=r.done||{};
     const when=r.when?`<div class="meta">📅 ${esc(new Date(r.when).toLocaleString([], {weekday:"short",month:"short",day:"numeric",hour:"numeric",minute:"2-digit"}))}${r.mins?" · "+r.mins+" min":""}. Everyone gets a reminder.</div>`:"";
-    return `<div class="card"><div class="meta">${esc(r.by)} started · ${esc(new Date(r.ts||0).toLocaleDateString())}</div><h3>${esc(r.ref)}</h3>${when}${calButtons("Bible study: "+r.ref,r.when,r.mins||45,"Faith Hub group Bible study. Passage: "+r.ref)}${(r.q||[]).map((x,i)=>`<div style="margin:4px 0">${i+1}. ${esc(x)}</div>`).join("")}<label for="sn_${r.id}">Your note</label><textarea id="sn_${r.id}" rows="3">${esc(mine&&mine.t||"")}</textarea><div class="row"><button class="btn small" data-act="stnote" data-id="${r.id}">Save note</button><button class="btn small ghost" data-act="stdone" data-id="${r.id}">${dn[me]?"✅ Done":"Mark done"}</button></div><div style="margin-top:10px;display:grid;gap:8px">`+PEOPLE.filter(n=>n!==me).map(n=>{const x=(r.notes||{})[n];return `<div style="border:1px solid var(--line);border-radius:14px;padding:10px 12px"><div class="meta" style="margin:0"><b>${esc(n)}</b> ${dn[n]?"✅ done":""}</div>${x&&x.t?`<div style="margin-top:4px">${nl(x.t)}</div>`:`<div class="meta" style="margin-top:4px">No note yet</div>`}</div>`;}).join("")+`</div></div>`;}).join("");
+    return `<div class="card"><div class="meta">${esc(r.by)} started · ${esc(new Date(r.ts||0).toLocaleDateString())}</div><h3>${esc(r.ref)}</h3>${when}${calButtons("Bible study: "+r.ref,r.when,r.mins||45,"Faith Hub group Bible study. Passage: "+r.ref)}${(r.q||[]).map((x,i)=>`<div style="margin:4px 0">${i+1}. ${esc(x)}</div>`).join("")}<div class="row" style="align-items:center;margin:8px 0"><span>📍 Reading together: verse <b>${Number(r.at||1)}</b>${r.atBy?` <span class="meta">(set by ${esc(r.atBy)})</span>`:""}</span><button class="btn small ghost" data-act="stat" data-id="${r.id}" data-d="-1" aria-label="Back one verse">−</button><button class="btn small ghost" data-act="stat" data-id="${r.id}" data-d="1" aria-label="Next verse">+</button><button class="btn small ghost" data-act="bedopen" data-ref="${esc(r.ref)}">🌙 Read</button><button class="btn small ghost" data-act="cmp" data-ref="${esc(r.ref)}">🔀 Compare</button></div><label for="sn_${r.id}">Your note</label><textarea id="sn_${r.id}" rows="3">${esc(mine&&mine.t||"")}</textarea><div class="row"><button class="btn small" data-act="stnote" data-id="${r.id}">Save note</button><button class="btn small ghost" data-act="stdone" data-id="${r.id}">${dn[me]?"✅ Done":"Mark done"}</button></div><div style="margin-top:10px;display:grid;gap:8px">`+PEOPLE.filter(n=>n!==me).map(n=>{const x=(r.notes||{})[n];return `<div style="border:1px solid var(--line);border-radius:14px;padding:10px 12px"><div class="meta" style="margin:0"><b>${esc(n)}</b> ${dn[n]?"✅ done":""}</div>${x&&x.t?`<div style="margin-top:4px">${nl(x.t)}</div>`:`<div class="meta" style="margin-top:4px">No note yet</div>`}</div>`;}).join("")+`</div></div>`;}).join("");
 }
 function pollList(){return Object.entries(metas.polls||{}).map(([id,r])=>({id,...r})).filter(r=>r&&r.o).sort((a,b)=>(b.ts||0)-(a.ts||0)).slice(0,8);}
 function pollsView(){
@@ -3788,7 +3879,7 @@ function fastView(){
 let cal={y:new Date().getFullYear(),m:new Date().getMonth(),sel:null};
 function calEvents(y,m){
   const o={};
-  items.filter(i=>visible(i)&&/^\d{4}-\d{2}-\d{2}$/.test(String(i.date||""))&&["event","sermon","camp","hike","stars","trip","kindplan"].includes(i.type)).forEach(i=>{
+  items.filter(i=>visible(i)&&/^\d{4}-\d{2}-\d{2}$/.test(String(i.date||""))&&["event","sermon","camp","hike","stars","trip","kindplan","mission"].includes(i.type)).forEach(i=>{
     const [yy,mm,dd]=i.date.split("-").map(Number);
     if((yy===y&&mm-1===m)||(i.repeat==="Every year"&&mm-1===m)){(o[dd]=o[dd]||[]).push(i);}
   });
@@ -3850,7 +3941,7 @@ function customizeHtml(){
   const hc=HOMECARDS.filter(([k])=>k!=="strong"||STRONGP.includes(me)).map(([k,l])=>`<div class="row"><button class="chip ${off.includes(k)?"":"on"}" data-act="hometog" data-k="${k}">${off.includes(k)?"⭕":"✅"} ${l}</button></div>`).join("")+`<div class="meta" style="margin-top:8px">Order on Home (tap ⬆️ to move up)</div>`+homeOrder().map((k,i)=>`<div class="row" style="justify-content:space-between"><span>${i+1}. ${(HOMECARDS.find(x=>x[0]===k)||[k,k])[1]}</span>${i?`<button class="chip" data-act="hordup" data-k="${k}" aria-label="Move up">⬆️</button>`:""}</div>`).join("");
   const secs=["faith","together","play"].map(g=>`<div class="meta" style="margin-top:10px">${GROUPS[g].icon} ${GROUPS[g].label}</div><div class="row">${GROUPS[g].subs.map(x=>`<button class="chip ${hs.includes(x)?"":"on"}" data-act="subtog" data-s="${x}">${hs.includes(x)?"⭕":"✅"} ${esc(LBL[x]||x)}</button>`).join("")}</div>`).join("");
   const fv=favs(),fsz=localStorage.getItem("fh_fs")||"1";
-  const favh=`<div class="card"><h3>Pin to Home</h3><div class="meta">Tap to add a shortcut on Home.</div>${["faith","together","play"].map(g=>`<div class="row">${GROUPS[g].subs.map(x=>`<button class="chip ${fv.includes(x)?"on":""}" data-act="favtog" data-s="${x}">${fv.includes(x)?"⭐":"☆"} ${esc(LBL[x]||x)}</button>`).join("")}</div>`).join("")}</div><div class="card"><h3>Shared phone</h3><div class="meta">Sign out automatically after being away.</div><div class="row">${[["0","Off"],["30","30 min"],["120","2 hours"]].map(([v,l])=>`<button class="chip ${(localStorage.getItem("fh_idle")||"0")===v?"on":""}" data-act="idleset" data-v="${v}">${l}</button>`).join("")}</div></div><div class="card"><h3>App health</h3><div class="row"><button class="btn small ghost" data-act="health">🩺 Is it working?</button><button class="btn small ghost" data-act="chkupd">🔄 Check for updates</button></div></div><div class="card"><h3>Your turn card</h3><div class="row"><button class="chip ${localStorage.getItem("fh_yt_off")==="1"?"":"on"}" data-act="yttog">${localStorage.getItem("fh_yt_off")==="1"?"⭕ Hidden":"✅ Shown on Home"}</button></div></div><div class="card"><h3>Text size</h3><div class="row">${[["18","Normal"],["21","Large"],["24","Extra large"]].map(([v,l])=>`<button class="chip ${fsz===v?"on":""}" data-act="fsz" data-v="${v}">${l}</button>`).join("")}</div></div>`;
+  const favh=`<div class="card"><h3>Pin to Home</h3><div class="meta">Tap to add a shortcut on Home.</div>${["faith","together","play"].map(g=>`<div class="row">${GROUPS[g].subs.map(x=>`<button class="chip ${fv.includes(x)?"on":""}" data-act="favtog" data-s="${x}">${fv.includes(x)?"⭐":"☆"} ${esc(LBL[x]||x)}</button>`).join("")}</div>`).join("")}</div><div class="card"><h3>Shared phone</h3><div class="meta">Sign out automatically after being away.</div><div class="row">${[["0","Off"],["30","30 min"],["120","2 hours"]].map(([v,l])=>`<button class="chip ${(localStorage.getItem("fh_idle")||"0")===v?"on":""}" data-act="idleset" data-v="${v}">${l}</button>`).join("")}</div></div><div class="card"><h3>App health</h3><div class="row"><button class="btn small ghost" data-act="health">🩺 Is it working?</button><button class="btn small ghost" data-act="chkupd">🔄 Check for updates</button></div></div><div class="card"><h3>Backups and keepsake</h3><div class="row"><button class="chip ${localStorage.getItem("fh_autobk")==="1"?"on":""}" data-act="autobk">${localStorage.getItem("fh_autobk")==="1"?"✅":"⭕"} Save a backup every week</button><button class="btn small ghost" data-act="exportme">💾 Save backup now</button><button class="btn small ghost" data-act="keepsake">🖨️ Print my year</button></div><div class="meta">The weekly backup saves a file to this phone when you open the app. Some phones ask first. Print my year only includes things you shared.</div></div><div class="card"><h3>Today together card</h3><div class="row"><button class="chip ${localStorage.getItem("fh_tt_off")==="1"?"":"on"}" data-act="tttog">${localStorage.getItem("fh_tt_off")==="1"?"⭕ Hidden":"✅ Shown on Home"}</button></div></div><div class="card"><h3>Easier to see</h3><div class="row"><button class="chip ${localStorage.getItem("fh_hc")==="1"?"on":""}" data-act="hctog">${localStorage.getItem("fh_hc")==="1"?"✅":"⭕"} High contrast</button></div></div><div class="card"><h3>Your turn card</h3><div class="row"><button class="chip ${localStorage.getItem("fh_yt_off")==="1"?"":"on"}" data-act="yttog">${localStorage.getItem("fh_yt_off")==="1"?"⭕ Hidden":"✅ Shown on Home"}</button></div></div><div class="card"><h3>Text size</h3><div class="row">${[["18","Normal"],["21","Large"],["24","Extra large"]].map(([v,l])=>`<button class="chip ${fsz===v?"on":""}" data-act="fsz" data-v="${v}">${l}</button>`).join("")}</div></div>`;
   const lay=localStorage.getItem("fh_lay")||"std";
   return favh+`<div class="card"><h3>Home layout</h3><div class="row">${[["min","Simple"],["std","Standard"],["full","Full"]].map(([k,l])=>`<button class="chip ${lay===k?"on":""}" data-act="layout" data-l="${k}">${l}</button>`).join("")}</div><div class="meta">Simple hides extras. Full opens everything.</div></div><div class="card"><h3>Home screen</h3><div class="meta">Choose what you see on Home.</div>${hc}</div><div class="card"><h3>Sections</h3><div class="meta">Turn off sections you do not use. They are only hidden, nothing is deleted.</div>${secs}</div>`;
 }
@@ -3920,7 +4011,7 @@ function ourHome(){
   const today=ymd(new Date()),readToday=(((metas.reads||{})[me])||[]).includes(today);
   const pushOn="Notification" in window&&Notification.permission==="granted"&&localStorage.getItem("fh_push")==="1";
   const hr=new Date().getHours(),gr=hr<12?"Good morning":hr<18?"Good afternoon":"Good evening";
-  let h=`<div class="hello">${gr}, ${esc(me||"friend")} 🌤️</div>`+laLine()+presetBar()+laPrompt()+pokesCard()+askCards()+missedCard()+yourTurnCard()+backupCard()+todayStrip()+(hOn("poke")?pokeCard():"")+duelHomeCard()+rescueCard()+followCard()+roomCard(false)+friendStatus()+ppCard()+readBar()+(new Date().getDay()===0?recapCard():"")+(hOn("favs")?favCard():"");
+  let h=`<div class="hello">${gr}, ${esc(me||"friend")} 🌤️</div>`+laLine()+presetBar()+laPrompt()+pokesCard()+askCards()+missedCard()+yourTurnCard()+togetherCard()+backupCard()+todayStrip()+(hOn("poke")?pokeCard():"")+duelHomeCard()+rescueCard()+followCard()+roomCard(false)+friendStatus()+ppCard()+readBar()+(new Date().getDay()===0?recapCard():"")+(hOn("favs")?favCard():"");
   if(!pushOn&&db&&"Notification" in window&&Notification.permission!=="denied")h+=`<div class="card gentle"><b>🔔 Turn on notifications</b><div class="meta">So pokes and your verse reach this phone.</div><div class="row"><button class="btn" data-act="notif">Turn on</button></div></div>`;
   const HB={};HB.trio=``;
   if(hOn("trio"))HB.trio=`<div class="trio"><button class="bigact" data-act="read" ${readToday?"disabled":""}><span>${readToday?"✅":"📖"}</span>${readToday?"Read today":"I read"}</button><button class="bigact" data-act="wiz" data-t="prayer"><span>🙏</span>Pray</button><button class="bigact" data-act="goto" data-g="together" data-s="chat"><span>💬</span>Message</button></div>`;
@@ -3990,9 +4081,10 @@ function supportSend(){
   if(!to.length){toast("Pick at least one person");return;}
   sendPing(to,($("spt").value||"").trim(),"support").then(()=>{closeDlg();toast("They have been notified 💛");});
 }
+const DISCQ=["What stood out to you?","What does this show about God?","What is one thing you could do about it this week?","Was anything confusing or hard?","Which verse would you want to remember?","How does this change the way you see today?","What would you ask the writer if you could?","Who could you encourage with this?"];
 function plDisc(dd){
   const l=Object.values(((metas["pd_"+planKey]||{})[dd])||{}).sort((a,b)=>(a.ts||0)-(b.ts||0));
-  openDlg(`<div class="dhead"><h3>💬 Day ${dd} discussion</h3><button class="xbtn" data-act="close" aria-label="Close">✕</button></div>${l.length?l.map(x=>`<div class="cm"><span class="who">${esc(x.by)}</span>${nl(x.t)}</div>`).join(""):`<p class="empty">No one has written yet. Share what stood out.</p>`}<textarea id="plt" placeholder="What stood out to you?"></textarea><div class="row"><button class="btn" data-act="plsay" data-d="${dd}">Post</button></div>`);
+  openDlg(`<div class="dhead"><h3>💬 Day ${dd} discussion</h3><button class="xbtn" data-act="close" aria-label="Close">✕</button></div>${l.length?l.map(x=>`<div class="cm"><span class="who">${esc(x.by)}</span>${nl(x.t)}</div>`).join(""):`<p class="empty">No one has written yet. Share what stood out.</p>`}<div class="meta">💡 Question for today: ${esc(DISCQ[dd%DISCQ.length])}</div><textarea id="plt" placeholder="Write your answer or anything else"></textarea><div class="row"><button class="btn" data-act="plsay" data-d="${dd}">Post</button></div>`);
 }
 function planView(){
   const key=PLANS[planKey]?planKey:"john",P=PLANS[key];
@@ -4181,9 +4273,9 @@ document.addEventListener("click",async e=>{
   const b=e.target.closest("[data-act]");if(!b||b.tagName==="SELECT")return;
   const a=b.dataset.act,d=b.dataset;
   const it=d.id?items.find(x=>x.id===d.id):null;
-  if(a==="nav"){if(d.g in subSel)subSel[d.g]=null;grp=d.g;filt="all";q="";render();scrollTo(0,0);}
+  if(a==="nav"){goFrom=null;const same=d.g===grp&&!subSel[grp];if(d.g in subSel)subSel[d.g]=null;grp=d.g;filt="all";q="";render();if(same)scrollTo({top:0,behavior:"smooth"});else scrollRestore();}
   else if(a==="goto"){closeDlg();grp=d.g;subSel[d.g]=d.s;filt="all";q="";render();scrollTo(0,0);}
-  else if(a==="sub"){subSel[grp]=d.s;filt="all";q="";render();scrollTo(0,0);}
+  else if(a==="sub"){goFrom=null;subSel[grp]=d.s;filt="all";q="";render();scrollTo(0,0);}
   else if(a==="filt"){filt=d.p;render();}
   else if(a==="cat"){catFilt=d.c;render();}
   else if(a==="add"){let pre=null;try{pre=d.pre?JSON.parse(d.pre):null;}catch(x){}addAction(d.t,pre);}
@@ -4406,7 +4498,7 @@ document.addEventListener("click",async e=>{
   else if(a==="trivfacts"){const o=trivOpt();o.facts=!o.facts;localStorage.setItem("fh_trivopt",JSON.stringify(o));render();}
   else if(a==="trivmenu"){triv.cat=null;render();}
   else if(a==="trivpick"){if(triv.pick===null){triv.pick=Number(d.i);const q=TQ();if(triv.pick===q.a){triv.score++;triv.streak++;if(db&&FV&&me){setMeta("board",{[me]:{triv:FV.increment(1)}});setMeta("bw",{[weekKey()]:{[me]:FV.increment(1)}});}if(db&&me&&triv.streak>boardOf(me).streak)setMeta("board",{[me]:{streak:triv.streak}});}else triv.streak=0;render();}}
-  else if(a==="trivnext"){triv.i++;triv.pick=null;if(triv.i>=triv.set.length){const b=trivBest(),key=triv.cat+"|"+triv.set.length;if(b[key]===undefined||triv.score>b[key]){b[key]=triv.score;triv.best=triv.score>=1?1:0;try{localStorage.setItem("fh_trivbest",JSON.stringify(b));}catch(e){}}if(triv.duel&&duels()[triv.duel]&&(duels()[triv.duel].scores||{})[me]===undefined)setMeta("duels",{[triv.duel]:{scores:{[me]:triv.score}}});if(db&&FV&&me)setMeta("board",{[me]:{rounds:FV.increment(1),perfect:FV.increment(triv.score===triv.set.length?1:0)}});if(triv.score>=Math.ceil(triv.set.length*.8))confetti();}else trivOrd();render();scrollTo(0,0);}
+  else if(a==="trivnext"){triv.i++;triv.pick=null;if(triv.i>=triv.set.length){if(db&&FV&&me&&triv.score>0&&!triv.cooped){triv.cooped=1;setMeta("coop",{["w"+weekNum()]:{[me]:FV.increment(triv.score)}});}const b=trivBest(),key=triv.cat+"|"+triv.set.length;if(b[key]===undefined||triv.score>b[key]){b[key]=triv.score;triv.best=triv.score>=1?1:0;try{localStorage.setItem("fh_trivbest",JSON.stringify(b));}catch(e){}}if(triv.duel&&duels()[triv.duel]&&(duels()[triv.duel].scores||{})[me]===undefined)setMeta("duels",{[triv.duel]:{scores:{[me]:triv.score}}});if(db&&FV&&me)setMeta("board",{[me]:{rounds:FV.increment(1),perfect:FV.increment(triv.score===triv.set.length?1:0)}});if(triv.score>=Math.ceil(triv.set.length*.8))confetti();}else trivOrd();render();scrollTo(0,0);}
   else if(a==="who")loginStep(d.p,"in");
   else if(a==="chto"){chatTo=d.p;render();}
   else if(a==="askwho"){if(auth)auth.signOut().catch(()=>{});}
@@ -4417,7 +4509,7 @@ document.addEventListener("click",async e=>{
   else if(a==="pinback")showLogin();
   else if(a==="changepin")changePinDlg();
   else if(a==="pinchange")pinChange();
-  else if(a==="back"){subSel[grp]=null;render();scrollRestore();}
+  else if(a==="back"){if(goFrom){const f=goFrom;goFrom=null;grp=f.g;if(f.g in subSel)subSel[f.g]=f.s;homeTab=f.t||"us";render();window.scrollTo(0,f.y||0);}else{subSel[grp]=null;render();scrollRestore();}}
   else if(a==="htab"){homeTab=d.t;render();scrollTo(0,0);}
   else if(a==="gsearch")searchDlg();
   else if(a==="srecent"){const g=$("gq");if(g){g.value=d.q;runSearch(d.q);}}
@@ -4475,7 +4567,7 @@ document.addEventListener("click",async e=>{
     const info={v:APP_VER,ua:String(navigator.userAgent).slice(0,160),notif:("Notification" in window)?Notification.permission:"none",sw:!!(navigator.serviceWorker&&navigator.serviceWorker.controller),online:navigator.onLine,standalone:!!(window.matchMedia&&matchMedia("(display-mode: standalone)").matches),screen:innerWidth+"x"+innerHeight,sub:grp+"/"+(subSel[grp]||"")};
     db.collection("feedback").add({fromLc:lc(me||"someone"),from:me||"Someone",text:t.slice(0,2000),kind:$("fbk").value,ts:Date.now(),v:APP_VER,info}).then(()=>{toast("Thank you! Sent.");closeDlg();}).catch(()=>toast("Could not send. Try again."));}
   else if(a==="trivreport"){const q=TQ();if(!db){toast("Sharing is not set up yet");return;}if(d.sent==="1"||e.target.disabled)return;e.target.disabled=true;db.collection("feedback").add({fromLc:lc(me||"someone"),from:me||"Someone",text:"Trivia question may be wrong: "+String(q.q).slice(0,200)+" | Marked answer: "+String(q.o[q.a]).slice(0,100)+" | "+String(q.r).slice(0,60),kind:"Wrong trivia question",ts:Date.now(),v:APP_VER}).then(()=>{e.target.textContent="✅ Reported";toast("Thanks, Jayden will check it");}).catch(()=>{e.target.disabled=false;toast("Could not send");});}
-  else if(a==="bedopen")bedOpen(d.ref||"");
+  else if(a==="bedopen"){e.preventDefault();bedOpen(d.ref||"");}
   else if(a==="bedx")bedClose();
   else if(a==="bedfs"){const c=bedCfg();c.fs=Math.max(16,Math.min(34,c.fs+Number(d.d)*2));bedSave(c);bedApply();}
   else if(a==="bedls"){const c=bedCfg();c.ls=c.ls>=2.1?1.4:Math.round((c.ls+.35)*100)/100;bedSave(c);bedApply();}
@@ -4513,6 +4605,14 @@ document.addEventListener("click",async e=>{
   else if(a==="chkupd"){toast("Checking...");(async()=>{try{if(navigator.serviceWorker){const r=await navigator.serviceWorker.getRegistration();if(r)await r.update();}const t=await (await fetch("./index.html?c="+Date.now(),{cache:"no-store"})).text();const m=/const APP_VER="([^"]+)"/.exec(t);if(m&&m[1]!==APP_VER){toast("Version "+m[1]+" is ready. Reopening...");setTimeout(()=>location.reload(),1200);}else toast("You are up to date ("+APP_VER+")");}catch(e){toast("Could not check. Are you online?");}})();}
   else if(a==="health"){healthDlg();}
   else if(a==="idleset"){localStorage.setItem("fh_idle",d.v);render();toast(d.v==="0"?"Auto sign out is off":"Signs out after "+d.v+" minutes away");}
+  else if(a==="ttoff"){localStorage.setItem("fh_tt_off","1");render();toast("Hidden. Turn it back on under Pin to Home.");}
+  else if(a==="tttog"){localStorage.setItem("fh_tt_off",localStorage.getItem("fh_tt_off")==="1"?"0":"1");render();}
+  else if(a==="circpray"){const k=ymd(new Date()),on=!!(((metas.circle||{})[k]||{})[me]);setMeta("circle",{[k]:{[me]:!on}});}
+  else if(a==="cmp"){cmpOpen(d.ref||(($("bedref")||{}).textContent||"").trim());}
+  else if(a==="hctog"){const on=localStorage.getItem("fh_hc")==="1";localStorage.setItem("fh_hc",on?"0":"1");if(on)delete document.documentElement.dataset.hc;else document.documentElement.dataset.hc="1";render();}
+  else if(a==="stat"){const r=(metas.study||{})[d.id]||{},n=Math.max(1,Math.min(200,Number(r.at||1)+Number(d.d)));setMeta("study",{[d.id]:{at:n,atBy:me}});}
+  else if(a==="autobk"){const on=localStorage.getItem("fh_autobk")==="1";localStorage.setItem("fh_autobk",on?"0":"1");render();toast(on?"Weekly backup is off":"Weekly backup is on");}
+  else if(a==="keepsake"){keepsake();}
   else if(a==="news")showNews();
   else if(a==="newsdone"){localStorage.setItem("fh_ver_seen",APP_VER);closeDlg();}
   else if(a==="tour"){const i=Number(d.i);if(i>=TOUR.length){localStorage.setItem("fh_tour","1");localStorage.setItem("fh_ver_seen",APP_VER);closeDlg();render();}else openTour(i);}
